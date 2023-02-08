@@ -79,6 +79,11 @@ body {
     margin: auto;
 }
 
+#mapid {
+    height: 400px;
+    width: 500px;
+}
+
 .select {
     position: relative;
     display: block;
@@ -94,6 +99,24 @@ body {
     background-color: rgb(86, 190, 160);
     color: rgb(13, 18, 31);
     font-size: 0.875rem;
+    padding-top: 5rem;
+    padding-bottom: 1.5rem;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+}
+
+nav ul {
+    list-style-type: none;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-left: 0;
+    padding-top: 0;
+}
+
+.nav li {
+    display: inline;
+    margin-right: 1rem;
+    white-space: nowrap;
 }
 
 .section__content {
@@ -103,4 +126,8 @@ body {
 .global__footer__meta {
     display: flex;
     justify-content: space-between;
+    text-align: center;
 }
+
+
+

@@ -1,4 +1,4 @@
-<!-- <!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 
 <head>
@@ -10,7 +10,17 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300&display=swap" rel="stylesheet">
   <link rel="icon" href="/images/nsw-logo.svg">
+
   <link rel="stylesheet" href="./style.css">
+
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
+    integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI=" crossorigin="" />
+
+  <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"
+    integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM=" crossorigin=""></script>
+
+  <!-- <script src="./script.js"></script> -->
+  <!-- <script src="./script.js" defer></script> -->
 
 </head>
 
@@ -55,15 +65,12 @@
         <option value="Hunter Valley">Hunter Valley</option>
       </select>
     </div>
-    <div class="map">
-      <iframe
-        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d13249.394987284191!2d151.20061632117918!3d-33.88067104782895!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6b12ae265bb4a143%3A0x16e224b2bd8fa957!2sUniversity%20of%20Technology%20Sydney!5e0!3m2!1sen!2sau!4v1674798662368!5m2!1sen!2sau"
-        width="500" height="500" style="border:0;" allowfullscreen="" loading="lazy"
-        referrerpolicy="no-referrer-when-downgrade">
-      </iframe>
-    </div>
+    <div class="map" id="mapid"></div>
+    <script src="./leaflet.js"></script>
   </div>
-  
+
+
+
 
   <form action="/action_page.php">
     <p>Pollutant selection:</p>
@@ -75,42 +82,42 @@
     <label for="javascript">PM2.5</label>
   </form>
 
-<footer class="global__footer">
-  <div class="section__content">
-    <div class="global__footer__navigation">
-      <nav class="nav" role="navigation" aria-label="Footer">
-        <ul>
-          <li>
-            News & Resources
-          </li>
-          <li>
-            Need Help?
-          </li>
-          <li>
-            Contact Us
-          </li>
-        </ul>
-      </nav>
+  <footer class="global__footer">
+    <div class="section__content">
+      <div class="global__footer__navigation">
+        <nav class="nav" role="navigation" aria-label="Footer">
+          <ul>
+            <li>
+              News & Resources
+            </li>
+            <li>
+              Need Help?
+            </li>
+            <li>
+              Contact Us
+            </li>
+          </ul>
+        </nav>
+      </div>
+      <div class="global__footer__meta">
+        <span>© 2023 NSW Government</span>
+        <nav class="nav nav--inline" role="navigation" aria-label="Footer Meta">
+          <ul>
+            <li>
+              Accessibility
+            </li>
+            <li>
+              Privacy
+            </li>
+            <li>
+              Copyright & Disclaimer
+            </li>
+          </ul>
+        </nav>
+      </div>
     </div>
-    <div class="global__footer__meta">
-      <span>© 2023 NSW Government</span>
-      <nav class="nav nav--inline" role="navigation" aria-label="Footer Meta">
-        <ul>
-          <li>
-            Accessibility
-          </li>
-          <li>
-            Privacy
-          </li>
-          <li>
-            Copyright & Disclaimer
-          </li>
-        </ul>
-      </nav>
-    </div>
-  </div>
-</footer>
+  </footer>
 
 </body>
 
-</html> -->
+</html>
