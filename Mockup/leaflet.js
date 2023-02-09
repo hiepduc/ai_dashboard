@@ -86,7 +86,7 @@ var largeIcon = L.icon({
 // 	// marker.bindTooltip(tooltip);
 // }
 
-$.get('./AQSs_Info/a.csv', function(csvString) {
+$.get('./AQSs_Info/data.csv', function(csvString) {
 
     // Use PapaParse to convert string to array of objects
     var data = Papa.parse(csvString, {header: true, dynamicTyping: true}).data;
@@ -98,9 +98,7 @@ $.get('./AQSs_Info/a.csv', function(csvString) {
 
       var marker = L.marker([row.Latitude, row.Longitude], {
         opacity: 1
-      }).bindPopup(row.Title);
-      
-      marker.addTo(map);
+      }).addTo(map);
     }
 
   });
