@@ -2,7 +2,7 @@ var map = L.map('mapid').setView([-33.8735670, 151.2068498], 10); // ([coordinat
 
 var osm = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
 	maxZoom: 19,
-	attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+	attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>' + ' contributors'
 }).addTo(map);
 
 var StamenTerrain = L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/terrain/{z}/{x}/{y}{r}.{ext}', {
@@ -29,14 +29,14 @@ var defaultIcon = L.icon({
 	iconUrl: '/images/marker2.svg',
 	iconSize: [50, 50],
 	// iconAnchor: [15, 46],
-	popupAnchor: [12, -34]
+	popupAnchor: [0, -20]
 });
 
 var largeIcon = L.icon({
 	iconUrl: '/images/marker1.svg',
 	iconSize: [60, 60],
 	// iconAnchor: [15, 46],
-	popupAnchor: [12, -34]
+	popupAnchor: [0, -20]
 });
 
 for (let i = 0; i < l; i++) {
@@ -90,7 +90,7 @@ var baseMaps = {
 }
 
 L.control.layers(baseMaps).addTo(map);
-// map.attributionControl.setPrefix('')
+// map.attributionControl.addAttribution('&copy; OpenStreetMap contributors');
 
 // var markers = [
 // 	[-33.88505, 151.04390],
