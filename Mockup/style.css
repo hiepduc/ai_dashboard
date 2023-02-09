@@ -101,13 +101,17 @@ body {
 }
 
 .global__footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
     background-color: rgb(86, 190, 160);
     color: rgb(13, 18, 31);
     font-size: 0.875rem;
     padding-top: 5rem;
     padding-bottom: 1.5rem;
-    padding-left: 1.5rem;
-    padding-right: 1.5rem;
+    /* padding-left: 1.5rem; */
+    /* padding-right: 2.5rem; */
+    
 }
 
 .nav ul {
@@ -124,14 +128,23 @@ body {
     white-space: nowrap;
 }
 
+
+
 .section__content {
     padding: 0;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
 }
 
 .global__footer__meta {
     display: flex;
     justify-content: space-between;
-    text-align: center;
+    /* text-align: center; */
+}
+
+.nav--inline li {
+    margin-left: 1.5rem;
+    margin-right: 0;
 }
 
 

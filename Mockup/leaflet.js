@@ -39,43 +39,78 @@ var largeIcon = L.icon({
 	popupAnchor: [0, -20]
 });
 
-for (let i = 0; i < l; i++) {
-	var pop = L.popup({
-		closeOnClick: true
-	}).setContent('<h4>Station: ' + stationNames[i] + '<br>PM2.5: ' + ppb25[i] + '<br> PM10: ' + ppb10[i] + '</h4>');
+// markerData = [];
+// $.ajax({
+// 	url: "/AQSs_Info/SiteDetails.txt",
+// 	async: false,
+// 	dataType: "text",
+// 	success: function (data) {
+// 		var lines = data.split("\n");
+// 		for (var i = 0; i < lines.length; i++) {
+// 			var fields = lines[i].split(",");
+// 			var lat = parseFloat(fields[0]);
+// 			var lng = parseFloat(fields[1]);
+// 			markerData.push([lat, lng]);
+// 		}
+// 	}
+// });
 
-	// var marker = L.marker(coords[i]).addTo(map).bindPopup(pop);
+// for (let i = 0; i < l; i++) {
+// 	var pop = L.popup({
+// 		closeOnClick: true
+// 	}).setContent('<h4>Station: ' + stationNames[i] + '<br>PM2.5: ' + ppb25[i] + '<br> PM10: ' + ppb10[i] + '</h4>');
 
-	(function (marker) {
-		marker.on('mouseover', function () {
-		  marker.setIcon(largeIcon);
-		});
-	
-		marker.on('mouseout', function () {
-		  marker.setIcon(defaultIcon);
-		});
-	  })(L.marker(coords[i], {icon: defaultIcon}).addTo(map).bindPopup(pop));
+// 	// var marker = L.marker(coords[i]).addTo(map).bindPopup(pop);
 
-	// marker.on('mouseover', function () {
-	// 	marker.setIcon(largeIcon);
-	// });
+// 	(function (marker) {
+// 		marker.on('mouseover', function () {
+// 			marker.setIcon(largeIcon);
+// 		});
 
-	// marker.on('mouseout', function () {
-	// 	marker.setIcon(defaultIcon);
-	// });
+// 		marker.on('mouseout', function () {
+// 			marker.setIcon(defaultIcon);
+// 		});
+// 	})(L.marker(coords[i], { icon: defaultIcon }).addTo(map).bindPopup(pop));
 
-	// var tooltip = L.tooltip({
-	// 	permanent: true
-	// }).setContent(stationNames[i]);
-	// marker.bindTooltip(tooltip);
-}
+// 	// marker.on('mouseover', function () {
+// 	// 	marker.setIcon(largeIcon);
+// 	// });
+
+// 	// marker.on('mouseout', function () {
+// 	// 	marker.setIcon(defaultIcon);
+// 	// });
+
+// 	// var tooltip = L.tooltip({
+// 	// 	permanent: true
+// 	// }).setContent(stationNames[i]);
+// 	// marker.bindTooltip(tooltip);
+// }
+
+$.get('./AQSs_Info/a.csv', function(csvString) {
+
+    // Use PapaParse to convert string to array of objects
+    var data = Papa.parse(csvString, {header: true, dynamicTyping: true}).data;
+
+    // For each row in data, create a marker and add it to the map
+    // For each row, columns `Latitude`, `Longitude`, and `Title` are required
+    for (var i in data) {
+      var row = data[i];
+
+      var marker = L.marker([row.Latitude, row.Longitude], {
+        opacity: 1
+      }).bindPopup(row.Title);
+      
+      marker.addTo(map);
+    }
+
+  });
 
 // for (var i = 0; i < markers.length; i++) {
 // 	(function (marker) {
 // 		marker.on('mouseover', function () {
 // 		  marker.setIcon(largeIcon);
 // 		});
-	
+
 // 		marker.on('mouseout', function () {
 // 		  marker.setIcon(defaultIcon);
 // 		});
@@ -83,13 +118,13 @@ for (let i = 0; i < l; i++) {
 //   }
 
 
-var baseMaps = {
-	'Open Street Map': osm,
-	'Terrain': StamenTerrain,
-	'Dark Mode': StadiaAlidadeSmoothDark
-}
 
-L.control.layers(baseMaps).addTo(map);
+var baseMaps = {
+	'Default': osm,
+	'Ozone O3': StamenTerrain,
+	'PM2.5': StadiaAlidadeSmoothDark
+}
+L.control.layers(baseMaps, null, { collapsed: false }).addTo(map);
 // map.attributionControl.addAttribution('&copy; OpenStreetMap contributors');
 
 // var markers = [
@@ -97,20 +132,19 @@ L.control.layers(baseMaps).addTo(map);
 // 	[-33.91977, 150.92550],
 // 	[-33.7512, 150.6941]
 //   ];
-  
+
 //   var defaultIcon = L.icon({
 // 	iconUrl: '/images/nsw-logo.svg',
 // 	iconSize: [25, 41],
 // 	iconAnchor: [12, 41],
 // 	popupAnchor: [1, -34]
 //   });
-  
+
 //   var largeIcon = L.icon({
 // 	iconUrl: '/images/nsw-logo.svg',
 // 	iconSize: [50, 82],
 // 	iconAnchor: [25, 82],
 // 	popupAnchor: [1, -34]
 //   });
-  
 
-  
+
