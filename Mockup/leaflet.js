@@ -86,22 +86,25 @@ var largeIcon = L.icon({
 // 	// marker.bindTooltip(tooltip);
 // }
 
-$.get('./AQSs_Info/data.csv', function(csvString) {
+// Read markers data from data.csv
+$.get('/AQSs_Info/d.csv', function (csvString) {
 
-    // Use PapaParse to convert string to array of objects
-    var data = Papa.parse(csvString, {header: true, dynamicTyping: true}).data;
+	// Use PapaParse to convert string to array of objects
+	var data = Papa.parse(csvString, { header: true, dynamicTyping: true }).data;
 
-    // For each row in data, create a marker and add it to the map
-    // For each row, columns `Latitude`, `Longitude`, and `Title` are required
-    for (var i in data) {
-      var row = data[i];
+	// For each row in data, create a marker and add it to the map
+	// For each row, columns `Latitude`, `Longitude`, and `Title` are required
+	for (var i in data) {
+		var row = data[i];
 
-      var marker = L.marker([row.Latitude, row.Longitude], {
-        opacity: 1
-      }).addTo(map);
-    }
+		var marker = L.marker([row.Latitude, row.Longitude], {
+			opacity: 1
+		}).bindPopup(row.Title);
 
-  });
+		marker.addTo(map);
+	}
+
+});
 
 // for (var i = 0; i < markers.length; i++) {
 // 	(function (marker) {
@@ -117,12 +120,14 @@ $.get('./AQSs_Info/data.csv', function(csvString) {
 
 
 
-var baseMaps = {
-	'Default': osm,
-	'Ozone O3': StamenTerrain,
-	'PM2.5': StadiaAlidadeSmoothDark
-}
-L.control.layers(baseMaps, null, { collapsed: false }).addTo(map);
+// var baseMaps = {
+// 	'Default': osm,
+// 	'Ozone O3': StamenTerrain,
+// 	'PM2.5': StadiaAlidadeSmoothDark
+// }
+// L.control.layers(baseMaps, null, { collapsed: false }).addTo(map);
+
+
 // map.attributionControl.addAttribution('&copy; OpenStreetMap contributors');
 
 // var markers = [
@@ -144,5 +149,3 @@ L.control.layers(baseMaps, null, { collapsed: false }).addTo(map);
 // 	iconAnchor: [25, 82],
 // 	popupAnchor: [1, -34]
 //   });
-
-
