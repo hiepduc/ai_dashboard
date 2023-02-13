@@ -120,12 +120,12 @@ $.get('/AQSs_Info/d.csv', function (csvString) {
 
 
 
-// var baseMaps = {
-// 	'Default': osm,
-// 	'Ozone O3': StamenTerrain,
-// 	'PM2.5': StadiaAlidadeSmoothDark
-// }
-// L.control.layers(baseMaps, null, { collapsed: false }).addTo(map);
+var baseMaps = {
+	'Default': osm,
+	'Ozone O3': StamenTerrain,
+	'PM2.5': StadiaAlidadeSmoothDark
+}
+L.control.layers(baseMaps, null, { collapsed: false }).addTo(map);
 
 
 // map.attributionControl.addAttribution('&copy; OpenStreetMap contributors');
