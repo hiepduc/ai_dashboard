@@ -13,6 +13,7 @@
 
   <link rel="stylesheet" href="./style.css">
 
+  <!-- Leaflet inclusion -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
     integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI=" crossorigin="" />
 
@@ -22,6 +23,11 @@
   <!-- Load jQuery and PapaParse to read data from a CSV file -->
   <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.3.0/papaparse.min.js"></script>
+
+  <script src="./AQSs_Info/nswMap.js"></script>
+
+  <!-- CDN for Chart.JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
 
 
   <!-- <script src="./script.js"></script> -->
@@ -70,6 +76,22 @@
         <option value="Hunter Valley">Hunter Valley</option>
       </select>
     </div>
+
+    <!-- <svg xmlns="http://www.w3.org/2000/svg" style="display: none">
+      <symbol id="icon-clear" viewBox="0 0 24 24">
+        <path
+          d="M18.984 6.422 13.406 12l5.578 5.578-1.406 1.406L12 13.406l-5.578 5.578-1.406-1.406L10.594 12 5.016 6.422l1.406-1.406L12 10.594l5.578-5.578z" />
+      </symbol>
+    </svg> -->
+
+    <!-- <div class="sidebar">
+      <button aria-label="close sidebar" type="button" class="close-button">
+        <svg>
+          <use xlink:href="#icon-clear" />
+        </svg>
+      </button>
+    </div> -->
+
     <div class="map" id="mapid"></div>
     <script src="./leaflet.js"></script>
   </div>
@@ -86,6 +108,33 @@
     <input type="radio" id="javascript" name="fav_language" value="JavaScript">
     <label for="javascript">PM2.5</label>
   </form>
+
+  <canvas id="myChart" style="width:100%;max-width:600px"></canvas>
+
+  <script>
+    var xValues = [50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150];
+    var yValues = [7, 8, 8, 9, 9, 9, 10, 11, 14, 14, 15];
+
+    new Chart("myChart", {
+      type: "line",
+      data: {
+        labels: xValues,
+        datasets: [{
+          fill: false,
+          lineTension: 0,
+          backgroundColor: "rgba(0,0,255,1.0)",
+          borderColor: "rgba(0,0,255,0.1)",
+          data: yValues
+        }]
+      },
+      options: {
+        legend: { display: false },
+        scales: {
+          yAxes: [{ ticks: { min: 6, max: 16 } }],
+        }
+      }
+    });
+  </script>
 
   <footer class="global__footer">
     <div class="section__content">
