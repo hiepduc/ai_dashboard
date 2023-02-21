@@ -113,7 +113,7 @@ function getMarkerInfo() {
 					if (row.lat != null && row.lng != null) {
 						latlngs = L.latLng([row.lat, row.lng]);
 						var marker = L.marker(latlngs).addTo(featureGroups);
-						marker.setIcon(defaultIcon).bindTooltip(data[i].title, {direction: 'top', offset: [1, -40]});
+						marker.setIcon(defaultIcon).bindTooltip(data[i].title, { direction: 'top', offset: [1, -40] });
 						// marker.on('mouseover', function () {
 						// 	marker.setIcon(largeIcon);
 						// });
@@ -270,7 +270,7 @@ function generateMarkerContent(title, lat, lng) {
 							lineTension: 0,
 							backgroundColor: "rgba(0,0,255,1.0)",
 							borderColor: "rgba(0,0,255,0.1)",
-							data: yValues
+							data: yValues,
 						}]
 					},
 					options: {
@@ -282,7 +282,19 @@ function generateMarkerContent(title, lat, lng) {
 							},
 						},
 						scales: {
-							yAxes: [{ ticks: { min: 0, max: 2 } }],
+							xAxes: [{
+								scaleLabel: {
+									display: true,
+									labelString: 'Forecast time'
+								}
+							}],
+							yAxes: [{
+								ticks: { min: 0, max: 2.5 },
+								scaleLabel: {
+									display: true,
+									labelString: 'Ozone (ppb)'
+								}
+							}],
 						}
 					}
 				});
