@@ -1,6 +1,6 @@
 .leaflet-sidebar {
   position: absolute;
-  height: 70%;
+  height: 80%;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
@@ -161,4 +161,50 @@
 
 .leaflet-bottom {
   right: 0 !important;
+}
+
+.sidebar-tabs {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-bottom: 1px solid #ddd;
+}
+
+.sidebar-tabs li {
+  display: inline-block;
+  margin: 0;
+  padding: 0;
+}
+
+.sidebar-tabs li a {
+  display: block;
+  padding: 10px 15px;
+  color: #333;
+  text-decoration: none;
+  border-right: 1px solid #ddd;
+}
+
+.sidebar-tabs li:last-child a {
+  border-right: none;
+}
+
+.sidebar-tabs li a:hover {
+  background-color: #f5f5f5;
+}
+
+.sidebar-tabs li.active a {
+  background-color: #f5f5f5;
+  font-weight: bold;
+}
+
+.sidebar-content {
+  padding: 15px;
+}
+
+.sidebar-pane {
+  display: none;
+}
+
+.sidebar-pane.active {
+  display: block;
 }

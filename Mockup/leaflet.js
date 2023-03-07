@@ -1,9 +1,22 @@
-var map = L.map('mapid').setView([-33.8735670, 151.2068498], 10); // ([coordinates], zoom scale)
+// Initial configuration of map
+let config = {
+	minZoom: 6,
+	maxZoom: 14,
+};
+// Magnification with which the map will start
+const zoom = 10;
+// Coordinates of NSW geographic center
+const cenLat = -32.163191;
+const cenLng = 147.032179;
+
+var map = L.map('mapid', config).setView([cenLat, cenLng], zoom); // ([coordinates], zoom scale)
 
 var osm = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-	maxZoom: 19,
+	maxZoom: 14,
 	attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>' + ' contributors'
 }).addTo(map);
+
+L.control.scale({ imperial: false }).addTo(map);
 
 var StamenTerrain = L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/terrain/{z}/{x}/{y}{r}.{ext}', {
 	attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
@@ -32,52 +45,7 @@ var largeIcon = L.icon({
 	popupAnchor: [0, -20]
 });
 
-// markerData = [];
-// $.ajax({
-// 	url: "/AQSs_Info/SiteDetails.txt",
-// 	async: false,
-// 	dataType: "text",
-// 	success: function (data) {
-// 		var lines = data.split("\n");
-// 		for (var i = 0; i < lines.length; i++) {
-// 			var fields = lines[i].split(",");
-// 			var lat = parseFloat(fields[0]);
-// 			var lng = parseFloat(fields[1]);
-// 			markerData.push([lat, lng]);
-// 		}
-// 	}
-// });
 
-// for (let i = 0; i < l; i++) {
-// 	var pop = L.popup({
-// 		closeOnClick: true
-// 	}).setContent('<h4>Station: ' + stationNames[i] + '<br>PM2.5: ' + ppb25[i] + '<br> PM10: ' + ppb10[i] + '</h4>');
-
-// 	// var marker = L.marker(coords[i]).addTo(map).bindPopup(pop);
-
-// 	(function (marker) {
-// 		marker.on('mouseover', function () {
-// 			marker.setIcon(largeIcon);
-// 		});
-
-// 		marker.on('mouseout', function () {
-// 			marker.setIcon(defaultIcon);
-// 		});
-// 	})(L.marker(coords[i], { icon: defaultIcon }).addTo(map).bindPopup(pop));
-
-// 	// marker.on('mouseover', function () {
-// 	// 	marker.setIcon(largeIcon);
-// 	// });
-
-// 	// marker.on('mouseout', function () {
-// 	// 	marker.setIcon(defaultIcon);
-// 	// });
-
-// 	// var tooltip = L.tooltip({
-// 	// 	permanent: true
-// 	// }).setContent(stationNames[i]);
-// 	// marker.bindTooltip(tooltip);
-// }
 
 var featureGroups = L.featureGroup().addTo(map);
 var markersInfo = [];
@@ -94,8 +62,10 @@ function getMarkerInfo() {
 			// Use PapaParse to convert string to array of objects
 			var data = Papa.parse(csvString, { header: true, dynamicTyping: true }).data;
 
-			// For each row in data, create a marker and add it to the map
-			// For each row, columns `Latitude`, `Longitude`, and `Title` are required
+			// Create a new panel for the new tab
+			var newPanel = L.DomUtil.create('div', 'sidebar-pane');
+			newPanel.innerHTML = '<h1>New Tab Content</h1>';
+
 			var sidebar = L.control.sidebar('sidebar', {
 				autopan: true,
 				position: 'right'
@@ -103,7 +73,6 @@ function getMarkerInfo() {
 
 			for (let i = 0; i < data.length - 1; i++) {
 				(function () { // Create a new scope for each iteration of the loop
-
 					var row = data[i];
 					if (row != null) {
 						markersInfo.push(data[i].title);
@@ -114,13 +83,6 @@ function getMarkerInfo() {
 						latlngs = L.latLng([row.lat, row.lng]);
 						var marker = L.marker(latlngs).addTo(featureGroups);
 						marker.setIcon(defaultIcon).bindTooltip(data[i].title, { direction: 'top', offset: [1, -40] });
-						// marker.on('mouseover', function () {
-						// 	marker.setIcon(largeIcon);
-						// });
-
-						// marker.on('mouseout', function () {
-						// 	marker.setIcon(defaultIcon);
-						// });
 						marker.on('click', function () {
 							if (activeMarker != null) {
 								activeMarker.setIcon(defaultIcon);
@@ -140,104 +102,20 @@ function getMarkerInfo() {
 		});
 	})
 };
+
 var markerInfoPromise = getMarkerInfo();
+
 
 
 function changeMarkerIcon(marker) {
 	// Change the icon for the clicked marker
 	marker.setIcon(L.icon({
 		iconUrl: '/images/marker3.svg',
-		iconSize: [50, 50],
-		iconAnchor: [25, 50],
-		popupAnchor: [0, -50],
+		iconSize: [60, 60],
+		iconAnchor: [30, 60],
+		popupAnchor: [0, -60],
 	}));
-}
-
-// markerInfoPromise.then(function (markersInfo) {
-// 	var marks = [
-// 		L.marker([51.5, -0.09]),
-// 		L.marker([51.5, -0.10]),
-// 		L.marker([51.5, -0.11])
-// 	];
-// 	var mar = L.featureGroup(marks).addTo(map);
-// 	var sidebar = L.control.sidebar('sidebar', {
-// 		autopan: true,
-// 		position: 'right'
-// 	}).addTo(map);
-// 	// console.log(markersInfo[2]);
-// 	// featureGroups.eachLayer(function (marker) {
-// 	for (let i = 0; i <= markersInfo.length; i++) {
-// 		console.log(markersInfo[i]);
-// 		featureGroups.on('click', function () {
-// 			sidebar.setContent(markersInfo[i]);
-// 			sidebar.show();
-// 		});
-// 	}
-// });
-// featureGroups.on('popupopen', function () {
-// 	var ctx = document.getElementById('myChart').getContext('2d');
-// 	var myChart = new Chart(ctx, {
-// 		type: 'bar',
-// 		data: chartData,
-// 		options: chartOptions
-// 	});
-// });
-// featureGroups.bindPopup('aa');
-
-// console.log(markers);
-// console.log(markers[0]);
-// for (var i in markers) {
-// 	var a = L.featureGroup(markers[i]).addTo(map);
-// 	console.log(markers[i]);
-// }
-// var marks = [
-// 	L.marker([51.5, -0.09]),
-// 	L.marker([51.5, -0.10]),
-// 	L.marker([51.5, -0.11])
-// ];
-// m1 = L.marker([-31.5, 160.11]).addTo(map);
-// var sidebar = L.control.sidebar('sidebar', {
-// 	position: 'right'
-// }).addTo(map);
-
-// marks.eachLayer(function (marker) {
-// 	marker.on('click', function () {
-// 		sidebar.setContent('a');
-// 		sidebar.show();
-// 	});
-// });
-
-// Create a new chart and attach it to the canvas element in the marker content
-function createMarkerChart() {
-	// Get a reference to the canvas element in the marker content
-	const canvas = document.querySelector(`.marker-content .marker-chart`);
-
-	// Create a new chart object and configure it with some data
-	const chart = new Chart(canvas, {
-		type: 'line',
-		data: {
-			labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
-			datasets: [{
-				label: 'Sales',
-				data: [10, 20, 30, 40, 50, 60, 70],
-				backgroundColor: 'rgba(255, 99, 132, 0.2)',
-				borderColor: 'rgba(255, 99, 132, 1)',
-				borderWidth: 1
-			}]
-		},
-		options: {
-			scales: {
-				yAxes: [{
-					ticks: {
-						beginAtZero: true
-					}
-				}]
-			}
-		}
-	});
-	// Return the chart object so that we can update it later if needed
-	return chart;
-}
+};
 
 
 
@@ -245,67 +123,149 @@ function generateMarkerContent(title, lat, lng) {
 	const content = `
 	  <div class="marker-content">
 		<h3 class="marker-title">${title} Station</h3>
-		<canvas id="marker-chart-${title}" class="marker-chart" width="200" height="200"></canvas>
-		<p class="marker-latlng">Latitude: ${lat}, Longitude: ${lng}</p>
+	  	<p class="marker-latlng"><b>Latitude:</b> ${lat} | <b>Longitude:</b> ${lng}</p>
+		<div class="container">
+			<div class="tabs">
+				<h3 class="active">Forecast </h3>
+				<h3>History </h3>
+			</div>
+
+			<div class="tab-content">
+			<div class="active">
+				<canvas id="marker-chart-${title}" class="marker-chart" width="200" height="200"></canvas>
+			</div>
+			<div>
+				<canvas id="abc-chart-${title}" class="abc-chart" width="200" height="200"></canvas>
+			</div>
+			</div>
+		</div>
 	  </div>
 	`;
 
 	setTimeout(() => {
-		const canvas = document.getElementById(`marker-chart-${title}`);
-		if (canvas) {
-			const ctx = canvas.getContext('2d');
+		
+		
+		const canvas1 = document.getElementById(`marker-chart-${title}`);
+		const canvas2 = document.getElementById(`abc-chart-${title}`);
+
+		const ctx1 = canvas1.getContext('2d');
+		const ctx2 = canvas2.getContext('2d');
+
+		if (canvas1 && canvas2) {
 			getOzoneDataForLocation(title, '/AQSs_Info/forecast.csv').then((result) => {
-				// console.log(result);
-				var xValues = result.map((d) => d.date);
-				// console.log('xValues:' + xValues);
-				var yValues = result.map((d) => d.ozone);
-				// console.log('yValues:' + yValues);
-				new Chart(ctx, {
-					type: 'line',
-					data: {
-						labels: xValues,
-						datasets: [{
-							label: 'Forecast',
-							fill: false,
-							lineTension: 0,
-							backgroundColor: "rgba(0,0,255,1.0)",
-							borderColor: "rgba(0,0,255,0.1)",
-							data: yValues,
-						}]
-					},
-					options: {
-						legend: {
-							display: true,
-							labels: {
-								fontSize: 12,
-								fontColor: '#333',
-							},
-						},
-						scales: {
-							xAxes: [{
-								scaleLabel: {
-									display: true,
-									labelString: 'Forecast time'
-								}
-							}],
-							yAxes: [{
-								ticks: { min: 0, max: 2.5 },
-								scaleLabel: {
-									display: true,
-									labelString: 'Ozone (ppb)'
-								}
-							}],
-						}
-					}
-				});
+				// extract data from forecastData
+				const forecastXValues = result.forecastData.map((d) => d.date);
+				const forecastYValues = result.forecastData.map((d) => d.ozone);
+
+				// extract data from historyData
+				const historyXValues = result.historyData.map((d) => d.date);
+				const historyYValues = result.historyData.map((d) => d.ozone);
+
+				// generate chart for both canvas elements
+				generateChart(ctx1, forecastXValues, forecastYValues, historyXValues, historyYValues);
+
 			});
 		}
+
+		let tabs = document.querySelectorAll('.tabs h3');
+		let tabContents = document.querySelectorAll('.tab-content div');
+		tabs.forEach((tab, index) => {
+			tab.addEventListener('click', () => {
+				tabContents.forEach((content) => {
+					content.classList.remove('active');
+				});
+				tabs.forEach(tab => {
+					tab.classList.remove('active');
+				});
+				// tabContents[index].classList.add('active');
+				// tabs[index].classList.add('active');
+
+				if (index === 0) {
+					tabContents[index].classList.add('active');
+					tabs[index].classList.add('active');
+				} else {
+					tabContents[index].classList.add('active');
+					tabs[index].classList.add('active');
+					getOzoneDataForLocation(title, '/AQSs_Info/forecast.csv').then((result) => {
+						// extract data from forecastData
+						const forecastXValues = result.forecastData.map((d) => d.date);
+						const forecastYValues = result.forecastData.map((d) => d.ozone);
+		
+						// extract data from historyData
+						const historyXValues = result.historyData.map((d) => d.date);
+						const historyYValues = result.historyData.map((d) => d.ozone);
+		
+						// generate chart for both canvas elements
+						generateChart(ctx2, forecastXValues, forecastYValues, historyXValues, historyYValues);
+		
+					});
+				}
+				
+			});
+		});
 	}, 0);
 	return content;
 }
-// getOzoneDataForLocation('Liverpool', '/AQSs_Info/forecast.csv');
-// cam = getOzoneDataForLocation('Camden', '/AQSs_Info/forecast.csv');
-// console.log('cam ' + cam);
+
+async function generateChart(context, forecastXValues, forecastYValues, historyXValues, historyYValues) {
+	new Chart(context, {
+		type: 'line',
+		data: {
+			labels: forecastXValues, // historyXValues.concat(forecastXValues),
+			datasets: [{
+				label: 'Forecast',
+				fill: false,
+				lineTension: 0,
+				backgroundColor: "rgba(0,0,255,1.0)",
+				borderColor: "rgba(0,0,255,0.1)",
+				data: forecastYValues,
+			},
+			{
+				label: 'History',
+				fill: false,
+				backgroundColor: "rgba(255,0,255,1.0)",
+				borderColor: "rgba(255,0,255,0.1)",
+				data: historyYValues,
+			}
+			]
+		},
+		options: {
+			responsive: true,
+			legend: {
+				display: true,
+				labels: {
+					fontSize: 12,
+					fontColor: '#333',
+				},
+			},
+			scales: {
+				xAxes: [{
+					scaleLabel: {
+						display: true,
+						labelString: 'Forecast time'
+					},
+					ticks: {
+						// autoSkip: true,
+						// maxTicksLimit: 80,
+						maxRotation: 90,
+						// minRotation: 0,
+					}
+				}],
+				yAxes: [{
+					ticks: {
+						suggestedMin: 0,
+						suggestedMax: Math.max(...historyYValues) * 1.1
+					},
+					scaleLabel: {
+						display: true,
+						labelString: 'Ozone (ppb)'
+					}
+				}],
+			}
+		}
+	});
+}
+
 async function getOzoneDataForLocation(location, csvFilePath) {
 	const response = await fetch(csvFilePath);
 	const file = await response.text();
@@ -314,14 +274,38 @@ async function getOzoneDataForLocation(location, csvFilePath) {
 	const locationHeader = `OZONE_${location.toUpperCase()}`;
 	const data = parsedData.map((row) => parseFloat(row[locationHeader]));
 	const forecastHours = parsedData.map((row) => parseFloat(row['forecast_hours']));
-	const date = parsedData.map((row) => new Date(row['datetime']).toLocaleString());
+	const date = parsedData.map((row) => new Date(row['datetime']).toLocaleString(undefined, { month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' }));
 	forecastData = [];
 	for (let i = 0; i < data.length; i++) {
 		if (!isNaN(forecastHours[i]) && forecastHours[i] > 0) {
 			forecastData.push({ date: date[i], ozone: data[i] });
 		}
 	}
-	return forecastData;
+	historyData = [];
+	for (let i = 0; i < data.length; i++) {
+		if (!isNaN(forecastHours[i]) && forecastHours[i] <= 0) {
+			historyData.push({ date: date[i], ozone: data[i] });
+		}
+	}
+	return { forecastData, historyData };
+}
+
+async function getNO2DataForLocation(location, csvFilePath) {
+	const response = await fetch(csvFilePath);
+	const file = await response.text();
+	const parsedData = Papa.parse(file, { header: true }).data;
+
+	const locationHeader = `NO2_${location.toUpperCase()}`;
+	const data = parsedData.map((row) => parseFloat(row[locationHeader]));
+	const forecastHours = parsedData.map((row) => parseFloat(row['forecast_hours']));
+	const date = parsedData.map((row) => new Date(row['datetime']).toLocaleString(undefined, { month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' }));
+	const NO2Data = [];
+	for (let i = 0; i < data.length; i++) {
+		if (!isNaN(forecastHours[i]) && forecastHours[i] <= 0) {
+			historyData.push({ date: date[i], NO2: data[i] });
+		}
+	}
+	return NO2Data;
 }
 
 // Wait for the Promise to resolve before accessing markerinfo
@@ -450,54 +434,6 @@ var baseMaps = {
 	'PM2.5': StadiaAlidadeSmoothDark
 }
 L.control.layers(baseMaps, null, { collapsed: false }).addTo(map);
-
-
-// map.attributionControl.addAttribution('&copy; OpenStreetMap contributors');
-
-// var markers = [
-// 	[-33.88505, 151.04390],
-// 	[-33.91977, 150.92550],
-// 	[-33.7512, 150.6941]
-//   ];
-
-//   var defaultIcon = L.icon({
-// 	iconUrl: '/images/nsw-logo.svg',
-// 	iconSize: [25, 41],
-// 	iconAnchor: [12, 41],
-// 	popupAnchor: [1, -34]
-//   });
-
-//   var largeIcon = L.icon({
-// 	iconUrl: '/images/nsw-logo.svg',
-// 	iconSize: [50, 82],
-// 	iconAnchor: [25, 82],
-// 	popupAnchor: [1, -34]
-//   });
-
-
-
-
-// config map
-// let config = {
-// 	minZoom: 7,
-// 	maxZoom: 18,
-// };
-// // magnification with which the map will start
-// const zoom = 18;
-// // co-ordinates
-
-// const lat = 52.22977;
-// const lng = 21.01178;
-
-// // calling map
-// const map = L.map("mapid", config).setView([lat, lng], zoom);
-
-// // Used to load and display tile layers on the map
-// // Most tile servers require attribution, which you can set under `Layer`
-// L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
-// 	attribution:
-// 		'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-// }).addTo(map);
 
 // // ------------------------------------------------------------
 // // async function to get data from json

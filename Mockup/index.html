@@ -30,8 +30,18 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
   <!-- <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> -->
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.4.1/leaflet.markercluster.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.4.1/MarkerCluster.css" />
+  <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.4.1/MarkerCluster.Default.css" />
+
+  
+
   <link rel="stylesheet" href="./ControlSidebar.css">
   <script src="./ControlSidebar.js"></script>
+  <!-- <script src="./tab.js"></script> -->
+
+
 
 
   <!-- <script src="./script.js"></script> -->
@@ -102,11 +112,29 @@
     <!-- <script src="https://unpkg.com/leaflet-sidebar@0.2.0/src/L.Control.Sidebar.js"></script> -->
     <script src="./leaflet.js"></script>
     <script src="./ControlSidebar.js"></script>
+    
 
   </div>
 
+  <!-- <div class="container">
+    <div class="tabs">
+      <h3 class="active">Forecast </h3>
+      <h3>History </h3>
+    </div>
 
+    <div class="tab-content">
+      <div class="active">
+        <h4>This is History</h2>
+          <p>Lorem ipsum dolor sit amet.</p>
+      </div>
+      <div>
+        <h4>This is Forecast</h2>
+          <p>Lorem ipsum dolor sit amet consectetur.</p>
+      </div>
+    </div>
+  </div> -->
 
+  
 
   <form action="/action_page.php">
     <p>Pollutant selection:</p>
@@ -117,33 +145,6 @@
     <input type="radio" id="javascript" name="fav_language" value="JavaScript">
     <label for="javascript">PM2.5</label>
   </form>
-
-  <canvas id="myChart" style="width:100%;max-width:600px"></canvas>
-
-  <script>
-    var xValues = [1, 2, 3, 4, 5];
-    var yValues = [1, 2, 3, 4, 5];
-
-    new Chart("myChart", {
-      type: "line",
-      data: {
-        labels: xValues,
-        datasets: [{
-          fill: false,
-          lineTension: 0,
-          backgroundColor: "rgba(0,0,255,1.0)",
-          borderColor: "rgba(0,0,255,0.1)",
-          data: yValues
-        }]
-      },
-      options: {
-        legend: { display: false },
-        scales: {
-          yAxes: [{ ticks: { min: 0, max: 16 } }],
-        }
-      }
-    });
-  </script>
 
   <footer class="global__footer">
     <div class="section__content">
