@@ -78,7 +78,6 @@ function getMarkerInfo() {
 						markersInfo.push(data[i].title);
 					}
 					var latlngs = [];
-					// var marker = [];
 					if (row.lat != null && row.lng != null) {
 						latlngs = L.latLng([row.lat, row.lng]);
 						var marker = L.marker(latlngs).addTo(featureGroups);
@@ -119,93 +118,97 @@ function changeMarkerIcon(marker) {
 
 
 
-function generateMarkerContent(title, lat, lng) {
-	const content = `
-	  <div class="marker-content">
-		<h3 class="marker-title">${title} Station</h3>
-	  	<p class="marker-latlng"><b>Latitude:</b> ${lat} | <b>Longitude:</b> ${lng}</p>
-		<div class="container">
-			<div class="tabs">
-				<h3 class="active">Forecast </h3>
-				<h3>History </h3>
-			</div>
+// function generateMarkerContent(title, lat, lng) {
+// 	const content = `
+// 	  <div class="marker-content">
+// 		<h2 class="marker-title">${title} Station</h2>
+// 	  	<p class="marker-latlng"><b>Latitude:</b> ${lat} | <b>Longitude:</b> ${lng}</p>
+// 		<div class="container">
+// 			<div class="tabs">
+// 				<h3 class="active">Forecast </h3>
+// 				<h3>History </h3>
+// 			</div>
 
-			<div class="tab-content">
-			<div class="active">
-				<canvas id="marker-chart-${title}" class="marker-chart" width="200" height="200"></canvas>
-			</div>
-			<div>
-				<canvas id="abc-chart-${title}" class="abc-chart" width="200" height="200"></canvas>
-			</div>
-			</div>
-		</div>
-	  </div>
-	`;
+// 			<div class="tab-content">
+// 			<div class="active">
+// 				<canvas id="marker-chart-${title}" class="marker-chart" width="200" height="200"></canvas>
+// 			</div>
+// 			<div>
+// 				<canvas id="abc-chart-${title}" class="abc-chart" width="200" height="200"></canvas>
+// 			</div>
+// 			</div>
+// 		</div>
+// 	  </div>
+// 	`;
 
-	setTimeout(() => {
+// 	setTimeout(() => {
 		
 		
-		const canvas1 = document.getElementById(`marker-chart-${title}`);
-		const canvas2 = document.getElementById(`abc-chart-${title}`);
+// 		const canvas1 = document.getElementById(`marker-chart-${title}`);
+// 		const canvas2 = document.getElementById(`abc-chart-${title}`);
 
-		const ctx1 = canvas1.getContext('2d');
-		const ctx2 = canvas2.getContext('2d');
+// 		const ctx1 = canvas1.getContext('2d');
+// 		const ctx2 = canvas2.getContext('2d');
 
-		if (canvas1 && canvas2) {
-			getOzoneDataForLocation(title, '/AQSs_Info/forecast.csv').then((result) => {
-				// extract data from forecastData
-				const forecastXValues = result.forecastData.map((d) => d.date);
-				const forecastYValues = result.forecastData.map((d) => d.ozone);
+// 		if (canvas1 && canvas2) {
+// 			getOzoneDataForLocation(title, '/AQSs_Info/forecast.csv').then((result) => {
+// 				// extract data from forecastData
+// 				const forecastXValues = result.forecastData.map((d) => d.date);
+// 				const forecastYValues = result.forecastData.map((d) => d.ozone);
 
-				// extract data from historyData
-				const historyXValues = result.historyData.map((d) => d.date);
-				const historyYValues = result.historyData.map((d) => d.ozone);
+// 				// extract data from historyData
+// 				const historyXValues = result.historyData.map((d) => d.date);
+// 				const historyYValues = result.historyData.map((d) => d.ozone);
 
-				// generate chart for both canvas elements
-				generateChart(ctx1, forecastXValues, forecastYValues, historyXValues, historyYValues);
+// 				// generate chart for both canvas elements
+// 				generateChart(ctx1, forecastXValues, forecastYValues, historyXValues, historyYValues);
 
-			});
-		}
+// 			});
+// 		}
 
-		let tabs = document.querySelectorAll('.tabs h3');
-		let tabContents = document.querySelectorAll('.tab-content div');
-		tabs.forEach((tab, index) => {
-			tab.addEventListener('click', () => {
-				tabContents.forEach((content) => {
-					content.classList.remove('active');
-				});
-				tabs.forEach(tab => {
-					tab.classList.remove('active');
-				});
-				// tabContents[index].classList.add('active');
-				// tabs[index].classList.add('active');
+// 		let tabs = document.querySelectorAll('.tabs h3');
+// 		let tabContents = document.querySelectorAll('.tab-content div');
+// 		tabs.forEach((tab, index) => {
+// 			tab.addEventListener('click', () => {
+// 				tabContents.forEach((content) => {
+// 					content.classList.remove('active');
+// 				});
+// 				tabs.forEach(tab => {
+// 					tab.classList.remove('active');
+// 				});
+// 				// tabContents[index].classList.add('active');
+// 				// tabs[index].classList.add('active');
 
-				if (index === 0) {
-					tabContents[index].classList.add('active');
-					tabs[index].classList.add('active');
-				} else {
-					tabContents[index].classList.add('active');
-					tabs[index].classList.add('active');
-					getOzoneDataForLocation(title, '/AQSs_Info/forecast.csv').then((result) => {
-						// extract data from forecastData
-						const forecastXValues = result.forecastData.map((d) => d.date);
-						const forecastYValues = result.forecastData.map((d) => d.ozone);
+// 				if (index === 0) {
+// 					tabContents[index].classList.add('active');
+// 					tabs[index].classList.add('active');
+// 				} else {
+// 					tabContents[index].classList.add('active');
+// 					tabs[index].classList.add('active');
+// 					getNO2DataForLocation(title, '/AQSs_Info/forecast.csv').then((result) => {
+// 						// extract data from forecastData
+// 						// const forecastXValues = result.forecastData.map((d) => d.date);
+// 						// const forecastYValues = result.forecastData.map((d) => d.ozone);
 		
-						// extract data from historyData
-						const historyXValues = result.historyData.map((d) => d.date);
-						const historyYValues = result.historyData.map((d) => d.ozone);
+// 						// extract data from historyData
+// 						const historyXValues = result.map((d) => d.date);
+// 						const historyYValues = result.map((d) => d.NO2);
+// 						console.log(result);
+// 						console.log(historyXValues);
+// 						console.log(historyYValues);
 		
-						// generate chart for both canvas elements
-						generateChart(ctx2, forecastXValues, forecastYValues, historyXValues, historyYValues);
+// 						// generate chart for both canvas elements
+// 						generateChart1(ctx2, historyXValues, historyYValues);
 		
-					});
-				}
+// 					});
+// 				}
 				
-			});
-		});
-	}, 0);
-	return content;
-}
+// 			});
+// 		});
+// 	}, 0);
+// 	return content;
+// }
+
 
 async function generateChart(context, forecastXValues, forecastYValues, historyXValues, historyYValues) {
 	new Chart(context, {
@@ -266,6 +269,57 @@ async function generateChart(context, forecastXValues, forecastYValues, historyX
 	});
 }
 
+async function generateChart1(context, historyXValues, historyYValues) {
+	new Chart(context, {
+		type: 'line',
+		data: {
+			labels: historyXValues, // historyXValues.concat(forecastXValues),
+			datasets: [{
+				label: 'NO2 History Data',
+				fill: false,
+				lineTension: 0,
+				backgroundColor: "rgba(0,0,255,1.0)",
+				borderColor: "rgba(0,0,255,0.1)",
+				data: historyYValues,
+			}]
+		},
+		options: {
+			responsive: true,
+			legend: {
+				display: true,
+				labels: {
+					fontSize: 12,
+					fontColor: '#333',
+				},
+			},
+			scales: {
+				xAxes: [{
+					scaleLabel: {
+						display: true,
+						labelString: 'Forecast time'
+					},
+					ticks: {
+						// autoSkip: true,
+						// maxTicksLimit: 80,
+						maxRotation: 90,
+						// minRotation: 0,
+					}
+				}],
+				yAxes: [{
+					ticks: {
+						suggestedMin: 0,
+						suggestedMax: Math.max(...historyYValues) * 1.1
+					},
+					scaleLabel: {
+						display: true,
+						labelString: 'NO2 (ppb)'
+					}
+				}],
+			}
+		}
+	});
+}
+
 async function getOzoneDataForLocation(location, csvFilePath) {
 	const response = await fetch(csvFilePath);
 	const file = await response.text();
@@ -294,17 +348,22 @@ async function getNO2DataForLocation(location, csvFilePath) {
 	const response = await fetch(csvFilePath);
 	const file = await response.text();
 	const parsedData = Papa.parse(file, { header: true }).data;
-
+	console.log(location);
 	const locationHeader = `NO2_${location.toUpperCase()}`;
+	console.log(locationHeader);
 	const data = parsedData.map((row) => parseFloat(row[locationHeader]));
+	console.log(data);
 	const forecastHours = parsedData.map((row) => parseFloat(row['forecast_hours']));
+	console.log(forecastHours);
 	const date = parsedData.map((row) => new Date(row['datetime']).toLocaleString(undefined, { month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' }));
+	console.log(date);
 	const NO2Data = [];
 	for (let i = 0; i < data.length; i++) {
 		if (!isNaN(forecastHours[i]) && forecastHours[i] <= 0) {
-			historyData.push({ date: date[i], NO2: data[i] });
+			NO2Data.push({ date: date[i], NO2: data[i] });
 		}
 	}
+	console.log(NO2Data);
 	return NO2Data;
 }
 
