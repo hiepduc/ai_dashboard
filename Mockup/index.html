@@ -34,9 +34,6 @@
   <script src="./ControlSidebar.js"></script>
 
 
-  <!-- <script src="./script.js"></script> -->
-  <!-- <script src="./script.js" defer></script> -->
-
 </head>
 
 <body>
@@ -82,14 +79,11 @@
     </div>
 
     <div class="map" id="mapid"></div>
+    <div id="sidebar"></div>
     <script src="./leaflet.js"></script>
     <script src="./ControlSidebar.js"></script>
 
-
-    <!-- <div class="stations">
-      
-    </div> -->
-    
+  
 
   </div>
   
@@ -98,7 +92,7 @@
   </div>
 
 
-  <form action="/action_page.php">
+  <!-- <form action="/action_page.php">
     <p>Pollutant selection:</p>
     <input type="radio" id="html" name="fav_language" value="HTML">
     <label for="html">O3</label>
@@ -106,34 +100,8 @@
     <label for="css">PM10</label>
     <input type="radio" id="javascript" name="fav_language" value="JavaScript">
     <label for="javascript">PM2.5</label>
-  </form>
+  </form> -->
 
-  <canvas id="myChart" style="width:100%;max-width:600px"></canvas>
-
-  <script>
-    var xValues = [1, 2, 3, 4, 5];
-    var yValues = [1, 2, 3, 4, 5];
-
-    new Chart("myChart", {
-      type: "line",
-      data: {
-        labels: xValues,
-        datasets: [{
-          fill: false,
-          lineTension: 0,
-          backgroundColor: "rgba(0,0,255,1.0)",
-          borderColor: "rgba(0,0,255,0.1)",
-          data: yValues
-        }]
-      },
-      options: {
-        legend: { display: false },
-        scales: {
-          yAxes: [{ ticks: { min: 0, max: 16 } }],
-        }
-      }
-    });
-  </script>
 
   <footer class="global__footer">
     <div class="section__content">
