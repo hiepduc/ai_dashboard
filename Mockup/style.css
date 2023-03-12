@@ -12,7 +12,7 @@ body {
 }
 
 .nsw-infobar {
-  padding: 16px;
+  padding: 10px;
   background-color: #002664;
   color: white;
   font-family: "Open Sans", sans-serif;
@@ -46,9 +46,15 @@ body {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  align-content: center;
-  align-items: center;
+  
+ 
   height: 4.5rem;
+}
+.nsw-header__wrapper h1{
+  font-size: 30px;
+  margin-bottom: 20px;
+  margin-right: 200x;
+  color: #0052b1;
 }
 
 .nsw-header__center {
@@ -253,14 +259,15 @@ body {
 
 .select {
   position: relative;
-  display: block;
+  display: grid;
   /* width: 200px; */
   width: 15%;
-  height: 100%;
-  line-height: 3;
+  height: 50%;
+  line-height: 2;
   overflow: hidden;
   border-radius: 0.25em;
-  padding-bottom: 10px;
+  padding-bottom: 100px;
+  padding-top: 10px;
 }
 
 .select h2 {

@@ -62,7 +62,7 @@
   <body>
     <div class="nsw-infobar">
       <div class="nsw-container">
-        <p>A New South Wales website</p>
+        <p>A NSW Government website</p>
       </div>
     </div>
 
@@ -75,13 +75,13 @@
                 class="nsw-icon nsw-header__logo"
                 focusable="false"
                 aria-hidden="true"
-                width="259"
-                height="280"
-                viewBox="0 0 259 280"
+                width="300"
+                height="320"
+                viewBox="0 0 300 320"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
               >
-                <image href="/images/nsw-logo.svg" width="259" height="280" />
+                <image href="/images/nsw-logo.svg" width="280" height="300" />
               </svg>
               <span class="nsw-header__logo-text">
                 Planning and
@@ -90,21 +90,43 @@
               </span>
             </a>
           </div>
+          <h1>NSW Air Quality Prediction Dashboard</h1>
         </div>
       </div>
     </header>
 
-    <h2>NSW Air Quality Prediction Dashboard</h2>
+    
     <div class="dashboard">
-      <div class="select">
-        <h2>Model</h2>
-        <select name="model" required>
-          <option value="New South Wales">New South Wales</option>
-          <option value="South Sydney">South Sydney</option>
-          <option value="North Sydney">North Sydney</option>
-          <option value="Hunter Valley">Hunter Valley</option>
-        </select>
-      </div>
+      
+        <div class="select">
+            <label for="station-network">Station network</label>
+          <select id="station-network">
+            <option value="Option 1">New South Wales</option>
+            <option value="Option 2">North Sydney</option>
+            <option value="Option 3">South Sydney</option>
+            <option value="Option 4">Hunter Valley</option>
+          </select>
+          <label for="standard-select">Pollutant</label>
+          <select id="standard-select">
+            <option value="Option 1">PM10</option>
+            <option value="Option 2">PM2.5</option>
+            <option value="Option 3">O3</option>
+            <option value="Option 4">CO</option>
+            <option value="Option 5">NO2</option>
+         
+          </select>
+          
+          <label for="time-scope">Time Scope</label>
+          <select id="time-scope">
+            <option value="Option 1">12h</option>
+            <option value="Option 2">24h</option>
+            <option value="Option 3">36h</option>
+            <option value="Option 4">48h</option>
+            <option value="Option 5">72h</option>
+          </select>
+        
+        </div>
+        
 
       <div class="map" id="mapid">
         <div id="sidebar"></div>
