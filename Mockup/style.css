@@ -71,7 +71,7 @@ body {
 }
 
 .nsw-header__logo-text {
-  font-size: 14px;
+  font-size: 16px;
   line-height: normal;
   font-weight: 700;
   margin-top: 5px;
@@ -94,6 +94,10 @@ body {
   height: 100%;
   /* width: 800px; */
   width: 60%;
+  background-color: white;
+  box-sizing: border-box;
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+  border-radius: 2px;
 }
 
 .hidden {
@@ -264,8 +268,36 @@ body {
   margin: 0;
 }
 
-.stations {
-  width: 10%;
+.stations-menu {
+  position: relative;
+  height: 100%;
+  width: 20%;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.stations-header {
+  display: flex;
+  position: relative;
+  text-align: center;
+  height: 30px;
+  background-color: #4caf50;
+}
+
+.stations-info {
+  height: calc(100% - 50px);
+  /* padding: 10px;
+  margin: 5px; */
+  list-style: none;
+  overflow: hidden;
+  overflow-y: auto;
+}
+
+.station-name {
+  display: flex;
+  flex-direction: row;
+  padding: 10px;
+  margin: 5px;
 }
 
 /* Footer */
@@ -284,6 +316,13 @@ body {
 
 .global__footer__navigation {
   padding-bottom: 10px;
+}
+
+hr {
+  border: none;
+  border-top: 0.2px solid #333; /* change color as needed */
+  padding-bottom: 10px;
+  opacity: 0.5;
 }
 
 .nav ul {
@@ -446,9 +485,10 @@ body {
 }
 
 .quality-color-items:nth-child(6) .o3-icon {
-    background-color: red;
-  }
+  background-color: red;
+}
 
 .quality-value {
   margin-left: 10px;
 }
+

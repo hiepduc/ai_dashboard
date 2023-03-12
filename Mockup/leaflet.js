@@ -1,6 +1,6 @@
 // Initial configuration of map
 let config = {
-  minZoom: 3,
+  minZoom: 6,
   maxZoom: 12,
 };
 // Magnification with which the map will start
@@ -51,9 +51,10 @@ var defaultIcon = L.icon({
 // Home button
 {
   // Home button
-  const htmlTemplate =
-    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><path d="M32 18.451L16 6.031 0 18.451v-5.064L16 .967l16 12.42zM28 18v12h-8v-8h-8v8H4V18l12-9z" /></svg>';
-
+  const htmlTemplate = `<svg width="32" height="32" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path fill-rule="evenodd" clip-rule="evenodd" d="m5.183 5.436.268-.865c-.368.09-.626.569-.716.861h-.144c-.014-.2-.064-.706-.2-.84.324-.333.798-.408 1.412-.3l-.4 1.15-.22-.005ZM1.895 3.408l.065.516-.248-.109-.126-.725c.88-.14 2.716.795 2.782 2.339l-.892-.008c-.186-.813-.928-1.825-1.582-2.013Zm.251 2c-.134-.546-.499-1.163-.936-1.288l.076.424-.248-.104-.11-.556c.6-.096 1.905.554 2.076 1.533l-.858-.009ZM1.118 5.4c-.102-.3-.285-.572-.643-.644l.134.64-.233-.002-.218-.878c.572-.08 1.588.32 1.725.891L1.118 5.4Zm4.832.485-5.891.014-.011-.249 5.903-.087-.002.322Z" fill="#000"/>
+    </svg>`;
+  // '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><path d="M32 18.451L16 6.031 0 18.451v-5.064L16 .967l16 12.42zM28 18v12h-8v-8h-8v8H4V18l12-9z" /></svg>';
   // create custom button
   const customControl = L.Control.extend({
     // button position
@@ -143,11 +144,16 @@ var defaultIcon = L.icon({
 var featureGroups = L.featureGroup().addLayer(map);
 var markersInfo = [];
 
+var markerInfoPromise = getMarkerInfo();
+// markerInfoPromise.then(function(markers) {
+//   console.log(markersInfo);
+// });
+
 //! Potential overlapping problem can be improved (featureGroup and markerClusterGroup)
 // Read markers data from data.csv
 function getMarkerInfo() {
   return new Promise(function (resolve, reject) {
-    var markersInfo = [];
+    // var markersInfo = [];
     var activeMarker = null;
     var markerClusterGroup = L.markerClusterGroup();
     $.get("/AQSs_Info/e.csv", function (csvString) {
@@ -179,12 +185,10 @@ function getMarkerInfo() {
           if (row.lat != null && row.lng != null) {
             latlngs = L.latLng([row.lat, row.lng]);
             let marker = L.marker(latlngs).addTo(featureGroups);
-            marker
-              .setIcon(defaultIcon)
-              .bindTooltip(data[i].title, {
-                direction: "top",
-                offset: [1, -40],
-              });
+            marker.setIcon(defaultIcon).bindTooltip(data[i].title, {
+              direction: "top",
+              offset: [1, -40],
+            });
             marker.on("click", function () {
               if (activeMarker != null) {
                 activeMarker.setIcon(defaultIcon);
@@ -205,7 +209,6 @@ function getMarkerInfo() {
 
       resolve(markersInfo);
       var bound = featureGroups.getBounds();
-      console.log(bound);
       map.fitBounds(featureGroups.getBounds(), {
         animate: false,
       });
@@ -214,7 +217,7 @@ function getMarkerInfo() {
   });
 }
 
-var markerInfoPromise = getMarkerInfo();
+
 
 async function changeMarkerIcon(marker) {
   // Change the icon for the clicked marker
