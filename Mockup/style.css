@@ -272,20 +272,20 @@ body {
   position: relative;
   height: 100%;
   width: 20%;
-  border-radius: 5px;
+  /* box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2); */
+  border-radius: 10px;
   overflow: hidden;
 }
 
 .stations-header {
-  display: flex;
   position: relative;
-  text-align: center;
   height: 30px;
   background-color: #4caf50;
+  padding-left: 15px;
 }
 
 .stations-info {
-  height: calc(100% - 50px);
+  height: calc(100% - 30px);
   /* padding: 10px;
   margin: 5px; */
   list-style: none;
@@ -293,12 +293,62 @@ body {
   overflow-y: auto;
 }
 
-.station-name {
+.stations-info::-webkit-scrollbar {
+  width: 10px;
+}
+
+.stations-info::-webkit-scrollbar-track {
+  background: #f0eeee;
+}
+
+.stations-info::-webkit-scrollbar-thumb {
+  height: 50px;
+  background: linear-gradient(to top, #00e400,
+  /* green - good air quality */ #ffff00,
+  /* yellow - moderate air quality */ #ff7e00,
+  /* orange - unhealthy for sensitive groups */ #ff0000
+    /* red - unhealthy air quality */);
+  border-radius: 5px;
+  border: 2px solid #f1f1f1;
+}
+
+.station-item {
+  border: 1px solid #ccc;
+}
+
+.good {
+  background-color: #00e400; /* green - good air quality */
+}
+
+.moderate {
+  background-color: #ffff00; /* yellow - moderate air quality */
+}
+
+.unhealthy-sensitive {
+  background-color: #ff7e00; /* orange - unhealthy for sensitive groups */
+}
+
+.unhealthy {
+  background-color: #ff0000; /* red - unhealthy air quality */
+}
+
+.station-container {
   display: flex;
   flex-direction: row;
-  padding: 10px;
+  align-items: center;
+  justify-content: space-between;
+  text-align: center;
+  padding: 2px;
+}
+
+.station-name {
   margin: 5px;
 }
+
+.station-value {
+  margin: 5px;
+}
+
 
 /* Footer */
 .global__footer {
@@ -428,6 +478,11 @@ hr {
 }
 
 .air-quality-gradient {
+  height: 50px;
+  display: flex;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
   background: linear-gradient(
     to right,
     #00e400,
