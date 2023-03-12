@@ -279,8 +279,9 @@ body {
   position: relative;
   height: 100%;
   width: 20%;
-  /* box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2); */
-  border-radius: 10px;
+  border-radius: 5px;
+  box-sizing: border-box;
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
   overflow: hidden;
 }
 
@@ -328,15 +329,15 @@ body {
 }
 
 .moderate {
-  background-color: #ffff00; /* yellow - moderate air quality */
+  background-color: #ffff00; /* yellow - moderate air quality  */
 }
 
 .unhealthy-sensitive {
-  background-color: #ff7e00; /* orange - unhealthy for sensitive groups */
+  background-color: #ff7e00; /* orange - unhealthy for sensitive groups  */
 }
 
 .unhealthy {
-  background-color: #ff0000; /* red - unhealthy air quality */
+  background-color: #ff0000; /* red - unhealthy air quality  */
 }
 
 .station-container {
@@ -359,13 +360,13 @@ body {
 
 /* Footer */
 .global__footer {
-  margin-top: 10px;
+  margin-top: 100px;
   bottom: 0;
   width: 100%;
   background-color: rgb(86, 190, 160);
   color: rgb(13, 18, 31);
   font-size: 0.875rem;
-  padding-top: 5rem;
+  padding-top: 3.5rem;
   padding-bottom: 1.5rem;
   /* padding-left: 1.5rem; */
   /* padding-right: 2.5rem; */
@@ -518,7 +519,7 @@ hr {
 }
 
 .o3-icon {
-  width: 5rem;
+  width: 4rem;
   height: 1.8rem;
   border-radius: 0.9rem;
   display: flex;

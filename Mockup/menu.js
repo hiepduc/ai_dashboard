@@ -1,4 +1,3 @@
-
 $.get("/AQSs_Info/e.csv", function (csvString) {
   // Use PapaParse to convert string to array of objects
   var data = Papa.parse(csvString, {
@@ -16,7 +15,7 @@ $.get("/AQSs_Info/e.csv", function (csvString) {
     // })();
   }
 
-  markersInfo.sort(function(a, b) {
+  markersInfo.sort(function (a, b) {
     return b.o3Value - a.o3Value;
   });
   // Call the callback function here after the array is fully populated
@@ -38,17 +37,17 @@ function displayStationNames(stationNames) {
 
     const stationItem = document.createElement("li");
     stationItem.classList.add("station-item");
-    stationItem.setAttribute("data-value-range", getValueRange(stationValue));
+    // stationItem.setAttribute("data-value-range", getValueRange(stationValue));
 
     if (stationValue <= 50) {
-        stationItem.classList.add("good");
-      } else if (stationValue <= 100) {
-        stationItem.classList.add("moderate");
-      } else if (stationValue <= 150) {
-        stationItem.classList.add("unhealthy-sensitive");
-      } else {
-        stationItem.classList.add("unhealthy");
-      }
+      stationItem.classList.add("good");
+    } else if (stationValue <= 100) {
+      stationItem.classList.add("moderate");
+    } else if (stationValue <= 150) {
+      stationItem.classList.add("unhealthy-sensitive");
+    } else {
+      stationItem.classList.add("unhealthy");
+    }
 
     const stationContainer = document.createElement("div");
     stationContainer.classList.add("station-container");
