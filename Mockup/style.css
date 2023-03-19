@@ -181,7 +181,7 @@ body {
 }
 
 .select {
-  position: relative;
+  position: top;
   display: grid;
   /* width: 200px; */
   width: 15%;
@@ -190,6 +190,7 @@ body {
   overflow: hidden;
   border-radius: 0.25em;
   padding-bottom: 100px;
+<<<<<<< HEAD
   padding-top: 10px;
   /* box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2); */
 }
@@ -197,6 +198,8 @@ body {
 .station-model {
   height: 3rem;
   font-size: large;
+=======
+>>>>>>> 03dceddba38cb17bcebdf705f04ae2c5bcc87b54
 }
 
 .select h2 {
@@ -580,4 +583,14 @@ hr {
 .quality-value {
   margin-left: 10px;
 }
-
+.timeslider{
+  display: grid;
+  align-items: center;
+  text-align: center;
+  margin: auto;
+  width: 60%;
+}
+.slider{
+  width: 100%; 
+  height: 25px; 
+}

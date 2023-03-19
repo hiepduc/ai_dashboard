@@ -97,9 +97,39 @@
     </header>
 
     <div class="dashboard">
+<<<<<<< HEAD
       <div class="select">
         <div class="station-model">
           <label for="station-model">Model</label>
+=======
+        <div class="select">
+            <label for="station-network">Model</label>
+          <select id="station-network">
+            <option value="Option 1">New South Wales</option>
+            <option value="Option 2">North Sydney</option>
+            <option value="Option 3">South Sydney</option>
+            <option value="Option 4">Hunter Valley</option>
+          </select>
+          <label for="standard-select">Pollutant</label>
+          <select id="standard-select">
+            <option value="Option 1">PM10</option>
+            <option value="Option 2">PM2.5</option>
+            <option value="Option 3">O3</option>
+            <option value="Option 4">CO</option>
+            <option value="Option 5">NO2</option>
+         
+          </select>
+          
+          <label for="time-scope">Time Scope</label>
+          <select id="time-scope">
+            <option value="Option 1">12h</option>
+            <option value="Option 2">24h</option>
+            <option value="Option 3">36h</option>
+            <option value="Option 4">48h</option>
+            <option value="Option 5">72h</option>
+          </select>
+        
+>>>>>>> 03dceddba38cb17bcebdf705f04ae2c5bcc87b54
         </div>
         <select id="station-model">
           <option value="Option 1">New South Wales</option>
@@ -185,6 +215,11 @@
         <div class="o3-icon">Doom</div>
         <span class="quality-value">50-60</span>
       </div>
+    </div>
+    <div class='timeslider' id='sliderbar'>
+      <h2>Hour: <label id='active-hour'>12PM</label></h2>
+      <input id='timeinput' class='slider' type='range' min='0' max='23' step='1' value='12' />
+      <script src="./timeslider.js"></script>
     </div>
 
     <div class="disclaimer">
