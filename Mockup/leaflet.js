@@ -206,7 +206,7 @@ function getMarkerInfo() {
         })();
       }
       map.addLayer(markerClusterGroup);
-
+      
       resolve(markersInfo);
       var bound = featureGroups.getBounds();
       map.fitBounds(featureGroups.getBounds(), {
@@ -857,3 +857,4 @@ function boundsMap(coords) {
     paddingTopLeft: [coords ? sidebar : 0, 10],
   });
 }
+

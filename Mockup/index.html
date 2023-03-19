@@ -98,9 +98,8 @@
 
     
     <div class="dashboard">
-      
         <div class="select">
-            <label for="station-network">Station network</label>
+            <label for="station-network">Model</label>
           <select id="station-network">
             <option value="Option 1">New South Wales</option>
             <option value="Option 2">North Sydney</option>
@@ -169,6 +168,11 @@
         <div class="o3-icon">Doom</div>
         <span class="quality-value">50-60</span>
       </div>
+    </div>
+    <div class='timeslider' id='sliderbar'>
+      <h2>Hour: <label id='active-hour'>12PM</label></h2>
+      <input id='timeinput' class='slider' type='range' min='0' max='23' step='1' value='12' />
+      <script src="./timeslider.js"></script>
     </div>
 
     <!-- <div class="dropdown">
