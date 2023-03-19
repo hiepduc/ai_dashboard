@@ -7,21 +7,17 @@ $.get("/AQSs_Info/e.csv", function (csvString) {
   let title = [];
   let value = [];
   for (let i = 0; i < data.length - 1; i++) {
-    // (function () {
     var row = data[i];
     if (row != null) {
       markersInfo.push({ title: data[i].title, o3Value: data[i]["O3_Value"] });
     }
-    // })();
   }
 
   markersInfo.sort(function (a, b) {
     return b.o3Value - a.o3Value;
   });
   // Call the callback function here after the array is fully populated
-
-  //   markersInfo.push({title: title,value: value});
-  console.log(markersInfo);
+  // console.log(markersInfo);
 
   displayStationNames(markersInfo);
 });
@@ -37,16 +33,15 @@ function displayStationNames(stationNames) {
 
     const stationItem = document.createElement("li");
     stationItem.classList.add("station-item");
-    // stationItem.setAttribute("data-value-range", getValueRange(stationValue));
-
+    
     if (stationValue <= 50) {
       stationItem.classList.add("good");
     } else if (stationValue <= 100) {
       stationItem.classList.add("moderate");
     } else if (stationValue <= 150) {
-      stationItem.classList.add("unhealthy-sensitive");
-    } else {
       stationItem.classList.add("unhealthy");
+    } else {
+      stationItem.classList.add("harmful");
     }
 
     const stationContainer = document.createElement("div");

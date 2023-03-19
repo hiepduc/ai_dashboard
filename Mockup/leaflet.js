@@ -195,11 +195,9 @@ function getMarkerInfo() {
               }
               changeMarkerIcon(marker);
               activeMarker = marker;
-              sidebar
-                .setContent(
+              sidebar.setContent(
                   generateMarkerContent(data[i].title, data[i].lat, data[i].lng)
-                )
-                .show();
+                ).show();
             });
             markerClusterGroup.addLayer(marker);
           }
@@ -217,8 +215,6 @@ function getMarkerInfo() {
   });
 }
 
-
-
 async function changeMarkerIcon(marker) {
   // Change the icon for the clicked marker
   marker.setIcon(
@@ -235,27 +231,34 @@ function generateMarkerContent(title, lat, lng) {
   const content = `
 	  <div class="marker-content">
 	  	<div class="marker-title-container">
-			<h2 class="marker-title">${title} Station</h2>
+			  <h2 class="marker-title">${title} Station</h2>
 	  		<p class="marker-latlng"><b>Latitude:</b> ${lat} | <b>Longitude:</b> ${lng}</p>
-		</div>
-		<div class="container">
-			<div class="tabs">
-				<h3 class="active">Forecast </h3>
-				<h3>History </h3>
-			</div>
+		  </div>
+      <div class="container">
+        <div class="tabs">
+          <h3 class="tab-item active">Forecast </h3>
+          <h3 class="tab-item">History </h3>
+        </div>
+      </div> 
 
 			<div class="tab-content">
-			<div class="active">
-				<canvas id="marker-chart-${title}" class="marker-chart" width="200" height="200"></canvas>
+        <div class="active">
+          <canvas id="marker-chart-${title}" class="marker-chart" width="200" height="200"></canvas>
+        </div>
+        <div>
+          <canvas id="NO2-chart-${title}" class="NO2-chart" width="200" height="200"></canvas>
+          <canvas id="WDR-chart-${title}" class="WDR-chart" width="200" height="200"></canvas>
+          <canvas id="WSP-chart-${title}" class="WSP-chart" width="200" height="200"></canvas>
+        </div>
+        
 			</div>
-			<div>
-				<canvas id="NO2-chart-${title}" class="NO2-chart" width="200" height="200"></canvas>
-				<canvas id="WDR-chart-${title}" class="WDR-chart" width="200" height="200"></canvas>
-				<canvas id="WSP-chart-${title}" class="WSP-chart" width="200" height="200"></canvas>
-			</div>
-			</div>
+      <div class="stats">
+        <h4>Current value of O3: </h4>
+        <h4>Max value of O3: </h4>
+        <h4>Stats</h4>
+        <h5>MAE: </h5>
+      </div>
 		</div>
-	  </div>
 	`;
 
   setTimeout(() => {
@@ -279,7 +282,8 @@ function generateMarkerContent(title, lat, lng) {
           // extract data from historyData
           const historyXValues = result.historyData.map((d) => d.date);
           const historyYValues = result.historyData.map((d) => d.ozone);
-
+          console.log(forecastXValues.map((x, i) => ({x: x, y: forecastYValues[i]})))
+          console.log(historyXValues.map((x, i) => ({x: x, y: historyYValues[i]})))
           // generate chart for both canvas elements
           generateChart(
             ctx1,
@@ -370,7 +374,7 @@ async function generateChart(
   new Chart(context, {
     type: "line",
     data: {
-      labels: forecastXValues, // historyXValues.concat(forecastXValues),
+      labels: historyXValues.concat(forecastXValues),
       datasets: [
         {
           label: "Forecast",
@@ -378,14 +382,23 @@ async function generateChart(
           lineTension: 0,
           backgroundColor: "rgba(0,0,255,1.0)",
           borderColor: "rgba(0,0,255,0.1)",
-          data: forecastYValues,
+          // data: forecastYValues,
+          // data: [
+          //   {x: forecastXValues, y: forecastYValues}
+          // ]
+          data: forecastXValues.map((x, i) => ({x: x, y: forecastYValues[i]})),
         },
         {
           label: "History",
           fill: false,
           backgroundColor: "rgba(255,0,255,1.0)",
           borderColor: "rgba(255,0,255,0.1)",
-          data: historyYValues,
+          // data: historyYValues,
+          // xAxisID: 'x2' // Match dataset to other axis
+          // data: [
+          //   {x: historyXValues, y: historyYValues}
+          // ]
+          data: historyXValues.map((xa, i) => ({x: xa, y: historyYValues[i]})),
         },
       ],
     },
@@ -400,6 +413,18 @@ async function generateChart(
       },
       scales: {
         xAxes: [
+          // {
+          //   type: 'category',
+          //   labels: forecastXValues,
+          //   id: 'x',
+          //   display: true // Set to false to hide the axis
+          // },
+          // {
+          //   type: 'category',
+          //   labels: historyXValues,
+          //   id: 'x2',
+          //   display: false // Set to false to hide the axis
+          // }
           {
             scaleLabel: {
               display: true,
@@ -475,10 +500,7 @@ async function generateChart1(
               labelString: "Forecast time",
             },
             ticks: {
-              // autoSkip: true,
-              // maxTicksLimit: 80,
               maxRotation: 90,
-              // minRotation: 0,
             },
           },
         ],
@@ -670,12 +692,12 @@ var nswBoundary = L.geoJSON(nswMapData, {
   },
 }).addTo(map);
 
-var baseMaps = {
-  Default: osm,
-  "Ozone O3": StamenTerrain,
-  "PM2.5": StadiaAlidadeSmoothDark,
-};
-L.control.layers(baseMaps, null, { collapsed: false }).addTo(map);
+// var baseMaps = {
+//   Default: osm,
+//   "Ozone O3": StamenTerrain,
+//   "PM2.5": StadiaAlidadeSmoothDark,
+// };
+// L.control.layers(baseMaps, null, { collapsed: false }).addTo(map);
 
 // // ------------------------------------------------------------
 // // async function to get data from json
