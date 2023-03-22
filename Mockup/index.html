@@ -39,8 +39,12 @@
     <script src="./AQSs_Info/nswMap.js"></script>
 
     <!-- CDN for Chart.JS -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script> -->
     <!-- <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> -->
+    <!-- <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js"></script> -->
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.2.1/chart.min.js" integrity="sha512-v3ygConQmvH0QehvQa6gSvTE2VdBZ6wkLOlmK7Mcy2mZ0ZF9saNbbk19QeaoTHdWIEiTlWmrwAL4hS8ElnGFbA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js"></script>
+
 
     <link rel="stylesheet" href="./ControlSidebar.css" />
     <script src="./ControlSidebar.js"></script>
@@ -97,63 +101,16 @@
     </header>
 
     <div class="dashboard">
-<<<<<<< HEAD
       <div class="select">
         <div class="station-model">
-          <label for="station-model">Model</label>
-=======
-        <div class="select">
-            <label for="station-network">Model</label>
+          <label for="station-network">Model</label><br>
           <select id="station-network">
             <option value="Option 1">New South Wales</option>
             <option value="Option 2">North Sydney</option>
             <option value="Option 3">South Sydney</option>
             <option value="Option 4">Hunter Valley</option>
           </select>
-          <label for="standard-select">Pollutant</label>
-          <select id="standard-select">
-            <option value="Option 1">PM10</option>
-            <option value="Option 2">PM2.5</option>
-            <option value="Option 3">O3</option>
-            <option value="Option 4">CO</option>
-            <option value="Option 5">NO2</option>
-         
-          </select>
-          
-          <label for="time-scope">Time Scope</label>
-          <select id="time-scope">
-            <option value="Option 1">12h</option>
-            <option value="Option 2">24h</option>
-            <option value="Option 3">36h</option>
-            <option value="Option 4">48h</option>
-            <option value="Option 5">72h</option>
-          </select>
-        
->>>>>>> 03dceddba38cb17bcebdf705f04ae2c5bcc87b54
         </div>
-        <select id="station-model">
-          <option value="Option 1">New South Wales</option>
-          <option value="Option 2">North Sydney</option>
-          <option value="Option 3">South Sydney</option>
-          <option value="Option 4">Hunter Valley</option>
-        </select>
-        <!-- <label for="standard-select">Pollutant</label>
-        <select id="standard-select">
-          <option value="Option 1">PM10</option>
-          <option value="Option 2">PM2.5</option>
-          <option value="Option 3">O3</option>
-          <option value="Option 4">CO</option>
-          <option value="Option 5">NO2</option>
-        </select>
-
-        <label for="time-scope">Time Scope</label>
-        <select id="time-scope">
-          <option value="Option 1">12h</option>
-          <option value="Option 2">24h</option>
-          <option value="Option 3">36h</option>
-          <option value="Option 4">48h</option>
-          <option value="Option 5">72h</option>
-        </select> -->
       </div>
 
       <div class="map" id="mapid">
@@ -216,6 +173,7 @@
         <span class="quality-value">50-60</span>
       </div>
     </div>
+
     <div class='timeslider' id='sliderbar'>
       <h2>Hour: <label id='active-hour'>12PM</label></h2>
       <input id='timeinput' class='slider' type='range' min='0' max='23' step='1' value='12' />
@@ -227,93 +185,51 @@
       <h2 class="disclaimer-flex">Stats</h2>
     </div>
 
-    <!-- <div class="flex-container">
-      <div class="flex-item">Flex 1</div>
-      <div class="flex-item center">Flex Item 2</div>
-      <div class="flex-item last">Flex Item 3</div>
-      <div class="flex-item">Flex Item 4</div>
-      <div class="flex-item center">Flex 5</div>
-      <div class="flex-item last">Flex Item 6</div>
+
+    
+    <div>
+      <canvas id="myChart1"></canvas>
     </div>
-
-    <style>
-      .flex-container {
-        display: flex;
-        /* width: 80%; */
-        flex-wrap: wrap;
-        justify-content: space-between;
-        align-items: flex-start;
-      }
-      .flex-item {
-        flex-basis: 33.33%;
-        flex-direction: column;
-        align-items: center;
-        /* text-align: left; */
-        /* margin: 5px; */
-      }
-      .flex-item.center {
-        text-align: center;
-      }
-      .flex-item.last {
-        text-align: right;
-      }
-    </style> -->
-    <canvas id="myChart"></canvas>
+    <div>
+      <input type="range" min="0" max="100" value="50" class="slider1">
+    </div>
     <script>
-      // Data for line 1
-      const data1 = {
-        label: "Line 1",
-        data: [
-          { x: 1, y: 10 },
-          { x: 2, y: 20 },
-          { x: 3, y: 15 },
-        ],
-        borderColor: "red",
-        fill: false,
-      };
-
-      // Data for line 2
-      const data2 = {
-        label: "Line 2",
-        data: [
-          { x: 2.5, y: 5 },
-          { x: 4, y: 12 },
-          { x: 5, y: 8 },
-        ],
-        borderColor: "blue",
-        fill: false,
-      };
-
-      // Create a chart
-      const ctx = document.getElementById("myChart").getContext("2d");
-      const myChart = new Chart(ctx, {
-        type: "line",
+      var slider = document.querySelector('.slider1');
+      var ctx = document.getElementById('myChart1').getContext('2d');
+      var chartData = [20, 30, 40, 50, 60, 70, 80, 90, 100];
+      var myChart = new Chart(ctx, {
+        type: 'bar',
         data: {
-          datasets: [data1, data2],
+          labels: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I'],
+          datasets: [{
+            label: 'My Chart',
+            data: chartData,
+            backgroundColor: 'rgba(255, 99, 132, 0.2)',
+            borderColor: 'rgba(255, 99, 132, 1)',
+            borderWidth: 1
+          }]
         },
         options: {
+          responsive: true,
+          maintainAspectRatio: false,
           scales: {
-            xAxes: [
-              {
-                type: "linear",
-                position: "bottom",
-                ticks: {
-                  min: 0,
-                  max: 6,
-                },
-              },
-            ],
-            yAxes: [
-              {
-                ticks: {
-                  beginAtZero: true,
-                },
-              },
-            ],
-          },
-        },
+            yAxes: [{
+              ticks: {
+                beginAtZero: true
+              }
+            }]
+          }
+        }
       });
+  
+      slider.oninput = function() {
+        chartData = chartData.map(value => value + 1);
+        myChart.data.datasets[0].data = chartData;
+        myChart.update();
+      }
     </script>
+
+
 
     <footer class="global__footer">
       <div class="section__content">
