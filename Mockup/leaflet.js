@@ -371,7 +371,7 @@ async function generateChart(
         },
       },
       scales: {
-        xAxes: [
+        x: 
           {
             scaleLabel: {
               display: true,
@@ -384,19 +384,19 @@ async function generateChart(
               // minRotation: 0,
             },
           },
-        ],
-        yAxes: [
+        
+        y: 
           {
             ticks: {
               suggestedMin: 0,
-              suggestedMax: Math.max(...historyYValues) * 1.1,
+              suggestedMax: Math.max(...historyYValues, ...forecastYValues) * 1.1,
             },
             scaleLabel: {
               display: true,
               labelString: "Ozone (ppb)",
             },
           },
-        ],
+        
       },
     },
   });
