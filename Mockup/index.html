@@ -43,10 +43,13 @@
     <!-- <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> 2.9.4 -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js"></script>
     <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.2.1/chart.min.js" integrity="sha512-v3ygConQmvH0QehvQa6gSvTE2VdBZ6wkLOlmK7Mcy2mZ0ZF9saNbbk19QeaoTHdWIEiTlWmrwAL4hS8ElnGFbA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script> -->
-    
+    <!-- Chart.JS Annotation Plugin-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-annotation/1.0.2/chartjs-plugin-annotation.min.js"></script>
+
 
     <link rel="stylesheet" href="./ControlSidebar.css" />
     <script src="./ControlSidebar.js"></script>
+    
 
     <!-- Marker cluster -->
     <link
@@ -121,16 +124,16 @@
       <div class="dashboard__right-container">
         <div class="pollutant-selector">
           <div class="radio-item">
-            <input type="radio" name="radio" id="radio1" checked="checked" />
-            <label for="radio1">O3</label>
+            <input type="radio" name="pollutant" data-pollutant="OZONE" id="o3" checked="checked" />
+            <label for="o3">O3</label>
           </div>
           <div class="radio-item">
-            <input type="radio" name="radio" id="radio2" />
-            <label for="radio2">PM 2.5</label>
+            <input type="radio" name="pollutant" data-pollutant="PM25" id="pm25"/>
+            <label for="pm25">PM 2.5</label>
           </div>
           <div class="radio-item">
-            <input type="radio" name="radio" id="radio3" />
-            <label for="radio3">Other...</label>
+            <input type="radio" name="pollutant" data-pollutant="other" id="other"/>
+            <label for="other">Other...</label>
           </div>
         </div>
 
@@ -173,9 +176,9 @@
       </div>
     </div>
 
-    <div class='timeslider' id='sliderbar'>
-      <h2>Hour: <label id='active-hour'>2 PM</label></h2>
-      <input id='timeinput' class='slider' type='range' min='0' max='23' step='1' value='14' />
+    <div class='time-slider' id='slider-bar'>
+      <h2>Forecast hour: <label id='active-hour'>11 AM 1/1</label></h2>
+      <input id='time-input' class='slider' type='range' min='0' max='23' step='1' value='0' />
       <script src="./timeslider.js"></script>
     </div>
 
@@ -183,6 +186,8 @@
       <h2 class="disclaimer-flex">Disclaimer placeholder</h2>
       <h2 class="disclaimer-flex">Stats</h2>
     </div>
+
+    
 
     <footer class="global__footer">
       <div class="section__content">

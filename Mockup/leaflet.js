@@ -41,13 +41,6 @@ var StadiaAlidadeSmoothDark = L.tileLayer(
   }
 );
 
-var defaultIcon = L.icon({
-  iconUrl: "/images/marker1.svg",
-  iconSize: [50, 50],
-  iconAnchor: [25, 50],
-  popupAnchor: [0, -50],
-});
-
 // Home button
 {
   // Home button
@@ -123,7 +116,20 @@ function getMarkerInfo() {
   return new Promise(function (resolve, reject) {
     // var markersInfo = [];
     var activeMarker = null;
-    var markerClusterGroup = L.markerClusterGroup();
+    // Create a DivIcon with custom HTML content
+
+    var markerClusterGroup = L.markerClusterGroup({
+      iconCreateFunction: function (cluster) {
+        const childCount = cluster.getChildCount();
+        return L.divIcon({
+          html: `<img src="/images/markerCluster.svg">
+                  <span>${childCount}</span>`,
+          className: "marker-cluster",
+        });
+      },
+      showCoverageOnHover: false,
+    });
+
     $.get("/AQSs_Info/e.csv", function (csvString) {
       // Use PapaParse to convert string to array of objects
       var data = Papa.parse(csvString, {
@@ -132,8 +138,8 @@ function getMarkerInfo() {
       }).data;
 
       // Create a new panel for the new tab
-      var newPanel = L.DomUtil.create("div", "sidebar-pane");
-      newPanel.innerHTML = "<h1>New Tab Content</h1>";
+      // var newPanel = L.DomUtil.create("div", "sidebar-pane");
+      // newPanel.innerHTML = "<h1>New Tab Content</h1>";
 
       var sidebar = L.control
         .sidebar("sidebar", {
@@ -141,7 +147,7 @@ function getMarkerInfo() {
           position: "right",
         })
         .addTo(map);
-
+      
       for (let i = 0; i < data.length - 1; i++) {
         (function () {
           // Create a new scope for each iteration of the loop
@@ -153,26 +159,29 @@ function getMarkerInfo() {
           if (row.lat != null && row.lng != null) {
             latlngs = L.latLng([row.lat, row.lng]);
             let marker = L.marker(latlngs).addTo(featureGroups);
-            marker.setIcon(defaultIcon).bindTooltip(data[i].title, {
-              direction: "top",
-              offset: [1, -40],
-            });
+            marker
+              .setIcon(colorMarker("default"))
+              .bindTooltip(data[i].title, {
+                direction: "top",
+              });
             marker.on("click", function () {
               if (activeMarker != null) {
-                activeMarker.setIcon(defaultIcon);
+                activeMarker.setIcon(colorMarker("default"));
               }
-              changeMarkerIcon(marker);
               activeMarker = marker;
-              sidebar.setContent(
+              marker.setIcon(colorMarker("selected"));
+              sidebar
+                .setContent(
                   generateMarkerContent(data[i].title, data[i].lat, data[i].lng)
-                ).show();
+                )
+                .show();
             });
             markerClusterGroup.addLayer(marker);
           }
         })();
       }
       map.addLayer(markerClusterGroup);
-      
+
       resolve(markersInfo);
       var bound = featureGroups.getBounds();
       map.fitBounds(featureGroups.getBounds(), {
@@ -183,48 +192,59 @@ function getMarkerInfo() {
   });
 }
 
-async function changeMarkerIcon(marker) {
-  // Change the icon for the clicked marker
-  marker.setIcon(
-    L.icon({
-      iconUrl: "/images/marker3.svg",
-      iconSize: [60, 60],
-      iconAnchor: [30, 60],
-      popupAnchor: [0, -60],
-    })
-  );
+function colorMarker(state) {
+  if (state == "selected") {
+    var size = 40;
+    var color = "#ff0000";
+  } else {
+    var size = 30;
+    var color = "#4472C4";
+  }
+
+  const svgTemplate = `
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" class="marker">
+    <path stroke="#fff" fill="${color}" d="M15.938 32S6 17.938 6 11.938C6 .125 15.938 0 15.938 0S26 .125 26 11.875C26 18.062 15.938 32 15.938 32zM16 6a4 4 0 100 8 4 4 0 000-8z"/>
+  </svg>`;
+
+  const colorIcon = L.divIcon({
+    className: "marker",
+    html: svgTemplate,
+    iconSize: [size, size],
+    iconAnchor: [size / 2, size],
+    popupAnchor: [0, -size],
+    tooltipAnchor: [1, -size],
+  });
+  return colorIcon;
 }
 
 function generateMarkerContent(title, lat, lng) {
   const content = `
 	  <div class="marker-content">
+
 	  	<div class="marker-title-container">
 			  <h2 class="marker-title">${title} Station</h2>
 	  		<p class="marker-latlng"><b>Latitude:</b> ${lat} | <b>Longitude:</b> ${lng}</p>
-		  </div>
-      <div class="container">
-        <div class="tabs">
+        <div class="marker-title__tabs">
           <h3 class="tab-item active">Forecast </h3>
           <h3 class="tab-item">History </h3>
         </div>
-      </div> 
-
+      </div>
+      
 			<div class="tab-content">
-        <div class="active">
-          <canvas id="marker-chart-${title}" class="marker-chart" width="200" height="200"></canvas>
+        <div class="chart active">
+          <canvas id="marker-chart-${title}" class="marker-chart" width="1" height="1"></canvas>
+          <div class="stats">
+            <h4>Current value of O3: </h4>
+            <h4>Max value of O3: </h4>
+            <h4>Stats</h4>
+            <h5>MAE: </h5>
+          </div>
         </div>
-        <div>
+        <div class="chart">
           <canvas id="NO2-chart-${title}" class="NO2-chart" width="200" height="200"></canvas>
           <canvas id="WDR-chart-${title}" class="WDR-chart" width="200" height="200"></canvas>
           <canvas id="WSP-chart-${title}" class="WSP-chart" width="200" height="200"></canvas>
         </div>
-        
-			</div>
-      <div class="stats">
-        <h4>Current value of O3: </h4>
-        <h4>Max value of O3: </h4>
-        <h4>Stats</h4>
-        <h5>MAE: </h5>
       </div>
 		</div>
 	`;
@@ -241,17 +261,30 @@ function generateMarkerContent(title, lat, lng) {
     const ctx4 = canvas4.getContext("2d");
 
     if (canvas1) {
-      getOzoneDataForLocation(title, "/AQSs_Info/forecast.csv").then(
+      getOzoneDataForLocation(title, "/AQSs_Info/forecast1.csv").then(
         (result) => {
           // extract data from forecastData
           const forecastXValues = result.forecastData.map((d) => d.date);
           const forecastYValues = result.forecastData.map((d) => d.ozone);
-
           // extract data from historyData
           const historyXValues = result.historyData.map((d) => d.date);
           const historyYValues = result.historyData.map((d) => d.ozone);
-          console.log(forecastXValues.map((x, i) => ({x: x, y: forecastYValues[i]})))
-          console.log(historyXValues.map((x, i) => ({x: x, y: historyYValues[i]})))
+          // console.log(forecastXValues.map((x, i) => ({ x: x, y: forecastYValues[i] })));
+          // console.log(historyXValues.map((x, i) => ({ x: x, y: historyYValues[i] })));
+
+          const stationColorIndex = document.querySelector(
+            ".marker-title-container"
+          );
+          if (forecastYValues[0] <= 2) {
+            stationColorIndex.classList.add("good");
+          } else if (forecastYValues[0] <= 3) {
+            stationColorIndex.classList.add("moderate");
+          } else if (forecastYValues[0] <= 5) {
+            stationColorIndex.classList.add("unhealthy");
+          } else {
+            stationColorIndex.classList.add("harmful");
+          }
+
           // generate chart for both canvas elements
           generateChart(
             ctx1,
@@ -264,8 +297,8 @@ function generateMarkerContent(title, lat, lng) {
       );
     }
 
-    let tabs = document.querySelectorAll(".tabs h3");
-    let tabContents = document.querySelectorAll(".tab-content div");
+    let tabs = document.querySelectorAll(".marker-title__tabs h3");
+    let tabContents = document.querySelectorAll(".chart");
     tabs.forEach((tab, index) => {
       tab.addEventListener("click", () => {
         tabContents.forEach((content) => {
@@ -286,7 +319,7 @@ function generateMarkerContent(title, lat, lng) {
           getHistoryDataForLocation(
             title,
             "NO2",
-            "/AQSs_Info/forecast.csv"
+            "/AQSs_Info/forecast1.csv"
           ).then((result) => {
             // extract data from historyData
             const historyXValues = result.map((d) => d.date);
@@ -300,7 +333,7 @@ function generateMarkerContent(title, lat, lng) {
           getHistoryDataForLocation(
             title,
             "WDR",
-            "/AQSs_Info/forecast.csv"
+            "/AQSs_Info/forecast1.csv"
           ).then((result) => {
             // extract data from historyData
             const historyXValues = result.map((d) => d.date);
@@ -314,7 +347,7 @@ function generateMarkerContent(title, lat, lng) {
           getHistoryDataForLocation(
             title,
             "WSP",
-            "/AQSs_Info/forecast.csv"
+            "/AQSs_Info/forecast1.csv"
           ).then((result) => {
             // extract data from historyData
             const historyXValues = result.map((d) => d.date);
@@ -349,7 +382,7 @@ async function generateChart(
           fill: false,
           backgroundColor: "rgba(255,0,255,1.0)",
           borderColor: "rgba(255,0,255,0.1)",
-          data: historyXValues.map((x, i) => ({x: x, y: historyYValues[i]})),
+          data: historyXValues.map((x, i) => ({ x: x, y: historyYValues[i] })),
         },
         {
           label: "Forecast",
@@ -357,11 +390,27 @@ async function generateChart(
           lineTension: 0,
           backgroundColor: "rgba(0,0,255,1.0)",
           borderColor: "rgba(0,0,255,0.1)",
-          data: forecastXValues.map((x, i) => ({x: x, y: forecastYValues[i]})),
+          data: forecastXValues.map((x, i) => ({
+            x: x,
+            y: forecastYValues[i],
+          })),
         },
       ],
     },
     options: {
+      plugins: {
+        annotation: {
+          annotations: {
+            vertLine: {
+              type: "line",
+              xMin: 12,
+              xMax: 12,
+              borderColor: "red",
+              borderWidth: 2,
+            },
+          },
+        },
+      },
       responsive: true,
       legend: {
         display: true,
@@ -371,32 +420,26 @@ async function generateChart(
         },
       },
       scales: {
-        x: 
-          {
-            scaleLabel: {
-              display: true,
-              labelString: "Forecast time",
-            },
-            ticks: {
-              // autoSkip: true,
-              // maxTicksLimit: 80,
-              maxRotation: 90,
-              // minRotation: 0,
-            },
+        x: {
+          title: {
+            display: true,
+            text: "Forecast time",
           },
-        
-        y: 
-          {
-            ticks: {
-              suggestedMin: 0,
-              suggestedMax: Math.max(...historyYValues, ...forecastYValues) * 1.1,
-            },
-            scaleLabel: {
-              display: true,
-              labelString: "Ozone (ppb)",
-            },
+          ticks: {
+            maxRotation: 90,
           },
-        
+        },
+
+        y: {
+          ticks: {
+            suggestedMin: 0,
+            suggestedMax: Math.max(...historyYValues, ...forecastYValues) * 1.1,
+          },
+          title: {
+            display: true,
+            text: "Ozone (ppb)",
+          },
+        },
       },
     },
   });
@@ -411,7 +454,7 @@ async function generateChart1(
   new Chart(context, {
     type: "line",
     data: {
-      labels: historyXValues, // historyXValues.concat(forecastXValues),
+      labels: historyXValues,
       datasets: [
         {
           label: "Forecast",
@@ -440,29 +483,25 @@ async function generateChart1(
         },
       },
       scales: {
-        xAxes: [
-          {
-            scaleLabel: {
-              display: true,
-              labelString: "Forecast time",
-            },
-            ticks: {
-              maxRotation: 90,
-            },
+        x: {
+          title: {
+            display: true,
+            text: "Forecast time",
           },
-        ],
-        yAxes: [
-          {
-            ticks: {
-              suggestedMin: 0,
-              suggestedMax: Math.max(...historyYValues) * 1.1,
-            },
-            scaleLabel: {
-              display: true,
-              labelString: `${parameter} ()`,
-            },
+          ticks: {
+            maxRotation: 90,
           },
-        ],
+        },
+        y: {
+          ticks: {
+            suggestedMin: 0,
+            suggestedMax: Math.max(...historyYValues) * 1.1,
+          },
+          title: {
+            display: true,
+            text: `${parameter} ()`,
+          },
+        },
       },
     },
   });
@@ -826,4 +865,3 @@ function boundsMap(coords) {
     paddingTopLeft: [coords ? sidebar : 0, 10],
   });
 }
-

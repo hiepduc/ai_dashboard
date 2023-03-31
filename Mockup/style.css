@@ -111,41 +111,25 @@ body {
   position: relative;
   width: 100%;
   height: 100%;
-  /* padding-left: 10px; */
   overflow: hidden;
-  overflow-y: scroll;
 }
 
 .marker-title-container {
   position: sticky;
   top: 0;
-  /* height: 10%; */
-  background-color: white;
+  height: 15%;
+  background-color: #fff;
   z-index: 1;
 }
-
-/* .tab-content {
-  height: 80%;
-} */
 
 .hidden {
   display: none;
 }
 
-.container {
+.marker-title__tabs {
+  position: absolute;
   width: 100%;
-  border: 1px solid white;
-  position: sticky;
-  /* transform: translateX(-50%);
-    left: 50%; */
-  /* top: 100px; */
-  background-color: white;
-  /* box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5); */
-  overflow-y: auto;
-}
-
-.tabs {
-  position: relative;
+  bottom: 0;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -154,11 +138,15 @@ body {
 
 .tab-item {
   width: 50%;
+  color: rgb(13, 18, 31, 0.5);
+  background-color: #f3f3f3;
+  text-align: center;
+  cursor: pointer;
 }
 
-.tabs .active {
-  background-color: wheat;
-  color: #002664;
+.tab-item.active {
+  background-color: white;
+  color: #333;
 }
 
 .tabs h3 {
@@ -168,17 +156,31 @@ body {
 
 .tab-content {
   background-color: white;
-  /* padding: 50px 40px; */
+  height: 85%;
+  overflow: hidden;
+  overflow-y: scroll;
 }
 
-.tab-content div {
+/* .tab-content::-webkit-scrollbar {
+  display: none; /* hide the scrollbar for webkit-based browsers 
+} */
+
+.tab-content .chart{
+  position: relative;
   display: none;
-  color: green;
+  color: #333;
+  overflow: hidden;
 }
 
-.tab-content .active {
+.tab-content .chart.active {
   display: block;
 }
+
+.tab-content .stats{
+  display: block;
+}
+
+
 
 .select {
   position: top;
@@ -204,6 +206,8 @@ body {
   margin: 0;
 }
 
+
+
 .dashboard__right-container{
   position: relative;
   height: 100%;
@@ -214,16 +218,19 @@ body {
   overflow: hidden;
 }
 
-
 .pollutant-selector{
-  position: relative;
+  /* position: relative; */
   height: 10%;
   width: 100%;
-  display: inline-flex;
+  display: flex;
+  flex-direction: row;
   align-items: center;
   justify-content: space-evenly;
 }
 
+.radio-item{
+  flex: 1;
+}
 .radio-item input[type="radio"]{
   display: none;
 }
@@ -233,55 +240,44 @@ body {
 }
 
 .radio-item label{
-  padding: 5px 20px;
-  height: 20px;
-  width: 50px;
+  width: 85%;
+  padding: 5px;
+  margin: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   background: white;
-  border: 2px solid rgba(173, 173, 173, 1);
-  border-radius: 6px;
+  border: 2px solid #ccc;
+  border-radius: 15px;
   cursor: pointer;
+  background-color: #f3f3f3;
+  color: rgb(13, 18, 31, 0.5);
   font-size: 12px;
-  font-weight: 400;
-  min-width: 100px;
-  position: relative;
-}
-
-.radio-item label:after,
-.radio-item label:before{
-  content: "";
-  position: absolute;
-  border-radius: 50%;
-}
-
-.radio-item label:before{
-  background: #524eee;
-  height: 6px;
-  width: 6px;
-  left: 5px;
-  top: 10px;
-  transition: 0.5s ease;
-  opacity: 0;
-  visibility: hidden;
-}
-
-.radio-item label:after{
-  height: 12px;
-  width: 12px;
-  border: 2px solid #524eee;
-  left: 2px;
-  top: 7px;
+  font-weight: bold;
+  text-align: center;
+  transition: 0.5s;
 }
 
 .radio-item [type="radio"]:checked ~ label{
   border-color: #524eee;
-}
-
-.radio-item [type="radio"]:checked ~ label:before{
-  opacity: 1;
-  visibility: visible;
+  background-color: #524eee;
+  color: #fff;
 }
 
 
+
+.marker-cluster>img{
+  height: 30px;
+  width: 30px;
+  translate: -9px -9px;
+}
+.marker-cluster span{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #fff;
+}
 
 
 .stations-menu {
@@ -297,7 +293,8 @@ body {
 .stations-header {
   position: relative;
   height: 30px;
-  background-color: #4caf50;
+  color: #fff;
+  background-color: #524eee;
   padding: 0 10px 0 3px;
   display: flex;
   flex-direction: row;
@@ -373,6 +370,7 @@ body {
 .station-value {
   margin: 5px;
   min-width: 60px;
+  text-align: right;
 }
 
 
@@ -390,6 +388,8 @@ body {
 .disclaimer-flex {
   padding: 0 0 20px 0;
 }
+
+/* End of Body */
 
 
 
@@ -448,6 +448,9 @@ hr {
   margin-left: 1.5rem;
   margin-right: 0;
 }
+
+/* End of Footer */
+
 
 .marker-position {
   position: absolute;
@@ -540,7 +543,7 @@ hr {
   margin-left: 10px;
 }
 
-.timeslider{
+.time-slider{
   display: grid;
   align-items: center;
   text-align: center;
@@ -552,3 +555,4 @@ hr {
   width: 100%; 
   height: 25px; 
 }
+

@@ -1,4 +1,4 @@
-document.getElementById("timeinput").addEventListener("input", (event) => {
+document.getElementById("time-input").addEventListener("input", (event) => {
   const hour = parseInt(event.target.value);
 
   // update the map
@@ -13,76 +13,28 @@ document.getElementById("timeinput").addEventListener("input", (event) => {
   const hour12 = hour % 12 ? hour % 12 : 12;
 
   // update text in the UI
-  document.getElementById("active-hour").innerText = hour12 + ampm + ' 12/01';
+  document.getElementById("active-hour").innerText = hour12 + ampm + " 12/01";
 });
 
-var slider = document.querySelector(".slider");
-console.log(slider);
-var forecastChart = document.getElementById("marker-chart-Camden");
-console.log(forecastChart);
-// var chartData = [20, 30, 40, 50, 60, 70, 80, 90, 100];
+const slider = document.querySelector(".slider");
+
 slider.oninput = function () {
-  const sliderValue = this.value;
-  const csvFileValue = sliderValue - 11;
-  console.log(sliderValue);
-  csvFilePath = `/AQSs_Info/forecast_${csvFileValue}.csv`;
-  getTempOzoneData("Camden", csvFilePath).then((result) => {
-    // extract data from forecastData
-    const forecastXValues = result.forecastData.map((d) => d.date);
-    const forecastYValues = result.forecastData.map((d) => d.ozone);
+  // const station = "Camden";
+  // const chartId = document.querySelector(`[id^="marker-chart-${station}"]`).id;
+  // const stationId = chartId.match(/marker-chart-(.*)/)[1];
+  // console.log(stationId); // "my-station-name"
+  const markerChart = document.querySelector(".marker-chart");
+  const markerChartId = markerChart.getAttribute("id");
+  //console.log(markerChartId); // prints the id of the element with class name "marker-chart"
 
-    // extract data from historyData
-    const historyXValues = result.historyData.map((d) => d.date);
-    const historyYValues = result.historyData.map((d) => d.ozone);
-
-    var forecastChart = document.getElementById("marker-chart-Camden");
-    console.log(forecastChart);
-    // chartData = chartData.map((value) => value + 1);
-    var dearSky = Chart.getChart("marker-chart-Camden");
-    // console.log(dearSky.data);
-    dearSky.data.labels = historyXValues.concat(forecastXValues);
-    dearSky.data.datasets[0].data = historyXValues.map((x, i) => ({x: x, y: historyYValues[i]}));
-    dearSky.data.datasets[1].data = forecastXValues.map((x, i) => ({x: x, y: forecastYValues[i]}));
-    // dearSky.options.scales.x.ticks.maxRotation = 90;
-    a = Math.ceil( Math.max(...historyYValues, ...forecastYValues) * 1.1 );
-    console.log("max " + Math.max(...historyYValues, ...forecastYValues));
-    console.log("a " +a);
-    dearSky.options.scales.y.suggestedMax = a;
-    dearSky.update();
-  });
+  // Get and transform slider value to integer
+  const sliderValue = parseInt(this.value);
+  // Acquire the chart by class name
+  const forecastChart = Chart.getChart(markerChartId);
+  // Translate vertical line with slider value
+  forecastChart.options.plugins.annotation.annotations.vertLine.xMin =
+    sliderValue + 12;
+  forecastChart.options.plugins.annotation.annotations.vertLine.xMax =
+    sliderValue + 12;
+  forecastChart.update();
 };
-
-// getTimeData(stationNames[i], "/AQSs_Info/");
-
-async function getTempOzoneData(location, csvFilePath) {
-  const response = await fetch(csvFilePath);
-  const file = await response.text();
-  const parsedData = Papa.parse(file, { header: true }).data;
-
-  const locationHeader = `OZONE_${location.toUpperCase()}`;
-  const data = parsedData.map((row) => parseFloat(row[locationHeader]));
-  const forecastHours = parsedData.map((row) =>
-    parseFloat(row["forecast_hours"])
-  );
-  const date = parsedData.map((row) =>
-    new Date(row["datetime"]).toLocaleString(undefined, {
-      month: "2-digit",
-      day: "2-digit",
-      hour: "2-digit",
-      minute: "2-digit",
-    })
-  );
-  forecastData = [];
-  for (let i = 0; i < data.length; i++) {
-    if (!isNaN(forecastHours[i]) && forecastHours[i] > 0) {
-      forecastData.push({ date: date[i], ozone: data[i] });
-    }
-  }
-  historyData = [];
-  for (let i = 0; i < data.length; i++) {
-    if (!isNaN(forecastHours[i]) && forecastHours[i] <= 0) {
-      historyData.push({ date: date[i], ozone: data[i] });
-    }
-  }
-  return { forecastData, historyData };
-}
