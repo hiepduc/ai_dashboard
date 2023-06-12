@@ -4,30 +4,68 @@ window.addEventListener("DOMContentLoaded", (event) => {
 
 b();
 async function b() {
-  const pollutantButtons = document.querySelectorAll(
-    'input[type="radio"][name="pollutant"]'
-  );
-  var clickedPollutantButton = document.querySelector('input[type="radio"][name="pollutant"]:checked');
-  console.log(clickedPollutantButton);
-  pollutantButtons.forEach((button) => {
-    button.addEventListener("change", (event) => {
-      clickedPollutantButton.removeAttribute("checked");
-      clickedPollutantButton = event.target;
-      clickedPollutantButton.setAttribute("checked", "checked");
-      stationsInfo = document.querySelectorAll(".stations-info");
-      console.log(stationsInfo);
-      stationsInfo.forEach((container) => {
-        while (container.firstChild) {
-          container.removeChild(container.firstChild);
-        }
-      });
-
-      console.log(event.target.dataset.pollutant);
-      pollutant = event.target.dataset.pollutant;
-      a(pollutant);
+  const pollutantButtons = document.getElementById("selector__air-pollutant");
+  var selectedPollutant = pollutantButtons.values;
+  // var clickedPollutantButton = document.querySelector(
+  //   'input[type="radio"][name="pollutant"]:checked'
+  // );
+  // console.log(clickedPollutantButton);
+  pollutantButtons.addEventListener('change', (event) => {
+    selectedPollutant = event.target.value;
+    stationsInfo = document.querySelectorAll(".stations-info");
+    stationsInfo.forEach((container) => {
+      while (container.firstChild) {
+        container.removeChild(container.firstChild);
+      }
     });
+    a(selectedPollutant);
   });
+  // pollutantButtons.forEach((button) => {
+  //   button.addEventListener("change", (event) => {
+  //     clickedPollutantButton.removeAttribute("checked");
+  //     clickedPollutantButton = event.target;
+  //     clickedPollutantButton.setAttribute("checked", "checked");
+  //     stationsInfo = document.querySelectorAll(".stations-info");
+  //     console.log(stationsInfo);
+  //     stationsInfo.forEach((container) => {
+  //       while (container.firstChild) {
+  //         container.removeChild(container.firstChild);
+  //       }
+  //     });
+
+  //     console.log(event.target.dataset.pollutant);
+  //     pollutant = event.target.dataset.pollutant;
+  //     a(pollutant);
+  //   });
+  // });
 }
+// async function b() {
+//   const pollutantButtons = document.querySelectorAll(
+//     'input[type="radio"][name="pollutant"]'
+//   );
+//   var clickedPollutantButton = document.querySelector(
+//     'input[type="radio"][name="pollutant"]:checked'
+//   );
+//   console.log(clickedPollutantButton);
+//   pollutantButtons.forEach((button) => {
+//     button.addEventListener("change", (event) => {
+//       clickedPollutantButton.removeAttribute("checked");
+//       clickedPollutantButton = event.target;
+//       clickedPollutantButton.setAttribute("checked", "checked");
+//       stationsInfo = document.querySelectorAll(".stations-info");
+//       console.log(stationsInfo);
+//       stationsInfo.forEach((container) => {
+//         while (container.firstChild) {
+//           container.removeChild(container.firstChild);
+//         }
+//       });
+
+//       console.log(event.target.dataset.pollutant);
+//       pollutant = event.target.dataset.pollutant;
+//       a(pollutant);
+//     });
+//   });
+// }
 
 function a(pollutant) {
   $.get("/AQSs_Info/e.csv", function (csvString) {
@@ -78,7 +116,12 @@ function a(pollutant) {
                 return b.o3Value - a.o3Value;
               });
               // console.log("markersInfo: " + markersInfo);
+              // Show loading message/spinner
+              // const loading = document.getElementById("loading");
+              // loading.style.display = "block";
               displayStationNames(markersInfo);
+              // Hide loading message/spinner
+              // loading.style.display = "none";
             }
           }
         );
@@ -114,47 +157,33 @@ async function getData(pollutant, location, csvFilePath) {
 
 function displayStationNames(stationNames) {
   const container = document.querySelector(".stations-info");
+  let html = "";
 
   for (let i = 0; i < stationNames.length; i++) {
     const stationName = stationNames[i].title;
-    // console.log(stationName);
     const stationTime = stationNames[i].time;
-    // console.log(stationTime);
     const stationValue = stationNames[i].o3Value.toFixed(2);
-    // console.log(stationValue);
 
-    const stationItem = document.createElement("li");
-    stationItem.classList.add("station-item");
-
+    let classList = "";
     if (stationValue <= 2) {
-      stationItem.classList.add("good");
+      classList = "good";
     } else if (stationValue <= 3) {
-      stationItem.classList.add("moderate");
+      classList = "moderate";
     } else if (stationValue <= 5) {
-      stationItem.classList.add("unhealthy");
+      classList = "unhealthy";
     } else {
-      stationItem.classList.add("harmful");
+      classList = "harmful";
     }
 
-    const stationContainer = document.createElement("div");
-    stationContainer.classList.add("station-container");
-
-    const stationNameElement = document.createElement("div");
-    stationNameElement.classList.add("station-name");
-    stationNameElement.textContent = stationName;
-
-    const stationTimeElement = document.createElement("div");
-    stationTimeElement.classList.add("station-time");
-    stationTimeElement.textContent = stationTime;
-
-    const stationValueElement = document.createElement("div");
-    stationValueElement.classList.add("station-value");
-    stationValueElement.textContent = stationValue;
-
-    stationContainer.appendChild(stationNameElement);
-    stationContainer.appendChild(stationTimeElement);
-    stationContainer.appendChild(stationValueElement);
-    stationItem.appendChild(stationContainer);
-    container.appendChild(stationItem);
+    html += `<li class="station-item">
+      <div class="station-container">
+        
+        <div class="station-name">${stationName}</div>
+        <div class="station-time">${stationTime}</div>
+        <div class="station-value ${classList}">${stationValue}</div>
+      </div>
+    </li>`;
   }
+
+  container.innerHTML = html;
 }

@@ -6,7 +6,7 @@ let config = {
 // Magnification with which the map will start
 const zoom = 6;
 // Coordinates of NSW geographic center
-const cenLat = -33.163191;
+const cenLat = -32.9; //-33.163191
 const cenLng = 147.032179;
 
 var map = L.map("mapid", config).setView([cenLat, cenLng], zoom); // ([coordinates], zoom scale)
@@ -101,7 +101,6 @@ var StadiaAlidadeSmoothDark = L.tileLayer(
   // const compareToArrays = (a, b) => JSON.stringify(a) === JSON.stringify(b);
 }
 
-
 var featureGroups = L.featureGroup().addLayer(map);
 var markersInfo = [];
 
@@ -147,7 +146,7 @@ function getMarkerInfo() {
           position: "right",
         })
         .addTo(map);
-      
+
       for (let i = 0; i < data.length - 1; i++) {
         (function () {
           // Create a new scope for each iteration of the loop
@@ -159,11 +158,9 @@ function getMarkerInfo() {
           if (row.lat != null && row.lng != null) {
             latlngs = L.latLng([row.lat, row.lng]);
             let marker = L.marker(latlngs).addTo(featureGroups);
-            marker
-              .setIcon(colorMarker("default"))
-              .bindTooltip(data[i].title, {
-                direction: "top",
-              });
+            marker.setIcon(colorMarker("default")).bindTooltip(data[i].title, {
+              direction: "top",
+            });
             marker.on("click", function () {
               if (activeMarker != null) {
                 activeMarker.setIcon(colorMarker("default"));
@@ -175,6 +172,12 @@ function getMarkerInfo() {
                   generateMarkerContent(data[i].title, data[i].lat, data[i].lng)
                 )
                 .show();
+              const closeButton = document.querySelector(".close");
+              console.log(closeButton);
+              closeButton.addEventListener("click", () => {
+                activeMarker.setIcon(colorMarker("default"));
+                activeMarker = null;
+              });
             });
             markerClusterGroup.addLayer(marker);
           }
@@ -198,7 +201,7 @@ function colorMarker(state) {
     var color = "#ff0000";
   } else {
     var size = 30;
-    var color = "#4472C4";
+    var color = "#524eee";
   }
 
   const svgTemplate = `
@@ -225,8 +228,8 @@ function generateMarkerContent(title, lat, lng) {
 			  <h2 class="marker-title">${title} Station</h2>
 	  		<p class="marker-latlng"><b>Latitude:</b> ${lat} | <b>Longitude:</b> ${lng}</p>
         <div class="marker-title__tabs">
-          <h3 class="tab-item active">Forecast </h3>
-          <h3 class="tab-item">History </h3>
+          <h3 class="tab-item active">Forecast</h3>
+          <h3 class="tab-item">Historical data</h3>
         </div>
       </div>
       
@@ -260,17 +263,82 @@ function generateMarkerContent(title, lat, lng) {
     const ctx3 = canvas3.getContext("2d");
     const ctx4 = canvas4.getContext("2d");
 
+    const optionTimeScope = document.getElementById("selector__time-scope");
+    console.log("optionTimeScope " + optionTimeScope);
+    var selectedTime = optionTimeScope.value;
+    console.log(selectedTime);
+
     if (canvas1) {
-      getOzoneDataForLocation(title, "/AQSs_Info/forecast1.csv").then(
-        (result) => {
+      getOzoneDataForLocation(
+        title,
+        `./AQSs_Info/Forecast_O3_48_${selectedTime}_demo.csv`
+      ).then((result) => {
+        // extract data from forecastData
+        const forecastXValues = result.forecastData.map((d) => d.date);
+        const forecastYValues = result.forecastData.map((d) => d.ozone);
+        // extract data from historyData
+        const historyXValues = result.historyData.map((d) => d.date);
+        const historyYValues = result.historyData.map((d) => d.ozone);
+        console.log(
+          forecastXValues.map((x, i) => ({ x: x, y: forecastYValues[i] }))
+        );
+        console.log(
+          historyXValues.map((x, i) => ({ x: x, y: historyYValues[i] }))
+        );
+
+        const stationColorIndex = document.querySelector(
+          ".marker-title-container"
+        );
+        if (forecastYValues[0] <= 2) {
+          stationColorIndex.classList.add("good");
+        } else if (forecastYValues[0] <= 3) {
+          stationColorIndex.classList.add("moderate");
+        } else if (forecastYValues[0] <= 5) {
+          stationColorIndex.classList.add("unhealthy");
+        } else {
+          stationColorIndex.classList.add("harmful");
+        }
+
+        // generate chart for both canvas elements
+        generateChart(
+          ctx1,
+          forecastXValues,
+          forecastYValues,
+          historyXValues,
+          historyYValues,
+          parseInt(selectedTime)
+        );
+      });
+    }
+
+    optionTimeScope.addEventListener("change", (event) => {
+      const markerChart = document.querySelector(".marker-chart");
+      const markerChartId = markerChart.getAttribute("id");
+      const chart = Chart.getChart(markerChartId); // replace "myChart" with the ID of your chart
+      if (chart) {
+        chart.destroy();
+      }
+
+      selectedTime = event.target.value;
+      console.log(selectedTime);
+
+      if (canvas1) {
+        getOzoneDataForLocation(
+          title,
+          `./AQSs_Info/Forecast_O3_48_${selectedTime}_demo.csv`
+        ).then((result) => {
           // extract data from forecastData
           const forecastXValues = result.forecastData.map((d) => d.date);
           const forecastYValues = result.forecastData.map((d) => d.ozone);
           // extract data from historyData
           const historyXValues = result.historyData.map((d) => d.date);
           const historyYValues = result.historyData.map((d) => d.ozone);
-          // console.log(forecastXValues.map((x, i) => ({ x: x, y: forecastYValues[i] })));
-          // console.log(historyXValues.map((x, i) => ({ x: x, y: historyYValues[i] })));
+          console.log(
+            forecastXValues.map((x, i) => ({ x: x, y: forecastYValues[i] }))
+          );
+          console.log(
+            historyXValues.map((x, i) => ({ x: x, y: historyYValues[i] }))
+          );
 
           const stationColorIndex = document.querySelector(
             ".marker-title-container"
@@ -291,11 +359,12 @@ function generateMarkerContent(title, lat, lng) {
             forecastXValues,
             forecastYValues,
             historyXValues,
-            historyYValues
+            historyYValues,
+            parseInt(selectedTime)
           );
-        }
-      );
-    }
+        });
+      }
+    });
 
     let tabs = document.querySelectorAll(".marker-title__tabs h3");
     let tabContents = document.querySelectorAll(".chart");
@@ -370,7 +439,8 @@ async function generateChart(
   forecastXValues,
   forecastYValues,
   historyXValues,
-  historyYValues
+  historyYValues,
+  timeScope
 ) {
   new Chart(context, {
     type: "line",
@@ -378,7 +448,7 @@ async function generateChart(
       labels: historyXValues.concat(forecastXValues),
       datasets: [
         {
-          label: "History",
+          label: "Historical data",
           fill: false,
           backgroundColor: "rgba(255,0,255,1.0)",
           borderColor: "rgba(255,0,255,0.1)",
@@ -403,8 +473,8 @@ async function generateChart(
           annotations: {
             vertLine: {
               type: "line",
-              xMin: 12,
-              xMax: 12,
+              xMin: 48,
+              xMax: 48,
               borderColor: "red",
               borderWidth: 2,
             },

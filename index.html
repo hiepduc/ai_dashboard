@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale = 1.0" />
+    <meta
+      name="Air quality prediction"
+      content="This is the website for Sydney air quality prediction"
+    />
+    <title>Air quality forecast</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto&display=swap"
+      rel="stylesheet"
+    />
+
+    <link rel="icon" href="./assets/images/nsw-logo.svg" />
+    <link rel="stylesheet" href="./assets/css/base.css" />
+    <link rel="stylesheet" href="./assets/css/style.css" />
+
+    <!-- Leaflet inclusion -->
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
+      integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI="
+      crossorigin=""
+    />
+
+    <script
+      src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"
+      integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM="
+      crossorigin=""
+    ></script>
+
+    <!-- Load jQuery and PapaParse to read data from a CSV file -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/papaparse@5.3.0/papaparse.min.js"></script>
+
+    <script src="./AQSs_Info/nswMap.js"></script>
+
+    <!-- CDN for Chart.JS -->
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script> -->
+    <!-- <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> 2.9.4 -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js"></script>
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.2.1/chart.min.js" integrity="sha512-v3ygConQmvH0QehvQa6gSvTE2VdBZ6wkLOlmK7Mcy2mZ0ZF9saNbbk19QeaoTHdWIEiTlWmrwAL4hS8ElnGFbA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script> -->
+    <!-- Chart.JS Annotation Plugin-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-annotation/1.0.2/chartjs-plugin-annotation.min.js"></script>
+
+    <link rel="stylesheet" href="./assets/css/ControlSidebar.css" />
+    <script src="./ControlSidebar.js"></script>
+
+    <!-- Marker cluster -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.4.1/MarkerCluster.css"
+    />
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.4.1/MarkerCluster.Default.css"
+    />
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.4.1/leaflet.markercluster.js"></script>
+    <!-- <script src="./menu.js"></script> -->
+    <!-- <script type="module" src="./legend.js"></script> -->
+    <!-- <script type="module" src="./CenterRegion.js"></script> -->
+    <script type="module" src="./index.js"></script>
+  </head>
+
+  <body>
+    <div class="nsw-infobar">
+      <div class="nsw-container">
+        <p>
+          A Website for Deep Learning Application <br />
+          <!-- UTS SEDE Showcase -->
+        </p>
+      </div>
+      <!-- <ul id="nav">
+        <li><a href="">Home</a></li>
+        <li><a href="">About</a></li>
+        <li><a href="">More info</a></li>
+        <li><a href="">Contact</a></li>
+        <li>
+          <a href="">Miscellaneous</a>
+          <ul class="subnav">
+            <li><a href="">Other 1 ...</a></li>
+            <li><a href="">Other 2</a></li>
+            <li><a href="">Other 3</a></li>
+          </ul>
+        </li>
+      </ul> -->
+    </div>
+
+    <header class="nsw-header">
+      <div class="nsw-header__container">
+        <div class="nsw-header__wrapper">
+          <div class="nsw-header__center">
+            <a href="https://www.dpie.nsw.gov.au" class="nsw-header__logo-link">
+              <svg
+                class="nsw-icon nsw-header__logo"
+                focusable="false"
+                aria-hidden="true"
+                width="300"
+                height="320"
+                viewBox="0 0 300 320"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <image
+                  href="./assets/images/nsw-logo.svg"
+                  width="280"
+                  height="300"
+                />
+              </svg>
+              <span class="nsw-header__logo-text">
+                Planning and
+                <br />
+                Environment
+              </span>
+            </a>
+          </div>
+          <div class="banner">
+            <h1>Air Quality Forecast Dashboard</h1>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <div class="dashboard">
+        <div class="dashboard-block dashboard-block__left-container">
+          <div class="select-header">
+            <h2>Select option</h2>
+          </div>
+          <div class="station-model">
+            <label for="station-network">Region</label><br />
+            <div class="select-box">
+              <select class="station-network" id="select-region">
+                <option value="NSW">New South Wales</option>
+                <option value="Sydney South-west">Sydney South West</option>
+                <option value="Sydney East">Sydney East</option>
+                <option value="Sydney North-west">Sydney North West</option>
+                <option value="Lower Hunter">Lower Hunter</option>
+                <option value="Upper Hunter">Upper Hunter</option>
+                <option value="Illawarra">Illawarra</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="station-model">
+            <label for="station-network">Model type</label><br />
+            <div class="select-box">
+              <select class="station-network" id="select-model">
+                <option value="CNN">CNN-LSTM</option>
+                <option value="BNN">BNN-CNN-LSTM</option>
+                <option value="Other">Other ...</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="station-model">
+            <label for="station-network">Time scope</label><br />
+            <div class="select-box">
+              <select class="station-network" id="select-time">
+                <option value="24">24 hour</option>
+                <option value="48">48 hour</option>
+                <option value="72">72 hour</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="station-model">
+            <label for="station-network">Air pollutant</label><br />
+            <div class="select-box">
+              <select class="station-network" id="select-pollutant">
+                <option value="OZONE">Ozone (O3)</option>
+                <option value="PM25">PM 2.5</option>
+                <!-- <option value="PM10">PM 10</option>
+                <option value="CO2">CO2</option>
+                <option value="Other">Other ...</option> -->
+              </select>
+            </div>
+          </div>
+
+          <!-- HTML !-->
+          <button class="select-button" type="button" role="button">
+            Apply selection
+          </button>
+
+          <div class="dashboard-block__map-key">
+            <h3>Note</h3>
+            <div class="map-key">
+              <div class="map-key-container">
+                <img
+                  class="map-key-icon"
+                  src="./assets/images/markerCluster.svg"
+                  alt="Blue circle with number of clustered Air quality stations"
+                />
+                <span>Air quality station cluster</span>
+              </div>
+              <div class="map-key-container">
+                <!-- <img
+                  class="map-key-icon"
+                  src="./assets/images/markerCluster.svg"
+                  alt="Blue marker Air quality stations"
+                /> -->
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+                  <path
+                    stroke="#fff"
+                    fill="#524eee"
+                    d="M15.938 32S6 17.938 6 11.938C6 .125 15.938 0 15.938 0S26 .125 26 11.875C26 18.062 15.938 32 15.938 32zM16 6a4 4 0 100 8 4 4 0 000-8z"
+                  />
+                </svg>
+                <span>Air quality station</span>
+              </div>
+              <div class="map-key-container">
+                <img
+                  class="map-key-icon"
+                  src="./assets/images/markerPurpleAirCluster.svg"
+                  alt="Purple circle with number of clustered PurpleAir sensors"
+                />
+                <span>PurpleAir sensor cluster</span>
+              </div>
+              <div class="map-key-container">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+                  <path
+                    stroke="#fff"
+                    fill="#aa44aa"
+                    d="M15.938 32S6 17.938 6 11.938C6 .125 15.938 0 15.938 0S26 .125 26 11.875C26 18.062 15.938 32 15.938 32zM16 6a4 4 0 100 8 4 4 0 000-8z"
+                  />
+                </svg>
+                <span>PurpleAir sensor</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="dashboard-block dashboard-block__map-container">
+          <div class="time-slider" id="slider-bar">
+            <h3>
+              Start time: 12 PM 1/1 Forecast time:
+              <label id="active-hour">12 PM 1/1 </label> End time: 12 PM 2/1
+            </h3>
+            <input
+              id="time-input"
+              class="slider"
+              type="range"
+              min="0"
+              max="23"
+              step="1"
+              value="0"
+            />
+            <div class="time-slider__controls">
+              <button
+                class="time-slider__control time-slider__control--backward"
+                type="button"
+              >
+                <img src="./assets/images/step.svg" />
+              </button>
+              <button
+                class="time-slider__control time-slider__control--motion"
+                type="button"
+              >
+                <img src="./assets/images/pause-button.svg" />
+              </button>
+              <button
+                class="time-slider__control time-slider__control--forward"
+                type="button"
+              >
+                <img src="./assets/images/step.svg" />
+              </button>
+            </div>
+            <script src="./timeslider.js"></script>
+          </div>
+
+          <div class="map" id="mapid">
+            <div id="sidebar"></div>
+            <script src="./ControlSidebar.js"></script>
+          </div>
+          <script type="module" src="./leaflet.js"></script>
+          <div class="map-air-quality-legend">
+            <!-- <div class="aq-categories">
+              <div class="aq-category good">Good</div>
+              <span class="quality-value">&lt 5.4</span>
+            </div>
+            <div class="aq-categories">
+              <div class="aq-category fair">Fair</div>
+              <span class="quality-value">5.4 - 8.0</span>
+            </div>
+            <div class="aq-categories">
+              <div class="aq-category poor">Poor</div>
+              <span class="quality-value">8.0 - 12.0</span>
+            </div>
+            <div class="aq-categories">
+              <div class="aq-category very-poor">Very poor</div>
+              <span class="quality-value">12.0 - 16.0</span>
+            </div>
+            <div class="aq-categories">
+              <div class="aq-category ext-poor">Ext poor</div>
+              <span class="quality-value">> 16.0</span>
+            </div> -->
+          </div>
+          <!-- <script src="./legend.js"></script> -->
+        </div>
+
+        <div class="dashboard-block dashboard-block__right-container">
+          <!-- <div class="pollutant-selector">
+          <div class="radio-item">
+            <input
+              type="radio"
+              name="pollutant"
+              data-pollutant="OZONE"
+              id="o3"
+              checked="checked"
+            />
+            <label for="o3">O3</label>
+          </div>
+          <div class="radio-item">
+            <input
+              type="radio"
+              name="pollutant"
+              data-pollutant="PM25"
+              id="pm25"
+            />
+            <label for="pm25">PM 2.5</label>
+          </div>
+          <div class="radio-item">
+            <input
+              type="radio"
+              name="pollutant"
+              data-pollutant="other"
+              id="other"
+            />
+            <label for="other">Other...</label>
+          </div>
+        </div> -->
+
+          <div class="stations-menu">
+            <div class="station-description">
+              <h2>NSW Air Quality Station Forecast Ranking</h2>
+              <h4 class="highest-pollutant">
+                Highest OZONE level in the forecast
+              </h4>
+            </div>
+            <div class="stations-ranking">
+              <ul class="stations-header">
+                <li class="station-name">Stations</li>
+                <li class="station-time">Hour</li>
+                <li class="station-value">(ppb)</li>
+              </ul>
+              <ul class="stations-info"></ul>
+            </div>
+            <!-- <script type="module" src="./menu.js"></script> -->
+          </div>
+        </div>
+      </div>
+
+      <canvas id="chart11" class="WSP-chart"></canvas>
+
+      <div class="disclaimer">
+        <h2 class="disclaimer-flex">Disclaimer placeholder</h2>
+        <h2 id="stat" class="disclaimer-flex">Stats</h2>
+      </div>
+    </main>
+
+    <footer class="global__footer">
+      <div class="section__content">
+        <div class="global__footer__navigation">
+          <nav class="nav" role="navigation" aria-label="Footer">
+            <ul>
+              <li>News & Resources</li>
+              <li>Need Help?</li>
+              <li>Contact Us</li>
+            </ul>
+          </nav>
+        </div>
+        <hr />
+        <div class="global__footer__meta">
+          <span>© 2023 UTS SEDE Showcase</span>
+          <nav
+            class="nav nav--inline"
+            role="navigation"
+            aria-label="Footer Meta"
+          >
+            <ul>
+              <li>Accessibility</li>
+              <li>Privacy</li>
+              <li>Copyright & Disclaimer</li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

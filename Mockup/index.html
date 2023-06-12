@@ -46,10 +46,8 @@
     <!-- Chart.JS Annotation Plugin-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-annotation/1.0.2/chartjs-plugin-annotation.min.js"></script>
 
-
     <link rel="stylesheet" href="./ControlSidebar.css" />
     <script src="./ControlSidebar.js"></script>
-    
 
     <!-- Marker cluster -->
     <link
@@ -88,7 +86,13 @@
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
               >
-                <image href="/images/nsw-logo.svg" width="280" height="300" />
+                <image
+                  title="Logo"
+                  href="/images/nsw-logo.svg"
+                  alt="NSW Logo"
+                  width="280"
+                  height="300"
+                />
               </svg>
               <span class="nsw-header__logo-text">
                 Planning and
@@ -97,97 +101,199 @@
               </span>
             </a>
           </div>
-          <h1>NSW Air Quality Prediction Dashboard</h1>
+          <!-- <h1>NSW Air Quality Prediction Dashboard</h1> -->
         </div>
       </div>
     </header>
 
-    <div class="dashboard">
-      <div class="select">
-        <div class="station-model">
-          <label for="station-network">Model</label><br>
-          <select id="station-network">
-            <option value="Option 1">New South Wales</option>
-            <option value="Option 2">North Sydney</option>
-            <option value="Option 3">South Sydney</option>
-            <option value="Option 4">Hunter Valley</option>
-          </select>
+    <main>
+      <div class="dashboard-headline">
+        <h1>NSW Air Quality Prediction Dashboard</h1>
+      </div>
+
+      <div class="dashboard">
+        <div class="select">
+          <div class="select-header">
+            <h2>Select option</h2>
+          </div>
+          <div class="station-model">
+            <label for="station-network">Region</label><br />
+            <div class="select-box">
+              <select id="station-network">
+                <option value="Option 1">New South Wales</option>
+                <option value="Option 2">North Sydney</option>
+                <option value="Option 3">South Sydney</option>
+                <option value="Option 4">Hunter Valley</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="station-model">
+            <label for="station-network">Model type</label><br />
+            <div class="select-box">
+              <select id="station-network">
+                <option value="Option 1">CNN-LSTM</option>
+                <option value="Option 2">BNN-CNN-LSTM</option>
+                <option value="Option 3">Other ...</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="station-model">
+            <label for="station-network">Time scope</label><br />
+            <div class="select-box">
+              <select id="selector__time-scope">
+                <option value="24">24 hour</option>
+                <option value="36">36 hour</option>
+                <option value="48">48 hour</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="station-model">
+            <label for="station-network">Air pollutant</label><br />
+            <div class="select-box">
+              <select id="selector__air-pollutant">
+                <option value="OZONE">Ozone (O3)</option>
+                <option value="PM25">PM 2.5</option>
+                <option value="PM10">PM 10</option>
+                <option value="Option 4">CO</option>
+                <option value="Option 5">Other ...</option>
+              </select>
+            </div>
+          </div>
+          <script src="./times.js"></script>
         </div>
-      </div>
 
-      <div class="map" id="mapid">
-        <div id="sidebar"></div>
-        <script src="./ControlSidebar.js"></script>
-      </div>
-      <script src="./leaflet.js"></script>
+        <div class="map-container">
+          <div class="time-slider" id="slider-bar">
+            <h2>
+              Forecast time:
+              <label id="active-hour">11 PM 1/1</label>
+            </h2>
+            <input
+              id="time-input"
+              class="slider"
+              type="range"
+              min="0"
+              max="23"
+              step="1"
+              value="0"
+            />
+            <script src="./timeslider.js"></script>
+          </div>
 
-      <div class="dashboard__right-container">
-        <div class="pollutant-selector">
+          <div class="map" id="mapid">
+            <div id="sidebar"></div>
+            <script src="./ControlSidebar.js"></script>
+          </div>
+          <script src="./leaflet.js"></script>
+
+          <!-- <div class="map-air-quality-legend">
+          <div class="quality-color-items">
+            <div class="o3-icon good">Good</div>
+            <span class="quality-value">0 - 2</span>
+          </div>
+          <div class="quality-color-items">
+            <div class="o3-icon moderate">Moderate</div>
+            <span class="quality-value">2 - 3</span>
+          </div>
+          <div class="quality-color-items">
+            <div class="o3-icon unhealthy">Unhealthy</div>
+            <span class="quality-value">3 - 5</span>
+          </div>
+          <div class="quality-color-items">
+            <div class="o3-icon harmful">Harmful</div>
+            <span class="quality-value">> 5</span>
+          </div>
+        </div> -->
+        </div>
+
+        <div class="dashboard__right-container">
+          <!-- <div class="pollutant-selector">
           <div class="radio-item">
-            <input type="radio" name="pollutant" data-pollutant="OZONE" id="o3" checked="checked" />
+            <input
+              type="radio"
+              name="pollutant"
+              data-pollutant="OZONE"
+              id="o3"
+              checked="checked"
+            />
             <label for="o3">O3</label>
           </div>
           <div class="radio-item">
-            <input type="radio" name="pollutant" data-pollutant="PM25" id="pm25"/>
+            <input
+              type="radio"
+              name="pollutant"
+              data-pollutant="PM25"
+              id="pm25"
+            />
             <label for="pm25">PM 2.5</label>
           </div>
           <div class="radio-item">
-            <input type="radio" name="pollutant" data-pollutant="other" id="other"/>
+            <input
+              type="radio"
+              name="pollutant"
+              data-pollutant="other"
+              id="other"
+            />
             <label for="other">Other...</label>
           </div>
+        </div> -->
+
+          <div class="stations-menu">
+            <ul class="stations-header">
+              <li class="station-name">Stations</li>
+              <li class="station-time">Hour</li>
+              <li class="station-value">Unit (ppb)</li>
+            </ul>
+            <!-- <div id="loading">Loading, please wait...</div> -->
+            <ul class="stations-info"></ul>
+            <script src="./menu.js"></script>
+          </div>
         </div>
+      </div>
 
-        <div class="stations-menu">
-          <ul class="stations-header">
-            <li class="station-name">Stations</li>
-            <li class="station-time">Hour</li>
-            <li class="station-value">(ppb)</li>
-          </ul>
-          <ul class="stations-info"></ul>
-          <script src="./menu.js"></script>
+      <div class="map-air-quality-legend">
+        <div class="quality-color-items">
+          <div class="o3-icon good">Good</div>
+          <span class="quality-value">0 - 2</span>
+        </div>
+        <div class="quality-color-items">
+          <div class="o3-icon moderate">Moderate</div>
+          <span class="quality-value">2 - 3</span>
+        </div>
+        <div class="quality-color-items">
+          <div class="o3-icon unhealthy">Unhealthy</div>
+          <span class="quality-value">3 - 5</span>
+        </div>
+        <div class="quality-color-items">
+          <div class="o3-icon harmful">Harmful</div>
+          <span class="quality-value">> 5</span>
         </div>
       </div>
-    </div>
 
-    <div class="map-air-quality-legend">
-      <div class="quality-color-items">
-        <div class="o3-icon">Ideal</div>
-        <span class="quality-value">0-10</span>
-      </div>
-      <div class="quality-color-items">
-        <div class="o3-icon">Nice</div>
-        <span class="quality-value">10-20</span>
-      </div>
-      <div class="quality-color-items">
-        <div class="o3-icon">OK</div>
-        <span class="quality-value">20-30</span>
-      </div>
-      <div class="quality-color-items">
-        <div class="o3-icon">Bad</div>
-        <span class="quality-value">30-40</span>
-      </div>
-      <div class="quality-color-items">
-        <div class="o3-icon">Harmful</div>
-        <span class="quality-value">40-50</span>
-      </div>
-      <div class="quality-color-items">
-        <div class="o3-icon">Terrible</div>
-        <span class="quality-value">50-60</span>
-      </div>
-    </div>
-
-    <div class='time-slider' id='slider-bar'>
-      <h2>Forecast hour: <label id='active-hour'>11 AM 1/1</label></h2>
-      <input id='time-input' class='slider' type='range' min='0' max='23' step='1' value='0' />
+      <!-- <div class="time-slider" id="slider-bar">
+      <h2>Forecast hour: <label id="active-hour">11 AM 1/1</label></h2>
+      <input
+        id="time-input"
+        class="slider"
+        type="range"
+        min="0"
+        max="23"
+        step="1"
+        value="0"
+      />
       <script src="./timeslider.js"></script>
-    </div>
+    </div> -->
 
-    <div class="disclaimer">
-      <h2 class="disclaimer-flex">Disclaimer placeholder</h2>
-      <h2 class="disclaimer-flex">Stats</h2>
-    </div>
+      <div class="disclaimer">
+        <h2 class="disclaimer-flex">Disclaimer placeholder</h2>
+        <h2 class="disclaimer-flex">Stats</h2>
+      </div>
 
-    
+      <!-- <input type="range" min="0" max="100" value="50" id="slider"> -->
+    </main>
 
     <footer class="global__footer">
       <div class="section__content">

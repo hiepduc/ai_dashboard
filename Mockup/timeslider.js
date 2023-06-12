@@ -33,8 +33,8 @@ slider.oninput = function () {
   const forecastChart = Chart.getChart(markerChartId);
   // Translate vertical line with slider value
   forecastChart.options.plugins.annotation.annotations.vertLine.xMin =
-    sliderValue + 12;
+    sliderValue + 48;
   forecastChart.options.plugins.annotation.annotations.vertLine.xMax =
-    sliderValue + 12;
+    sliderValue + 48;
   forecastChart.update();
 };
