@@ -18,13 +18,13 @@ let config = {
   maxBoundsViscosity: 0.9,
 };
 var w = window.innerWidth;
-console.log(w);
+// console.log(w);
 // Magnification with which the map will start
 var zoom;
 if (w < 740) {
   zoom = 5;
 } else zoom = 6;
-console.log(zoom);
+// console.log(zoom);
 // Coordinates of NSW geographic center
 const cenLat = -33.0;
 const cenLng = 147.032179;
@@ -397,17 +397,17 @@ function generateMarkerContent(title, lat, lng) {
         // extract data from forecastData
         const forecastXValues = result.forecastData.map((d) => d.date);
         const forecastYValues = result.forecastData.map((d) => d.value);
-        console.log("Forecast Y:");
-        console.log(forecastYValues);
-        console.log("X:");
-        console.log(forecastXValues);
+        // console.log("Forecast Y:");
+        // console.log(forecastYValues);
+        // console.log("X:");
+        // console.log(forecastXValues);
         // extract data from historyData
         const historyXValues = result.historyData.map((d) => d.date);
         const historyYValues = result.historyData.map((d) => d.value);
-        console.log("History Y:");
-        console.log(historyYValues);
-        console.log("X:");
-        console.log(historyXValues);
+        // console.log("History Y:");
+        // console.log(historyYValues);
+        // console.log("X:");
+        // console.log(historyXValues);
         // console.log(forecastXValues.map((x, i) => ({ x: x, y: forecastYValues[i] })));
         // console.log(historyXValues.map((x, i) => ({ x: x, y: historyYValues[i] })));
 

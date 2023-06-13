@@ -13,7 +13,7 @@ async function getPollutantDataForLocation(
   const forecastHours = parsedData.map((row) =>
     parseFloat(row["forecast_hours"])
   );
-  console.log(parsedData);
+  // console.log(parsedData);
   const dateOptions = {
     month: "2-digit",
     day: "2-digit",
@@ -21,26 +21,8 @@ async function getPollutantDataForLocation(
     minute: "2-digit",
   };
   const date = parsedData.map((row) =>
-    new Date(row["datetime"]).toLocaleString(undefined, {
-      month: "2-digit",
-      day: "2-digit",
-      hour: "2-digit",
-      minute: "2-digit",
-    })
+    new Date(row["datetime"]).toLocaleString("en-AU", dateOptions)
   );
-  console.log(date);
-  // {
-  //   const datetime = new Date(row["datetime"]);
-  //   return new Intl.DateTimeFormat(undefined, dateOptions).format(datetime);
-  // }
-  // const date = parsedData.map((row) =>
-  //   new Date(row["datetime"]).toLocaleString(undefined, {
-  //     month: "2-digit",
-  //     day: "2-digit",
-  //     hour: "2-digit",
-  //     minute: "2-digit",
-  //   })
-  // );
   // console.log(date);
 
   if (dataOption == "forecast") {
@@ -65,8 +47,8 @@ async function getPollutantDataForLocation(
     for (let i = 0; i < data.length; i++) {
       if (!isNaN(forecastHours[i]) && forecastHours[i] > 0) {
         forecastData.push({ date: date[i], value: data[i] });
-        console.log("forecastData");
-        console.log(date[i]);
+        // console.log("forecastData");
+        // console.log(date[i]);
         // forecastData["date"].push(date[i]);
         // forecastData["value"].push(data[i]);
       } else if (!isNaN(forecastHours[i]) && forecastHours[i] <= 0) {

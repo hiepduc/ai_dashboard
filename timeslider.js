@@ -1,13 +1,6 @@
 document.getElementById("time-input").addEventListener("input", (event) => {
   const hour = parseInt(event.target.value);
 
-  // update the map
-  // $.get("/AQSs_Info/e.csv", function (csvString) {
-  //   var data = Papa.parse(csvString, {
-  //     header: true,
-  //   }).data;
-  // });
-
   // converting 0-23 hour to AMPM format
   const ampm = hour >= 12 ? "AM" : "PM";
   const hour12 = hour % 12 ? hour % 12 : 12;
@@ -51,11 +44,6 @@ playPauseButton.addEventListener("click", function () {
 
 const buttonForward = document.querySelector(".time-slider__control--forward");
 buttonForward.addEventListener("click", function () {
-  // if (slider.value == slider.max) {
-  //   console.log("triggered");
-  //   slider.value = 3 - 1;
-  //   console.log(slider.value);
-  // }
   incrementSliderValue("forward");
 });
 
@@ -74,7 +62,6 @@ function incrementSliderValue(motion) {
     else slider.value = currentValue + 1;
   } else if (motion == "backward") slider.value = currentValue - 1;
   updateChart(parseInt(slider.value));
-  // if (slider.value == slider.max) slider.value = slider.min;
 }
 
 function autoIncreSliderValue() {
@@ -97,9 +84,12 @@ function updateChart(sliderValue) {
   forecastChart.options.plugins.annotation.annotations.vertLine.xMax =
     sliderValue + 48;
   const y = forecastChart.data.datasets[1].data[sliderValue].y;
+  const x = forecastChart.data.datasets[1].data[sliderValue].x;
   // use the y value to update the label content of the vertical line annotation
   forecastChart.options.plugins.annotation.annotations.vertLine.label.content =
     y;
+  const sliderForecastTime = document.getElementById("forecast-time");
+  sliderForecastTime.innerHTML = x;
   forecastChart.update();
   if (isPlaying && sliderValue == slider.max) {
     playPauseButton.src = "./assets/images/pause-button.svg";
@@ -108,6 +98,5 @@ function updateChart(sliderValue) {
       intervalTime = null;
     }
     isPlaying = false;
-    // slider.value = slider.min;
   }
 }

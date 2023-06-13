@@ -18,7 +18,7 @@ async function menuRender(pollutant, time) {
   container.innerHTML = `<div class="loader"></div>`;
   menuGetData(pollutant, time);
 }
-
+var region = null;
 function menuGetData(pollutant, time) {
   $.get("./AQSs_Info/e.csv", function (csvString) {
     // Use PapaParse to convert string to array of objects
@@ -32,11 +32,22 @@ function menuGetData(pollutant, time) {
       var row = data[i];
       let maxOzone = 0;
       if (row != null) {
+        const selectedRegion = document.querySelector("#select-region").value;
+        
+        if (selectedRegion == "Sydney South-west") {
+          region = "SW";
+        } else if (selectedRegion == "Sydney East") {
+          region = "CE";
+        } else if (selectedRegion == "Sydney North-west") {
+          region = "NW";
+        }
+        console.log(selectedRegion);
+        console.log(region);
         stationNames.push(data[i].title);
         getPollutantDataForLocation(
           stationNames[i],
           pollutant.value,
-          `./AQSs_Info/forecast_${time}.csv`,
+          `./AQSs_Info/${region}_forecast_${pollutant.label}_${time}_48_0.csv`,
           "forecast"
         ).then((result) => {
           // extract data from forecastData
