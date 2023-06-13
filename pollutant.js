@@ -2,6 +2,7 @@
 export const airPollutants = [
   {
     value: "OZONE",
+    label: "O3",
     name: "Ozone",
     unit: "pphm",
     categories: [
@@ -14,6 +15,7 @@ export const airPollutants = [
   },
   {
     value: "PM25",
+    label: "PM25",
     name: "PM 2.5",
     unit: "µg/m³",
     categories: [
