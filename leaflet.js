@@ -153,7 +153,11 @@ function getMarkerInfo() {
       showCoverageOnHover: false,
     });
 
-    $.get("./AQSs_Info/e.csv", function (csvString) {
+///////////////////////////////////////////////    
+// Load station ands and locations    
+///////////////////////////////////////////////    
+
+$.get("./AQSs_Info/e.csv", function (csvString) {
       // Use PapaParse to convert string to array of objects
       var data = Papa.parse(csvString, {
         header: true,
@@ -386,11 +390,14 @@ function generateMarkerContent(title, lat, lng) {
       } else if (selectedRegion == "Sydney North-west") {
         region = "NW";
       } 
-
+/////////////////////////////////////////////////////
+// load forecast files
+/////////////////////////////////////////////////////
       getPollutantDataForLocation(
         title,
         selectedPollutantObj.value,
-        `./AQSs_Info/${region}_forecast_${selectedPollutantObj.label}_${selectedTime}_48_0.csv`,
+        // `./AQSs_Info/${region}_forecast_${selectedPollutantObj.label}_${selectedTime}_48_0.csv`,
+        `./AQSs_Info/New/${region}_forecast_${selectedPollutantObj.label}_${selectedTime}_48_0.csv`,
         "both"
       ).then((result) => {
         // console.log(result);
