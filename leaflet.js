@@ -174,7 +174,11 @@ function getMarkerInfo() {
       showCoverageOnHover: false,
     });
 
-    $.get("./AQSs_Info/e.csv", function (csvString) {
+///////////////////////////////////////////////    
+// Load station ands and locations    
+///////////////////////////////////////////////    
+
+$.get("./AQSs_Info/e.csv", function (csvString) {
       // Use PapaParse to convert string to array of objects
       var data = Papa.parse(csvString, {
         header: true,
@@ -410,10 +414,14 @@ function generateMarkerContent(title, lat, lng) {
         (pollutant) => pollutant.value === selectedPollutant
       );
 
-      getPollutantDataForLocation(
+/////////////////////////////////////////////////////
+// load forecast files
+/////////////////////////////////////////////////////
+getPollutantDataForLocation(
         title,
         selectedPollutantObj.value,
-        `./AQSs_Info/forecast_${selectedTime}.csv`,
+        // `./AQSs_Info/forecast_${selectedTime}.csv`,
+        `./AQSs_Info/New/forecast_${selectedTime}.csv`,
         "both"
       ).then((result) => {
         console.log(result);
