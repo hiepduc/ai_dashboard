@@ -2,6 +2,7 @@ import { airPollutants } from "./pollutant.js";
 import { menuRender } from "./menu.js";
 import { legendGenerator } from "./legend.js";
 
+// Load default selection for left pane forecast selector and right pane display
 window.addEventListener("DOMContentLoaded", () => {
   const defaultPollutant = airPollutants.find(
     (pollutant) => pollutant.value == "OZONE"

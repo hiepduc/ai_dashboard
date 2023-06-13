@@ -1,5 +1,3 @@
-
-
 document.getElementById("time-input").addEventListener("input", (event) => {
   const hour = parseInt(event.target.value);
 
@@ -95,9 +93,9 @@ function updateChart(sliderValue) {
   const forecastChart = Chart.getChart(markerChartId);
   // Translate vertical line with slider value
   forecastChart.options.plugins.annotation.annotations.vertLine.xMin =
-    sliderValue + 12;
+    sliderValue + 48;
   forecastChart.options.plugins.annotation.annotations.vertLine.xMax =
-    sliderValue + 12;
+    sliderValue + 48;
   const y = forecastChart.data.datasets[1].data[sliderValue].y;
   // use the y value to update the label content of the vertical line annotation
   forecastChart.options.plugins.annotation.annotations.vertLine.label.content =

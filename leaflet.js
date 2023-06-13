@@ -40,34 +40,12 @@ var osm = L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
 
 L.control.scale({ imperial: false }).addTo(map);
 
-// var StamenTerrain = L.tileLayer(
-//   "https://stamen-tiles-{s}.a.ssl.fastly.net/terrain/{z}/{x}/{y}{r}.{ext}",
-//   {
-//     attribution:
-//       'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-//     subdomains: "abcd",
-//     minZoom: 0,
-//     maxZoom: 18,
-//     ext: "png",
-//   }
-// );
-
-// var StadiaAlidadeSmoothDark = L.tileLayer(
-//   "https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png",
-//   {
-//     maxZoom: 20,
-//     attribution:
-//       '&copy; <a href="https://stadiamaps.com/">Stadia Maps</a>, &copy; <a href="https://openmaptiles.org/">OpenMapTiles</a> &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors',
-//   }
-// );
-
 // Home button
 {
   // Home button
   const htmlTemplate = `<svg width="32" height="32" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path fill-rule="evenodd" clip-rule="evenodd" d="m5.183 5.436.268-.865c-.368.09-.626.569-.716.861h-.144c-.014-.2-.064-.706-.2-.84.324-.333.798-.408 1.412-.3l-.4 1.15-.22-.005ZM1.895 3.408l.065.516-.248-.109-.126-.725c.88-.14 2.716.795 2.782 2.339l-.892-.008c-.186-.813-.928-1.825-1.582-2.013Zm.251 2c-.134-.546-.499-1.163-.936-1.288l.076.424-.248-.104-.11-.556c.6-.096 1.905.554 2.076 1.533l-.858-.009ZM1.118 5.4c-.102-.3-.285-.572-.643-.644l.134.64-.233-.002-.218-.878c.572-.08 1.588.32 1.725.891L1.118 5.4Zm4.832.485-5.891.014-.011-.249 5.903-.087-.002.322Z" fill="#000"/>
     </svg>`;
-  // '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><path d="M32 18.451L16 6.031 0 18.451v-5.064L16 .967l16 12.42zM28 18v12h-8v-8h-8v8H4V18l12-9z" /></svg>';
   // create custom button
   const customControl = L.Control.extend({
     // button position
@@ -121,6 +99,9 @@ L.control.scale({ imperial: false }).addTo(map);
   // const compareToArrays = (a, b) => JSON.stringify(a) === JSON.stringify(b);
 }
 
+///////////////////////////////////////////////
+// ZOOM TO REGION
+///////////////////////////////////////////////
 {
   const selectButton = document.querySelector(".select-button");
   selectButton.addEventListener("click", () => {
@@ -154,13 +135,11 @@ var sidebar = L.control
   })
   .addTo(map);
 var markerInfoPromise = getMarkerInfo();
-
+var activeStationMarker = null;
 //! Potential overlapping problem can be improved (featureGroup and markerClusterGroup)
 // Read markers data from data.csv
 function getMarkerInfo() {
   return new Promise(function (resolve, reject) {
-    var activeMarker = null;
-
     // Create a DivIcon with custom HTML content
     var markerClusterGroup = L.markerClusterGroup({
       iconCreateFunction: function (cluster) {
@@ -192,14 +171,18 @@ function getMarkerInfo() {
           if (row.lat != null && row.lng != null) {
             latlngs = L.latLng([row.lat, row.lng]);
             let marker = L.marker(latlngs).addTo(featureGroups);
-            marker.setIcon(colorMarker("default")).bindTooltip(data[i].title, {
+            marker.setIcon(colorMarker("station")).bindTooltip(data[i].title, {
               direction: "top",
             });
             marker.on("click", function () {
-              if (activeMarker != null) {
-                activeMarker.setIcon(colorMarker("default"));
+              if (activeSensorMarker != null) {
+                activeSensorMarker.setIcon(colorMarker("purpleair"));
+                activeSensorMarker = null;
               }
-              activeMarker = marker;
+              if (activeStationMarker != null) {
+                activeStationMarker.setIcon(colorMarker("station"));
+              }
+              activeStationMarker = marker;
               marker.setIcon(colorMarker("selected"));
               sidebar
                 .setContent(
@@ -216,9 +199,9 @@ function getMarkerInfo() {
       // Add an event listener to the close button
       if (closeButton) {
         closeButton.addEventListener("click", () => {
-          if (activeMarker != null) {
-            activeMarker.setIcon(colorMarker("default"));
-            activeMarker = null;
+          if (activeStationMarker != null) {
+            activeStationMarker.setIcon(colorMarker("station"));
+            activeStationMarker = null;
           }
           const slider = document.querySelector(".slider");
           slider.value = 0;
@@ -234,7 +217,7 @@ function colorMarker(state) {
   if (state == "selected") {
     var size = 40;
     var color = "#ff0000";
-  } else if (state == "default") {
+  } else if (state == "station") {
     var size = 30;
     var color = "#524eee";
   } else if (state == "purpleair") {
@@ -262,13 +245,9 @@ var purpleairFeatureGroups = L.featureGroup().addLayer(map);
 var purpleairInfo = [];
 var purpleairPromise = getPurpleAirInfo(purpleairInfo, purpleairFeatureGroups);
 
-console.log(nswMapData);
-console.log(purpleairSensors);
-
+var activeSensorMarker = null;
 function getPurpleAirInfo(markersInfo, featureGroups) {
   return new Promise(function (resolve, reject) {
-    var activeMarker = null;
-
     // Create a DivIcon with custom HTML content
     var purpleairMarkerClusterGroup = L.markerClusterGroup({
       iconCreateFunction: function (cluster) {
@@ -302,10 +281,14 @@ function getPurpleAirInfo(markersInfo, featureGroups) {
             direction: "top",
           });
         purpleairMarker.on("click", function () {
-          if (activeMarker != null) {
-            activeMarker.setIcon(colorMarker("purpleair"));
+          if (activeStationMarker != null) {
+            activeStationMarker.setIcon(colorMarker("station"));
+            activeStationMarker = null;
           }
-          activeMarker = purpleairMarker;
+          if (activeSensorMarker != null) {
+            activeSensorMarker.setIcon(colorMarker("purpleair"));
+          }
+          activeSensorMarker = purpleairMarker;
           purpleairMarker.setIcon(colorMarker("selected"));
 
           generateMarkerContentPA(
@@ -321,17 +304,6 @@ function getPurpleAirInfo(markersInfo, featureGroups) {
               console.error(error);
               // Handle the error if needed
             });
-
-          // sidebar
-          //   .setContent(
-          //     generateMarkerContentPA(
-          //       purpleairSensorID,
-          //       purpleairSensorName,
-          //       purpleairSensorLatitude,
-          //       purpleairSensorLongitude
-          //     )
-          //   )
-          //   .show();
         });
         purpleairMarkerClusterGroup.addLayer(purpleairMarker);
       })();
@@ -341,9 +313,9 @@ function getPurpleAirInfo(markersInfo, featureGroups) {
     // Add an event listener to the close button
     if (closeButton) {
       closeButton.addEventListener("click", function () {
-        if (activeMarker != null) {
-          activeMarker.setIcon(colorMarker("purpleair"));
-          activeMarker = null;
+        if (activeSensorMarker != null) {
+          activeSensorMarker.setIcon(colorMarker("purpleair"));
+          activeSensorMarker = null;
         }
       });
     }
@@ -368,12 +340,7 @@ function generateMarkerContent(title, lat, lng) {
 			<div class="tab-content">
         <div class="chart active">
           <canvas id="marker-chart-${title}" class="marker-chart" width="1" height="1"></canvas>
-          <div class="stats">
-            <h4>Current value of O3: </h4>
-            <h4>Max value of O3: </h4>
-            <h4>Stats</h4>
-            <h5>MAE: </h5>
-          </div>
+          
         </div>
         <div class="chart">
           <canvas id="NO2-chart-${title}" class="NO2-chart" width="200" height="200"></canvas>
@@ -397,34 +364,50 @@ function generateMarkerContent(title, lat, lng) {
 
     if (canvas1) {
       var timeSelection = document.querySelector("#select-time");
-      console.log(timeSelection);
+      // console.log(timeSelection);
       let selectedTime = timeSelection.value;
-      console.log(selectedTime);
+      // console.log(selectedTime);
 
       var pollutantSelection = document.querySelector("#select-pollutant");
-      console.log(pollutantSelection);
+      // console.log(pollutantSelection);
       let selectedPollutant = pollutantSelection.value;
-      console.log(selectedPollutant);
+      // console.log(selectedPollutant);
 
       var selectedPollutantObj = airPollutants.find(
         (pollutant) => pollutant.value === selectedPollutant
       );
 
+      const selectedRegion = document.querySelector("#select-region").value;
+      let region = null;
+      if (selectedRegion == "Sydney South-west") {
+        region = "SW";
+      } else if (selectedRegion == "Sydney East") {
+        region = "CE";
+      } else if (selectedRegion == "Sydney North-west") {
+        region = "NW";
+      } 
+
       getPollutantDataForLocation(
         title,
         selectedPollutantObj.value,
-        `./AQSs_Info/forecast_${selectedTime}.csv`,
+        `./AQSs_Info/${region}_forecast_${selectedPollutantObj.label}_${selectedTime}_48_0.csv`,
         "both"
       ).then((result) => {
-        console.log(result);
+        // console.log(result);
         // extract data from forecastData
         const forecastXValues = result.forecastData.map((d) => d.date);
         const forecastYValues = result.forecastData.map((d) => d.value);
+        console.log("Forecast Y:");
         console.log(forecastYValues);
+        console.log("X:");
+        console.log(forecastXValues);
         // extract data from historyData
         const historyXValues = result.historyData.map((d) => d.date);
         const historyYValues = result.historyData.map((d) => d.value);
+        console.log("History Y:");
         console.log(historyYValues);
+        console.log("X:");
+        console.log(historyXValues);
         // console.log(forecastXValues.map((x, i) => ({ x: x, y: forecastYValues[i] })));
         // console.log(historyXValues.map((x, i) => ({ x: x, y: historyYValues[i] })));
 
@@ -476,9 +459,9 @@ function generateMarkerContent(title, lat, lng) {
           ).then((result) => {
             // extract data from historyData
             const historyXValues = result.map((d) => d.date);
-            console.log(historyXValues);
+            // console.log(historyXValues);
             const historyYValues = result.map((d) => d.value);
-            console.log(historyYValues);
+            // console.log(historyYValues);
 
             // generate chart for both canvas elements
             generateChart(
@@ -553,17 +536,17 @@ var nswBoundary = L.geoJSON(nswMapData, {
 // };
 // L.control.layers(baseMaps, null, { collapsed: false }).addTo(map);
 
-const sensorsID = {
-  sensor1: {
-    id: 180263,
-  },
-  sensor2: {
-    id: 180261,
-  },
-  sensor3: {
-    id: 180259,
-  },
-  sensor4: {
-    id: 180257,
-  },
-};
+// const sensorsID = {
+//   sensor1: {
+//     id: 180263,
+//   },
+//   sensor2: {
+//     id: 180261,
+//   },
+//   sensor3: {
+//     id: 180259,
+//   },
+//   sensor4: {
+//     id: 180257,
+//   },
+// };
