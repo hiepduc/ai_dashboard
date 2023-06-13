@@ -397,7 +397,7 @@ function generateMarkerContent(title, lat, lng) {
         title,
         selectedPollutantObj.value,
         // `./AQSs_Info/${region}_forecast_${selectedPollutantObj.label}_${selectedTime}_48_0.csv`,
-        `./AQSs_Info/New/${region}_forecast_${selectedPollutantObj.label}_${selectedTime}_48_0.csv`,
+        `./AQSs_Info/${region}_forecast_${selectedPollutantObj.label}_${selectedTime}_48_0.csv`,
         "both"
       ).then((result) => {
         // console.log(result);
