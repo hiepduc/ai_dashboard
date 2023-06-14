@@ -17,7 +17,7 @@ window.addEventListener("DOMContentLoaded", () => {
   let previousRegion = null;
 
   
-  const selectButton = document.querySelector(".select-button");
+  const selectButton = document.querySelector("#apply-button");
   selectButton.addEventListener("click", () => {
     const pollutantSelection = document.querySelector("#select-pollutant");
     const selectedPollutant = airPollutants.find(

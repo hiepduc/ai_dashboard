@@ -76,7 +76,6 @@ function generateMarkerContentPA(id, title, lat, lng) {
                     <h4>PM10.0: ${dataPurpleAir.sensor["pm10.0"]}</h4>
                     <h4>Temperature: ${currTemp}°C</h4>
                     <h4>Humidity: ${dataPurpleAir.sensor.humidity}%</h4>
-                    <h4>Reliability: N/A</h4>
                     <h4>Time: ${formattedTime}</h4>
                     <canvas id="pa-marker-chart-${title}" class="marker-chart" width="1" height="1"></canvas>
                     </div>

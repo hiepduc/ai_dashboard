@@ -171,11 +171,35 @@
           </div>
 
           <!-- HTML !-->
-          <button class="select-button" type="button" role="button">
+          <button
+            class="select-button"
+            id="apply-button"
+            type="button"
+            role="button"
+          >
             Apply selection
           </button>
 
           <div class="dashboard-block__map-key">
+            <h3>Visibility</h3>
+            <div id="button-container">
+              <button
+                class="layer-button layer-button__active"
+                id="toggle-button__station"
+                type="button"
+                role="button"
+              >
+                Air quality station
+              </button>
+              <button
+                class="layer-button layer-button__active"
+                id="toggle-button__sensor"
+                type="button"
+                role="button"
+              >
+                PurpleAir sensor
+              </button>
+            </div>
             <h3>Note</h3>
             <div class="map-key">
               <div class="map-key-container">
@@ -226,8 +250,8 @@
         <div class="dashboard-block dashboard-block__map-container">
           <div class="time-slider" id="slider-bar">
             <h3>
-              Start time: <span id="start-time">12/6 11:00 pm</span> Forecast time:
-              <span id="forecast-time">12/6 11:00 pm</span> End time:
+              Start time: <span id="start-time">12/6 11:00 pm</span> Forecast
+              time: <span id="forecast-time">12/6 11:00 pm</span> End time:
               <span id="end-time">14/6 10:00 pm</span>
             </h3>
 
@@ -260,7 +284,6 @@
                 <img src="./assets/images/step.svg" />
               </button>
             </div>
-            <!-- <script src="./timeslider.js"></script> -->
           </div>
 
           <div class="map" id="mapid">
