@@ -20,7 +20,6 @@ body {
   margin-right: auto;
 }
 
-
 /* SUB-HEADER */
 .nsw-header {
   background-color: #f9f9f9;
@@ -372,6 +371,49 @@ select:focus {
 .dashboard-block__map-key {
   margin-top: auto;
   line-height: 25px;
+}
+
+.layer-button {
+  position: relative;
+  background-color: #524eee; /* Green */
+  border: none;
+  /* outline: solid #0052b1; */
+  /* color: white; */
+  padding: 0.5rem 0.5rem;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 1rem;
+  margin: 4px 2px;
+  transition-duration: 0.5s;
+  cursor: pointer;
+  border-radius: 2rem;
+  opacity: 0.85;
+}
+
+/* .layer-button__disable:hover, */
+.layer-button__active {
+  background-color: #524eee; /* Green */
+  /* border: none; */
+  /* outline: solid #0052b1; */
+  color: white;
+  /* padding: 0.5rem 0.5rem; */
+  /* text-align: center; */
+  /* text-decoration: none; */
+  /* display: inline-block; */
+  /* font-size: 1rem; */
+  /* margin: 4px 2px; */
+  /* transition-duration: 0.4s; */
+  /* cursor: pointer; */
+  /* border-radius: 1rem; */
+  /* opacity: 0.85; */
+}
+
+/* .layer-button__active:hover, */
+.layer-button__disable {
+  background-color: transparent;
+  outline: solid #524eee;
+  color: #524eee;
 }
 
 .map-key-container svg,

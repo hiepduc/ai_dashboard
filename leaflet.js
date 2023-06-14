@@ -79,24 +79,7 @@ L.control.scale({ imperial: false }).addTo(map);
     buttonBackToHome.addEventListener("click", () => {
       map.flyTo([cenLat, cenLng], zoom);
     });
-
-    // map.on("moveend", () => {
-    //   const { lat: latCenter, lng: lngCenter } = map.getCenter();
-
-    //   const latC = latCenter.toFixed(3) * 1;
-    //   const lngC = lngCenter.toFixed(3) * 1;
-
-    //   const defaultCoordinate = [+cenLat.toFixed(3), +cenLng.toFixed(3)];
-
-    //   const centerCoordinate = [latC, lngC];
-
-    //   // if (compareToArrays(centerCoordinate, defaultCoordinate)) {
-    //   //   buttonBackToHome.classList.add("hidden");
-    //   // }
-    // });
   }
-
-  // const compareToArrays = (a, b) => JSON.stringify(a) === JSON.stringify(b);
 }
 
 ///////////////////////////////////////////////
@@ -126,7 +109,7 @@ L.control.scale({ imperial: false }).addTo(map);
   });
 }
 
-var featureGroups = L.featureGroup().addLayer(map);
+var featureGroups = L.featureGroup();
 var markersInfo = [];
 var sidebar = L.control
   .sidebar("sidebar", {
@@ -134,73 +117,63 @@ var sidebar = L.control
     position: "right",
   })
   .addTo(map);
-var markerInfoPromise = getMarkerInfo();
+getMarkerInfo();
 var activeStationMarker = null;
-//! Potential overlapping problem can be improved (featureGroup and markerClusterGroup)
-// Read markers data from data.csv
+let markerClusterGroup = L.markerClusterGroup({
+  iconCreateFunction: function (cluster) {
+    const childCount = cluster.getChildCount();
+    return L.divIcon({
+      html: `<img src='./assets/images/markerCluster.svg'>
+              <span>${childCount}</span>`,
+      className: "marker-cluster",
+    });
+  },
+  showCoverageOnHover: false,
+});
+
 function getMarkerInfo() {
   return new Promise(function (resolve, reject) {
-    // Create a DivIcon with custom HTML content
-    var markerClusterGroup = L.markerClusterGroup({
-      iconCreateFunction: function (cluster) {
-        const childCount = cluster.getChildCount();
-        return L.divIcon({
-          html: `<img src='./assets/images/markerCluster.svg'>
-                  <span>${childCount}</span>`,
-          className: "marker-cluster",
-        });
-      },
-      showCoverageOnHover: false,
-    });
-
-///////////////////////////////////////////////    
-// Load station ands and locations    
-///////////////////////////////////////////////    
-
-$.get("./AQSs_Info/e.csv", function (csvString) {
-      // Use PapaParse to convert string to array of objects
+    $.get("./AQSs_Info/e.csv", function (csvString) {
       var data = Papa.parse(csvString, {
         header: true,
         dynamicTyping: true,
       }).data;
 
       for (let i = 0; i < data.length - 1; i++) {
-        (function () {
-          // Create a new scope for each iteration of the loop
-          var row = data[i];
-          if (row != null) {
-            markersInfo.push(data[i].title);
-          }
-          var latlngs = [];
-          if (row.lat != null && row.lng != null) {
-            latlngs = L.latLng([row.lat, row.lng]);
-            let marker = L.marker(latlngs).addTo(featureGroups);
-            marker.setIcon(colorMarker("station")).bindTooltip(data[i].title, {
-              direction: "top",
-            });
-            marker.on("click", function () {
-              if (activeSensorMarker != null) {
-                activeSensorMarker.setIcon(colorMarker("purpleair"));
-                activeSensorMarker = null;
-              }
-              if (activeStationMarker != null) {
-                activeStationMarker.setIcon(colorMarker("station"));
-              }
-              activeStationMarker = marker;
-              marker.setIcon(colorMarker("selected"));
-              sidebar
-                .setContent(
-                  generateMarkerContent(data[i].title, data[i].lat, data[i].lng)
-                )
-                .show();
-            });
-            markerClusterGroup.addLayer(marker);
-          }
-        })();
+        var row = data[i];
+        if (row != null) {
+          markersInfo.push(data[i].title);
+        }
+        var latlngs = [];
+        if (row.lat != null && row.lng != null) {
+          latlngs = L.latLng([row.lat, row.lng]);
+          let marker = L.marker(latlngs, {
+            icon: colorMarker("station"),
+          }).bindTooltip(data[i].title, {
+            direction: "top",
+          });
+          marker.on("click", function () {
+            if (activeSensorMarker != null) {
+              activeSensorMarker.setIcon(colorMarker("purpleair"));
+              activeSensorMarker = null;
+            }
+            if (activeStationMarker != null) {
+              activeStationMarker.setIcon(colorMarker("station"));
+            }
+            activeStationMarker = marker;
+            marker.setIcon(colorMarker("selected"));
+            sidebar
+              .setContent(
+                generateMarkerContent(data[i].title, data[i].lat, data[i].lng)
+              )
+              .show();
+          });
+          featureGroups.addLayer(marker);
+          markerClusterGroup.addLayer(marker);
+        }
       }
-      // Get the close button element
+
       const closeButton = document.querySelector(".close");
-      // Add an event listener to the close button
       if (closeButton) {
         closeButton.addEventListener("click", () => {
           if (activeStationMarker != null) {
@@ -216,6 +189,20 @@ $.get("./AQSs_Info/e.csv", function (csvString) {
     });
   });
 }
+
+function toggleMarkerClusterGroup(cluster) {
+  if (map.hasLayer(cluster)) {
+    map.removeLayer(cluster);
+  } else {
+    map.addLayer(cluster);
+  }
+}
+
+// Example button to toggle visibility of the marker cluster
+// const toggleClusterButton = document.getElementById("toggle-button__station");
+// toggleClusterButton.addEventListener("click", () => {
+//   toggleMarkerClusterGroup(markerClusterGroup);
+// });
 
 function colorMarker(state) {
   if (state == "selected") {
@@ -243,89 +230,6 @@ function colorMarker(state) {
     tooltipAnchor: [1, -size],
   });
   return colorIcon;
-}
-
-var purpleairFeatureGroups = L.featureGroup().addLayer(map);
-var purpleairInfo = [];
-var purpleairPromise = getPurpleAirInfo(purpleairInfo, purpleairFeatureGroups);
-
-var activeSensorMarker = null;
-function getPurpleAirInfo(markersInfo, featureGroups) {
-  return new Promise(function (resolve, reject) {
-    // Create a DivIcon with custom HTML content
-    var purpleairMarkerClusterGroup = L.markerClusterGroup({
-      iconCreateFunction: function (cluster) {
-        const childCount = cluster.getChildCount();
-        return L.divIcon({
-          html: `<img src='./assets/images/markerPurpleAirCluster.svg'>
-                  <span>${childCount}</span>`,
-          className: "marker-cluster",
-        });
-      },
-      showCoverageOnHover: false,
-    });
-
-    const purpleairSensorsData = purpleairSensors.data;
-
-    for (let i = 0; i < purpleairSensorsData.length; i++) {
-      const purpleairSensor = purpleairSensorsData[i];
-      const purpleairSensorID = purpleairSensor[0];
-      const purpleairSensorName = purpleairSensor[1];
-      const purpleairSensorLatitude = purpleairSensor[2];
-      const purpleairSensorLongitude = purpleairSensor[3];
-      (function () {
-        var purpleairLatLng = L.latLng([
-          purpleairSensorLatitude,
-          purpleairSensorLongitude,
-        ]);
-        let purpleairMarker = L.marker(purpleairLatLng).addTo(featureGroups);
-        purpleairMarker
-          .setIcon(colorMarker("purpleair"))
-          .bindTooltip(purpleairSensorName, {
-            direction: "top",
-          });
-        purpleairMarker.on("click", function () {
-          if (activeStationMarker != null) {
-            activeStationMarker.setIcon(colorMarker("station"));
-            activeStationMarker = null;
-          }
-          if (activeSensorMarker != null) {
-            activeSensorMarker.setIcon(colorMarker("purpleair"));
-          }
-          activeSensorMarker = purpleairMarker;
-          purpleairMarker.setIcon(colorMarker("selected"));
-
-          generateMarkerContentPA(
-            purpleairSensorID,
-            purpleairSensorName,
-            purpleairSensorLatitude,
-            purpleairSensorLongitude
-          )
-            .then((content) => {
-              sidebar.setContent(content).show();
-            })
-            .catch((error) => {
-              console.error(error);
-              // Handle the error if needed
-            });
-        });
-        purpleairMarkerClusterGroup.addLayer(purpleairMarker);
-      })();
-    }
-    // Get the close button element
-    const closeButton = document.querySelector(".close");
-    // Add an event listener to the close button
-    if (closeButton) {
-      closeButton.addEventListener("click", function () {
-        if (activeSensorMarker != null) {
-          activeSensorMarker.setIcon(colorMarker("purpleair"));
-          activeSensorMarker = null;
-        }
-      });
-    }
-    map.addLayer(purpleairMarkerClusterGroup);
-    resolve(purpleairInfo);
-  });
 }
 
 function generateMarkerContent(title, lat, lng) {
@@ -389,10 +293,10 @@ function generateMarkerContent(title, lat, lng) {
         region = "CE";
       } else if (selectedRegion == "Sydney North-west") {
         region = "NW";
-      } 
-/////////////////////////////////////////////////////
-// load forecast files
-/////////////////////////////////////////////////////
+      }
+      /////////////////////////////////////////////////////
+      // load forecast files
+      /////////////////////////////////////////////////////
       getPollutantDataForLocation(
         title,
         selectedPollutantObj.value,
@@ -524,6 +428,108 @@ function generateMarkerContent(title, lat, lng) {
   }, 0);
   return content;
 }
+
+var purpleairFeatureGroups = L.featureGroup();
+var purpleairMarkerClusterGroup = L.markerClusterGroup({
+  iconCreateFunction: function (cluster) {
+    const childCount = cluster.getChildCount();
+    return L.divIcon({
+      html: `<img src='./assets/images/markerPurpleAirCluster.svg'>
+                    <span>${childCount}</span>`,
+      className: "marker-cluster",
+    });
+  },
+  showCoverageOnHover: false,
+});
+var purpleairInfo;
+var activeSensorMarker = null;
+
+getPurpleAirInfo();
+
+function getPurpleAirInfo() {
+  return new Promise(function (resolve, reject) {
+    const purpleairSensorsData = purpleairSensors.data;
+
+    for (let i = 0; i < purpleairSensorsData.length; i++) {
+      const purpleairSensor = purpleairSensorsData[i];
+      const purpleairSensorID = purpleairSensor[0];
+      const purpleairSensorName = purpleairSensor[1];
+      const purpleairSensorLatitude = purpleairSensor[2];
+      const purpleairSensorLongitude = purpleairSensor[3];
+
+      var purpleairLatLng = L.latLng([
+        purpleairSensorLatitude,
+        purpleairSensorLongitude,
+      ]);
+      let purpleairMarker = L.marker(purpleairLatLng, {
+        icon: colorMarker("purpleair"),
+      }).bindTooltip(purpleairSensorName, {
+        direction: "top",
+      });
+      purpleairMarker.on("click", function () {
+        if (activeStationMarker != null) {
+          activeStationMarker.setIcon(colorMarker("station"));
+          activeStationMarker = null;
+        }
+        if (activeSensorMarker != null) {
+          activeSensorMarker.setIcon(colorMarker("purpleair"));
+        }
+        activeSensorMarker = purpleairMarker;
+        purpleairMarker.setIcon(colorMarker("selected"));
+
+        generateMarkerContentPA(
+          purpleairSensorID,
+          purpleairSensorName,
+          purpleairSensorLatitude,
+          purpleairSensorLongitude
+        )
+          .then((content) => {
+            sidebar.setContent(content).show();
+          })
+          .catch((error) => {
+            console.error(error);
+            // Handle the error if needed
+          });
+      });
+
+      purpleairFeatureGroups.addLayer(purpleairMarker);
+      purpleairMarkerClusterGroup.addLayer(purpleairMarker);
+    }
+
+    map.addLayer(purpleairMarkerClusterGroup);
+
+    resolve(purpleairInfo);
+  });
+}
+
+
+
+// Example button to toggle visibility of purpleairMarkerClusterGroup
+// const toggleClusterGroupButton = document.getElementById(
+//   "toggle-button__sensor"
+// );
+// toggleClusterGroupButton.addEventListener("click", () => {
+//   toggleMarkerClusterGroup(purpleairMarkerClusterGroup);
+// });
+
+const buttonContainer = document.getElementById("button-container");
+
+buttonContainer.addEventListener("click", function(event) {
+  const clickedButton = event.target;
+  
+  if (clickedButton.classList.contains("layer-button")) {
+    clickedButton.classList.toggle("layer-button__active");
+    clickedButton.classList.toggle("layer-button__disable");
+    
+    const buttonId = clickedButton.id;
+    if (buttonId === "toggle-button__sensor") {
+      toggleMarkerClusterGroup(purpleairMarkerClusterGroup);
+    } else if (buttonId === "toggle-button__station") {
+      toggleMarkerClusterGroup(markerClusterGroup);
+    }
+  }
+});
+
 
 var nswBoundary = L.geoJSON(nswMapData, {
   style: function (geoJsonFeature) {

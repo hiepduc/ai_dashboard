@@ -41,8 +41,8 @@ function menuGetData(pollutant, time) {
         } else if (selectedRegion == "Sydney North-west") {
           region = "NW";
         }
-        console.log(selectedRegion);
-        console.log(region);
+        // console.log(selectedRegion);
+        // console.log(region);
         stationNames.push(data[i].title);
         getPollutantDataForLocation(
           stationNames[i],

@@ -8,7 +8,9 @@ async function getPollutantDataForLocation(
   const file = await response.text();
   const parsedData = Papa.parse(file, { header: true }).data;
 
-  const locationHeader = `${pollutant}_${location.toUpperCase()}`;
+  const formattedLocation = location.toUpperCase().replace(/ /g, "_");
+  const locationHeader = `${pollutant}_${formattedLocation}`;
+
   const data = parsedData.map((row) => parseFloat(row[locationHeader]));
   const forecastHours = parsedData.map((row) =>
     parseFloat(row["forecast_hours"])
