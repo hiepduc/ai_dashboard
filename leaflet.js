@@ -198,12 +198,6 @@ function toggleMarkerClusterGroup(cluster) {
   }
 }
 
-// Example button to toggle visibility of the marker cluster
-// const toggleClusterButton = document.getElementById("toggle-button__station");
-// toggleClusterButton.addEventListener("click", () => {
-//   toggleMarkerClusterGroup(markerClusterGroup);
-// });
-
 function colorMarker(state) {
   if (state == "selected") {
     var size = 40;
@@ -301,7 +295,7 @@ function generateMarkerContent(title, lat, lng) {
         title,
         selectedPollutantObj.value,
         // `./AQSs_Info/${region}_forecast_${selectedPollutantObj.label}_${selectedTime}_48_0.csv`,
-        `./AQSs_Info/${region}_forecast_${selectedPollutantObj.label}_${selectedTime}_48_0.csv`,
+        `./AQSs_Info/${region}_forecast_${selectedPollutantObj.label}_${selectedTime}_48_14062023_.csv`,
         "both"
       ).then((result) => {
         // console.log(result);
@@ -502,25 +496,15 @@ function getPurpleAirInfo() {
   });
 }
 
-
-
-// Example button to toggle visibility of purpleairMarkerClusterGroup
-// const toggleClusterGroupButton = document.getElementById(
-//   "toggle-button__sensor"
-// );
-// toggleClusterGroupButton.addEventListener("click", () => {
-//   toggleMarkerClusterGroup(purpleairMarkerClusterGroup);
-// });
-
 const buttonContainer = document.getElementById("button-container");
 
-buttonContainer.addEventListener("click", function(event) {
+buttonContainer.addEventListener("click", function (event) {
   const clickedButton = event.target;
-  
+
   if (clickedButton.classList.contains("layer-button")) {
     clickedButton.classList.toggle("layer-button__active");
     clickedButton.classList.toggle("layer-button__disable");
-    
+
     const buttonId = clickedButton.id;
     if (buttonId === "toggle-button__sensor") {
       toggleMarkerClusterGroup(purpleairMarkerClusterGroup);
@@ -529,7 +513,6 @@ buttonContainer.addEventListener("click", function(event) {
     }
   }
 });
-
 
 var nswBoundary = L.geoJSON(nswMapData, {
   style: function (geoJsonFeature) {
