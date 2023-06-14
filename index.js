@@ -7,7 +7,7 @@ window.addEventListener("DOMContentLoaded", () => {
   const defaultPollutant = airPollutants.find(
     (pollutant) => pollutant.value == "OZONE"
   ); // Assign default pollutant to ozone
-  const defaultTimeScope = 24;
+  const defaultTimeScope = 48;
   menuRender(defaultPollutant, defaultTimeScope);
   legendGenerator(defaultPollutant);
   // Keep track of the previous selections
