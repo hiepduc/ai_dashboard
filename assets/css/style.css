@@ -375,10 +375,8 @@ select:focus {
 
 .layer-button {
   position: relative;
-  background-color: #524eee; /* Green */
+  background-color: #524eee;
   border: none;
-  /* outline: solid #0052b1; */
-  /* color: white; */
   padding: 0.5rem 0.5rem;
   text-align: center;
   text-decoration: none;
@@ -393,20 +391,8 @@ select:focus {
 
 /* .layer-button__disable:hover, */
 .layer-button__active {
-  background-color: #524eee; /* Green */
-  /* border: none; */
-  /* outline: solid #0052b1; */
+  background-color: #524eee;
   color: white;
-  /* padding: 0.5rem 0.5rem; */
-  /* text-align: center; */
-  /* text-decoration: none; */
-  /* display: inline-block; */
-  /* font-size: 1rem; */
-  /* margin: 4px 2px; */
-  /* transition-duration: 0.4s; */
-  /* cursor: pointer; */
-  /* border-radius: 1rem; */
-  /* opacity: 0.85; */
 }
 
 /* .layer-button__active:hover, */

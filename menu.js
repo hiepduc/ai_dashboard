@@ -47,7 +47,7 @@ function menuGetData(pollutant, time) {
         getPollutantDataForLocation(
           stationNames[i],
           pollutant.value,
-          `./AQSs_Info/${region}_forecast_${pollutant.label}_${time}_48_0.csv`,
+          `./AQSs_Info/${region}_forecast_${pollutant.label}_${time}_48_14062023_.csv`,
           "forecast"
         ).then((result) => {
           // extract data from forecastData
