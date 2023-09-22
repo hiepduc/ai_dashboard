@@ -10,7 +10,7 @@ function markerGenerator(type, size, category) {
     // Determine the color based on the category
     let colour = categorizedColorCode(category);
     return `<svg width="${size}" height="${size}">
-    <rect width="${size}" height="${size}" style="fill:${colour};stroke-width:1;stroke:rgba(0,0,0,0.5)" /> 
+    <rect width="${size}" height="${size}" style="fill:${colour};stroke-width:5;stroke:rgba(0,0,0,0.5)" /> 
     </svg>`;
   }
 }

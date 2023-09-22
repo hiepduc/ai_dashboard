@@ -272,24 +272,12 @@ export class MapWidget {
       region.stations.forEach((station) => {
         // console.log(station);
         let latLngs = L.latLng([station.Latitude, station.Longitude]);
-        if (this.csvData) {
-          var selectedPollutantObj = airPollutants.find(
-            (pollutant) => pollutant.label === this.selection.pollutants
-          );
-          const forecastYValues =
-            this.csvData.data.stations[
-              replaceSpace(station.SiteName.toUpperCase())
-            ];
-          console.log("CCCCC", forecastYValues);
-          color = getCategoryLabel(selectedPollutantObj, 10);
-          console.log("CCCCCCC0", color);
-        }
-        console.log("CCCCCCC1", color);
+        
         let marker = L.marker(latLngs, {
           icon: colorMarker("station", "normal", color),
           riseOnHover: true,
           stationId: replaceSpace(station.SiteName), // Assign a unique identifier
-        }).bindTooltip(station.SiteName, { direction: "top" });
+        }).bindTooltip(station.SiteName, { direction: "top",className: "leaflet-tooltip-fontsize" });
 
         marker.on("click", () => {
           if (this.csvData) {

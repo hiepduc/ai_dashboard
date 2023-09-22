@@ -354,6 +354,10 @@ body {
   margin-left: 10px;
 }
 
+.leaflet-tooltip-fontsize {
+  font-size: 1rem;
+}
+
 /* DASHBOARD Selector Left */
 
 .dashboard-block__left-container {
@@ -745,7 +749,6 @@ select:focus {
   font-weight: bold;
 }
 
-
 .activity-guide {
   margin-left: auto;
   margin-right: auto;
@@ -794,7 +797,6 @@ select:focus {
 .activity-guide li {
   list-style-type: disc;
 }
-
 
 /* End of Body */
 
