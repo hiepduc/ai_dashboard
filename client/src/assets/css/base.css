@@ -1,0 +1,45 @@
+:root {
+  --good: #42a93c;
+  --fair: #eec900;
+  --poor: #e47400;
+  --very-poor: #ba0029;
+  --extremely-poor: #590019;
+  --default-header-color: #002664;
+  --slider-height: 15px;
+}
+
+*,
+:after,
+:before {
+  box-sizing: inherit;
+  padding: 0;
+  margin: 0;
+}
+
+html {
+  font-size: 100%;
+  line-height: 1.6rem;
+  /* font-family: Arial, Helvetica, sans-serif; */
+  /* font-family: "Roboto", sans-serif; */
+  font-family: "Open Sans", sans-serif;
+  box-sizing: border-box;
+}
+
+/* body {
+  max-width: 2000px;
+} */
+
+.grid {
+  width: 1200px;
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+.grid_full-width {
+  width: 100%;
+}
+
+.grid__row {
+  display: flex;
+  flex-wrap: wrap;
+}
