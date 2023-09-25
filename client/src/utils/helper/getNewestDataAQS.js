@@ -1,12 +1,13 @@
 import fetchHistoricalObservations from "../../services/fetchHistObs";
 import { sitesDetails } from "../Map/SiteDetails";
 
-async function getNewestDataAQS() {
+async function getNewestDataAQS(currentState) {
   // Example usage
   const parameters = "PM2.5";
   const startDate = "2023-09-13";
   const endDate = "2023-09-14";
   const sites = sitesDetails.map((site) => site.Site_Id);
+  console.log("Sites IDs:", sites);
   const newestStationInfo = [];
 
   for (const siteId of sites) {
@@ -14,7 +15,8 @@ async function getNewestDataAQS() {
       parameters,
       siteId,
       startDate,
-      endDate
+      endDate,
+      currentState
     );
     const filteredDataForStation = response.filter(
       (item) => item.Value !== null
@@ -36,4 +38,5 @@ async function getNewestDataAQS() {
   }
   return newestStationInfo;
 }
+
 export { getNewestDataAQS };

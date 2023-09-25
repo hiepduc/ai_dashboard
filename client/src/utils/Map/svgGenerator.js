@@ -1,3 +1,10 @@
+/**
+ *
+ * @param {String} type - whether station or sensor marker
+ * @param {Number} size - size in pixel of marker
+ * @param {String} category - corresponding air pollutant category of DPE
+ * @returns svg tag for corresponding marker
+ */
 function markerGenerator(type, size, category) {
   if (type === "purpleair") {
     let colour = "#aa44aa";

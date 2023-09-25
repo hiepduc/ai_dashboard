@@ -1,5 +1,6 @@
 // DataContext.js
 import { createContext, useContext, useState } from "react";
+import { stateConfig } from "../../Configuration/config";
 
 const DataContext = createContext();
 
@@ -8,26 +9,34 @@ function useData() {
 }
 
 function DataProvider({ children }) {
-  const [csvData, setCSVData] = useState(null);
-  const [selectedOptions, setSelectedOptions] = useState({
-    regions: "", // Initialize selected options for each dropdown list
-    pollutants: "",
-    timeScopes: "",
-    models: "",
-  });
+  const [csvData, setCSVData] = useState(stateConfig.initForecastData);
+  const [selectionState, setSelectionState] = useState(
+    stateConfig.initSelectionState
+  );
+  const [selectedOptions, setSelectedOptions] = useState(
+    stateConfig.initSelectedOptions
+  );
   const [changedDropdownParam, setChangedDropdownParam] = useState("");
-  const [sliderValue, setSliderValue] = useState(0); // Initial value
-  const [sliderTimeLabel, setSliderTimeLabel] = useState(["--", "--", "--"]);
+  const [sliderValue, setSliderValue] = useState(stateConfig.initSliderValue); // Initial value
+  const [sliderTimeLabel, setSliderTimeLabel] = useState(
+    stateConfig.initSliderTimeLabel
+  );
 
   return (
     <DataContext.Provider
       value={{
         csvData,
         setCSVData,
+        selectionState,
+        setSelectionState,
         selectedOptions,
         setSelectedOptions,
         changedDropdownParam,
         setChangedDropdownParam,
+        sliderValue,
+        setSliderValue,
+        sliderTimeLabel,
+        setSliderTimeLabel,
       }}
     >
       {children}

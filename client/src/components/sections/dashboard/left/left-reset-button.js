@@ -1,20 +1,16 @@
-import React, { useState, useEffect } from "react";
-import { useData } from "../../../../services/Selector/dataContext";
+import React from "react";
 import Button from "./button";
+import { useData } from "../../../../services/Selector/dataContext";
 import { resetButton } from "../../../../Configuration/buttonConfig";
-
-const fileNameParameters = ["regions", "models", "pollutants", "timeScopes"];
+import { stateConfig } from "../../../../Configuration/config";
 
 function ResetButton() {
-  const { setSelectedOptions } = useData();
+  const {setCSVData, setSelectionState, setSelectedOptions } = useData();
 
   const resetSelections = () => {
-    setSelectedOptions({
-      regions: "", // Reset to default value
-      pollutants: "", // Reset to default value
-      timeScopes: "", // Reset to default value
-      models: "",
-    });
+    setCSVData(stateConfig.initForecastData);
+    setSelectionState(stateConfig.initSelectionState);
+    setSelectedOptions(stateConfig.initSelectedOptions);
   };
 
   return (
@@ -27,4 +23,5 @@ function ResetButton() {
     />
   );
 }
+
 export default ResetButton;

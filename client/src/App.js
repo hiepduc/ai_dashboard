@@ -12,11 +12,13 @@ function App() {
     <>
       <Banner />
       <Header />
-      <DataProvider>
-        <Dashboard />
-        <Disclaimer />
-      </DataProvider>
-      <ActivityGuide />
+      <main>
+        <DataProvider>
+          <Dashboard />
+          <Disclaimer />
+        </DataProvider>
+        <ActivityGuide />
+      </main>
       <Footer />
     </>
   );

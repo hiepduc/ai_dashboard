@@ -12,6 +12,15 @@ export const airPollutants = [
     ParameterDescription: "PM 2.5",
     Units: "µg/m³",
   },
+  {
+    ParameterCode: "AQC",
+    ParameterDescription: "AQC",
+    Units: "category",
+    UnitsDescription: "category",
+    Category: "Site AQC",
+    SubCategory: "Hourly",
+    Frequency: "Hourly average",
+  },
   // {
   //   ParameterCode: "NO2",
   //   ParameterDescription: "NO2",
@@ -28,6 +37,21 @@ export const airPollutants = [
   //   Units: "m/s",
   // },
 ];
+
+/**
+ *
+ * @param {String} parameterCode - code of air pollutant according to DPE
+ * @returns pollutant - corresponding pollutant object in pollutant.js config file
+ */
+export function findAirPollutantByCode(parameterCode) {
+  // Use the find() method to find the object with the specified ParameterCode
+  const pollutant = airPollutants.find(
+    (pollutant) => pollutant.ParameterCode === parameterCode
+  );
+
+  // Return the pollutant object if found, or null if not found
+  return pollutant || null;
+}
 
 /*
 const airPollutants = [

@@ -48,6 +48,21 @@ function findAirPollutantUnit(parameterLabel) {
 
 /**
  *
+ * @param {String} parameterLabel - label of air pollutant
+ * @returns unit - unit of air pollutant
+ */
+function findAirPollutantUnitByCode(parameterCode) {
+  // Use the find() method to find the object with the specified ParameterCode
+  const pollutant = airPollutants.find(
+    (pollutant) => pollutant.ParameterCode === parameterCode
+  );
+
+  // Return the pollutant object if found, or null if not found
+  return pollutant.Units || null;
+}
+
+/**
+ *
  * @param {Number} stationCode - Site_Id of DPE AQS
  * @returns SiteName - SiteName of DPE AQS
  */
@@ -65,5 +80,6 @@ export {
   findAirPollutantByCode,
   findAirPollutantByLabel,
   findAirPollutantUnit,
+  findAirPollutantUnitByCode,
   findStationByCode,
 };

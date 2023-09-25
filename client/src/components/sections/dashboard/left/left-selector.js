@@ -9,14 +9,11 @@ const Selector = () => {
     setCSVData,
     selectedOptions,
     setSelectedOptions,
+    setSelectionState,
     setChangedDropdownParam,
   } = useData();
+  
   const [options, setOptions] = useState(null); // Set options for dropdown lists
-  // const [selectedOptions, setSelectedOptions] = useState({
-  //   regions: "", // Initialize selected options for each dropdown list
-  //   pollutants: "O3",
-  //   timeScopes: "48",
-  // }); // State for selected options
   console.log("State test: ", selectedOptions);
 
   useEffect(() => {
@@ -35,12 +32,8 @@ const Selector = () => {
 
   useEffect(() => {
     console.log("Selected options: ", selectedOptions);
-    if (
-      selectedOptions.regions &&
-      selectedOptions.pollutants &&
-      selectedOptions.timeScopes &&
-      selectedOptions.models
-    ) {
+    const hasAllValues = Object.values(selectedOptions).every((value) => value);
+    if (hasAllValues) {
       console.log("Bottle neck ", selectedOptions);
       // Call the fetchData function whenever selectedOptions change
       const fetchData = async () => {
@@ -50,6 +43,7 @@ const Selector = () => {
           console.log("Response:", response);
           setCSVData(response);
           console.log("Data Response:");
+          setSelectionState(true);
         } catch (error) {
           console.error("Error fetching data:", error);
         }

@@ -1,11 +1,14 @@
 import axios from "axios";
+
 // Function to fetch historical observations from the backend
 async function fetchHistoricalObservations(
   parameters,
   sites,
   startDate,
-  endDate
+  endDate,
+  currentState
 ) {
+  if (currentState) return [];
   try {
     const getObsURL = "http://localhost:8000/api/getObs";
     const response = await axios.get(getObsURL, {

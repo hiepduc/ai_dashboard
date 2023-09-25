@@ -20,13 +20,30 @@ const linePlotParams = {
   xAxisTitle: "Time",
 };
 
+const fileNameParameters = ["regions", "models", "pollutants", "timeScopes"];
+
+const stateConfig = {
+  initSelectionState: false,
+  initSelectedOptions: {
+    regions: "", // Initialize selected options for each dropdown list
+    pollutants: "", // Example: O3, PM2.5
+    timeScopes: "", // Example: 24, 48, 72
+    models: "", // Example: LSTM-BNN
+  },
+  initForecastData: null,
+  initSliderValue: 0,
+  initSliderTimeLabel: ["--", "--", "--"],
+  initRightPanelHeader: "Up-to-date AQS observations across NSW",
+  initRightPanelPollutant: "AQC",
+};
+
 // const content = [
-  
+
 //     right: [{
 //       heading: "NSW Air Quality Station Ranking",
 //       subHeading: "Highest up-to-date PM2.5 level",
 //     },]
-  
+
 // ];
 
 export {
@@ -34,5 +51,6 @@ export {
   dpe_site_data_file,
   dateOptions,
   linePlotParams,
+  stateConfig,
   // content,
 };

@@ -1,22 +1,24 @@
 import { useState, useEffect } from "react";
 import getCategoryLabel from "../../../../utils/helper/getCategoryLabel";
 // import fetchHistoricalObservations from "../../../../services/fetchHistObs";
-import { descendingSortByKey } from "../../../../utils/helper/sort";
-import { getNewestDataAQS } from "../../../../utils/helper/getNewestDataAQS";
+import { descendingSortByKey, sortByAQC } from "../../../../utils/helper/sort";
+// import { getNewestDataAQS } from "../../../../utils/helper/getNewestDataAQS";
 import { convertDataFormat } from "../../../../utils/helper/convertDataFormat";
 // import { sitesDetails } from "../../../../AQSs_Info/SiteDetails";
 import {
-  findAirPollutantByCode,
+  // findAirPollutantByCode,
+  findAirPollutantByLabel,
   findStationByCode,
 } from "../../../../utils/helper/lookupHelper";
 import { useData } from "../../../../services/Selector/dataContext";
+import getNewestObs from "../../../../services/getNewestObs";
 
 function Ranking() {
-  const { csvData } = useData();
-  const [useCsvData, setUseCsvData] = useState(false);
+  const { csvData, selectedOptions, selectionState } = useData();
+  // const [useCsvData, setUseCsvData] = useState(false);
 
-  const [stationInfo, setStationInfo] = useState([]);
-  const parameters = "PM2.5";
+  const [stationObsInfo, setStationObsInfo] = useState([]);
+  const [stationForecastInfo, setStationForecastInfo] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -26,50 +28,61 @@ function Ranking() {
         // Assuming csvData is an array of objects
         fetchedData = convertDataFormat(csvData.ranking);
         fetchedData.sort(descendingSortByKey("Value")); // Change the key as needed
+        setStationForecastInfo(fetchedData);
       } else {
-        fetchedData = await getNewestDataAQS();
+        fetchedData = await getNewestObs(selectionState);
+        // fetchedData = fetchedData.filter((station) => station.AirQualityCategory === "");
         fetchedData = fetchedData.map((station) => ({
           ...station,
           SiteName: findStationByCode(station.Site_Id),
         }));
-        fetchedData.sort(descendingSortByKey("Value")); // Sort based on "Value"
+        // fetchedData.sort(descendingSortByKey("Value")); // Sort based on "Value"
+        setStationObsInfo(sortByAQC(fetchedData));
       }
 
       // Set the sorted data to the state
-      setStationInfo(fetchedData);
-      console.log(fetchedData);
+      // setStationInfo(fetchedData);
+      // console.log(fetchedData);
     };
     fetchData();
-  }, [csvData]);
+  }, [csvData, selectionState]);
 
   return (
     <ul className="stations-info">
-      {stationInfo.map((station) => {
-        const classList = getCategoryLabel(
-          findAirPollutantByCode(parameters),
-          station.Value
-        );
-
-        return (
-          <li className="station-item" key={station.SiteName}>
-            <div
-              className="station-container"
-              style={{
-                borderLeft: `8px solid var(--${classList})`,
-              }}
-            >
-              <div className="station-name">{station.SiteName}</div>
-              <div className="station-time">
-                <div>{station.HourDescription}</div>
-                <div>{station.Date}</div>
+      {(selectionState ? stationForecastInfo : stationObsInfo).map(
+        (station) => {
+          let classList;
+          if (selectionState) {
+            classList = getCategoryLabel(
+              findAirPollutantByLabel(selectedOptions.pollutants),
+              station.Value
+            );
+          } else {
+            classList = station.AirQualityCategory.toLowerCase();
+          }
+          return (
+            <li className="station-item" key={station.SiteName}>
+              <div
+                className="station-container"
+                style={{
+                  borderLeft: `8px solid var(--${classList})`,
+                }}
+              >
+                <div className="station-name">{station.SiteName}</div>
+                <div className="station-time">
+                  <div>{station.HourDescription}</div>
+                  <div>{station.Date}</div>
+                </div>
+                <div className={`station-value ${classList}`}>
+                  {selectionState
+                    ? station.Value.toFixed(2)
+                    : station.AirQualityCategory}
+                </div>
               </div>
-              <div className={`station-value ${classList}`}>
-                {station.Value.toFixed(2)}
-              </div>
-            </div>
-          </li>
-        );
-      })}
+            </li>
+          );
+        }
+      )}
     </ul>
   );
 }
