@@ -13,12 +13,17 @@ import { useData } from "../../../../services/Selector/dataContext";
 // Chart.register(Annotation);
 
 function Slider() {
-  const { csvData, selectedOptions } = useData();
-  const [sliderValue, setSliderValue] = useState(0); // Initial value
-  const [sliderMax, setSliderMax] = useState();
+  const {
+    csvData,
+    selectedOptions,
+    sliderValue,
+    setSliderValue,
+    sliderTimeLabel,
+    setSliderTimeLabel,
+  } = useData();
+  const [sliderMax, setSliderMax] = useState(24);
   const [isPlaying, setIsPlaying] = useState(false);
   const [intervalTime, setIntervalTime] = useState(null);
-  const [sliderTimeLabel, setSliderTimeLabel] = useState(["--", "--", "--"]);
   const sliderMin = 0;
 
   useEffect(() => {
@@ -47,10 +52,10 @@ function Slider() {
       const lineAnnotationValue =
         sliderValue + Number(selectedOptions.timeScopes);
       forecastChart.options.plugins.annotation.annotations.vertLine.xMin =
-      lineAnnotationValue;
+        lineAnnotationValue;
 
       forecastChart.options.plugins.annotation.annotations.vertLine.xMax =
-      lineAnnotationValue;
+        lineAnnotationValue;
 
       // Update chart annotations
       const y = forecastChart.data.datasets[1].data[sliderValue].y.toFixed(2);
@@ -60,30 +65,11 @@ function Slider() {
         [`${x}`, `Forecast data: ${y}`];
       forecastChart.update();
     }
-
-    // Additional chart updates as needed based on sliderValue
   }, [sliderValue, selectedOptions.timeScopes]);
 
   const handleSliderChange = (event) => {
     setSliderValue(parseInt(event.target.value));
   };
-
-  // const handlePlayPauseClick = () => {
-  //   if (!isPlaying) {
-  //     setIsPlaying(true);
-  //     autoIncreSliderValue();
-  //   } else {
-  //     setIsPlaying(false);
-  //     clearInterval(intervalTime);
-  //   }
-  // };
-
-  // const autoIncreSliderValue = () => {
-  //   intervalTime = setInterval(() => {
-  //     const nextValue = (sliderValue + 1) % 24;
-  //     setSliderValue(nextValue);
-  //   }, 1000);
-  // };
 
   const handleStepForward = () => {
     // Implement your step forward logic here
@@ -122,6 +108,7 @@ function Slider() {
         if (prevValue >= sliderMax - 1) {
           clearInterval(intervalTime);
           setIsPlaying(false);
+          // setSliderValue(0);
           return prevValue;
         }
         return prevValue + 1;
@@ -138,7 +125,7 @@ function Slider() {
         className="slider"
         type="range"
         min={sliderMin}
-        max={sliderMax - 1}
+        max={sliderMax-1}
         step="1"
         value={sliderValue}
         onChange={handleSliderChange}

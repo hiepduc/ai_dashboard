@@ -8,6 +8,7 @@ import purpleairSensors from "../../../../utils/Map/sensors";
 import { generateMarkerContent } from "../../../../utils/Map/sidebarAQS";
 import generateMarkerContentPA from "../../../../utils/Map/sidebarPurpleAir";
 import getCategoryLabel from "../../../../utils/helper/getCategoryLabel";
+import { findAirPollutantByLabel } from "../../../../utils/helper/lookupHelper";
 
 import { markerGenerator, svgHome } from "../../../../utils/Map/svgGenerator";
 import markerCluster from "../../../../assets/images/markerCluster.svg";
@@ -88,7 +89,7 @@ export class MapWidget {
     });
 
     // this.purpleairFeatureGroups = L.featureGroup();
-    this.purpleairMarkerClusterGroup = L.markerClusterGroup({
+    this.sensorClusterGroup = L.markerClusterGroup({
       iconCreateFunction: function (cluster) {
         const childCount = cluster.getChildCount();
         return L.divIcon({
@@ -102,6 +103,8 @@ export class MapWidget {
 
     this.csvData = null;
     this.selection = null;
+    this.selectionState = null;
+    this.stationObsData = null;
 
     this.homeButton(cenLat, cenLng, zoom);
     this.markerAQS();
@@ -109,33 +112,99 @@ export class MapWidget {
     // this.initEventListeners();
   }
 
+  getStationObsData(stationObsInfo) {
+    this.stationObsData = stationObsInfo;
+    if (this.stationObsData.length) {
+      Object.entries(this.regionFeatureGroups).forEach((region) => {
+        console.log("region feature2: ", region);
+
+        region[1].eachLayer((layer) => {
+          if (layer instanceof L.Marker) {
+            const stationId = layer.options.stationId; // Get the station identifier
+            console.log("stationId: ", stationId);
+            const foundStationObs = this.stationObsData.find(
+              (stationObs) => stationObs.Site_Id === stationId
+            );
+            console.log("foundStationObs", foundStationObs);
+            if (foundStationObs) {
+              layer.setIcon(
+                colorMarker(
+                  "station",
+                  "normal",
+                  foundStationObs.AirQualityCategory.toLowerCase()
+                )
+              );
+            } else {
+              layer.setIcon(colorMarker("station", "normal", "default"));
+            }
+          }
+        });
+      });
+    }
+  }
+
   getData(data) {
     this.csvData = data;
     console.log(this.csvData);
     if (this.csvData) {
       // Assuming you have a new color for the markers
-      var selectedPollutantObj = airPollutants.find(
-        (pollutant) => pollutant.label === this.selection.pollutants
+      console.log("selection pollutant", this.selection.pollutants);
+      var selectedPollutantObj = findAirPollutantByLabel(
+        this.selection.pollutants
+      );
+      //  airPollutants.find(
+      //   (pollutant) => pollutant.label === this.selection.pollutants
+      // );
+
+      this.regionFeatureGroups[this.selection.regions].eachLayer((layer) => {
+        if (layer instanceof L.Marker) {
+          // Check if it's a marker
+          const stationName = layer.options.stationName.toUpperCase(); // Get the station identifier
+          console.log("stationName: ", stationName);
+
+          // Use the stationId to access the data in this.csvData
+          if (this.csvData.data.stations.hasOwnProperty(stationName)) {
+            const forecastValue =
+              this.csvData.data.stations[stationName].forecastValue[0];
+            let color = getCategoryLabel(selectedPollutantObj, forecastValue);
+            // Set the new icon for the marker
+            layer.setIcon(colorMarker("station", "normal", color));
+            layer.options.stationStatus = color;
+          } else {
+            // Set default icon for the marker
+            layer.setIcon(colorMarker("station", "normal", "default"));
+          }
+          console.log("mod: ", layer.options);
+        }
+      });
+    }
+  }
+
+  setAnimation(sliderValue) {
+    if (sliderValue && this.csvData) {
+      var selectedPollutantObj = findAirPollutantByLabel(
+        this.selection.pollutants
       );
 
       this.regionFeatureGroups[this.selection.regions].eachLayer((layer) => {
         if (layer instanceof L.Marker) {
           // Check if it's a marker
-          const stationId = layer.options.stationId.toUpperCase(); // Get the station identifier
-          console.log("stationId: ", stationId);
+          const stationName = layer.options.stationName.toUpperCase(); // Get the station identifier
+          console.log("stationName: ", stationName);
+
           // Use the stationId to access the data in this.csvData
-          if (this.csvData.data.stations.hasOwnProperty(stationId)) {
+          if (this.csvData.data.stations.hasOwnProperty(stationName)) {
             const forecastValue =
-              this.csvData.data.stations[stationId].forecastValue[0];
+              this.csvData.data.stations[stationName].forecastValue[sliderValue];
             let color = getCategoryLabel(selectedPollutantObj, forecastValue);
             // Set the new icon for the marker
             layer.setIcon(colorMarker("station", "normal", color));
+            // layer.options.stationStatus = color;
           } else {
-            const forecastValue = 0;
-            let color = getCategoryLabel(selectedPollutantObj, forecastValue);
-            // Set the new icon for the marker
+            // Set default icon for the marker
             layer.setIcon(colorMarker("station", "normal", "default"));
           }
+          console.log("mod: ", layer.options);
         }
       });
     }
@@ -174,95 +243,96 @@ export class MapWidget {
     });
   }
 
-  getContainerRef() {
-    return this.containerRef;
-  }
-
-  // initEventListeners() {
-  //   // Listen for a custom event triggered by React
-  //   document.addEventListener("mapZoomToRegion", (event) => {
-  //     const regionName = event.detail.regionName;
-  //     this.zoomToRegion(regionName);
-  //   });
-  // }
-
   ///////////////////////////////////////////////
   // ZOOM TO REGION
   ///////////////////////////////////////////////
-  zoomToRegion(selectedRegion) {
+  zoomToRegion(selectedRegion, selectionState) {
     console.log("Region zoom test: ", selectedRegion);
-    // const selectButton = document.querySelector(".select-button");
-    // selectButton.addEventListener("click", () => {
-    // const selectedRegion = document.querySelector("#select-region").value;
-    // if (selectedRegion === "NSW") {
-    //   this.map.flyTo([this.cenLat, this.cenLng], this.zoom);
-    //   regionDetails.forEach((region) => {
-    //     // If map has layers of other regions, make them disapper
-    //     if (this.map.hasLayer(this.regionFeatureGroups[region.label])) {
-    //       this.toggleLayerVisibility(this.regionFeatureGroups[region.label]);
-    //       console.log("Appear:" + region.label);
-    //     }
-    //   });
-    //   // If map doen't have NSW cluster, make it appears
-    //   if (!this.map.hasLayer(this.regionClusterGroup))
-    //     this.toggleLayerVisibility(this.regionClusterGroup);
-    // } else {
-    console.log("Prepare to zoom");
-    regionDetails.forEach((region) => {
-      if (region.label === selectedRegion) {
-        // Zoom to boundary of selected region
-        var northEastRegionBound = L.latLng(
-            region.largestLatitude,
-            region.largestLongitude
-          ),
-          southWestRegionBound = L.latLng(
-            region.smallestLatitude,
-            region.smallestLongitude
-          ),
-          regionBounds = L.latLngBounds(
-            northEastRegionBound,
-            southWestRegionBound
+    console.log("oom: ", this.regionClusterGroup);
+    if (!selectedRegion && !selectionState) {
+      // If no region is selected, zoom to the default region
+      selectedRegion = "NSW";
+      this.zoom(selectedRegion);
+      regionDetails.forEach((region) => {
+        if (this.map.hasLayer(this.regionFeatureGroups[region.label]))
+          this.toggleLayerVisibility(
+            this.regionFeatureGroups[region.label],
+            false
           );
-        this.map.flyToBounds(regionBounds);
-
-        // Toggle the visibility of selected region
-        // If map has the NSw cluster layer, make it disapper
-        if (this.map.hasLayer(this.regionClusterGroup))
-          this.toggleLayerVisibility(this.regionClusterGroup);
-        // If map doesn't have the selected region, make it appears
-        if (!this.map.hasLayer(this.regionFeatureGroups[region.label])) {
-          this.toggleLayerVisibility(this.regionFeatureGroups[region.label]);
+      });
+      if (!this.map.hasLayer(this.regionClusterGroup))
+        this.toggleLayerVisibility(this.regionClusterGroup, true);
+    } else if (selectedRegion) {
+      this.zoom(selectedRegion);
+      console.log("Zoom to region: ", selectedRegion);
+      if (this.map.hasLayer(this.regionClusterGroup))
+        this.toggleLayerVisibility(this.regionClusterGroup, false);
+      regionDetails.forEach((region) => {
+        if (region.label === selectedRegion) {
+          this.toggleLayerVisibility(
+            this.regionFeatureGroups[region.label],
+            true
+          );
           console.log("Appear:" + region.label);
-        } else this.regionFeatureGroups[region.label].addTo(this.map);
-      } else {
-        // If map has other regions, make them disappear
-        if (this.map.hasLayer(this.regionFeatureGroups[region.label])) {
-          this.toggleLayerVisibility(this.regionFeatureGroups[region.label]);
-          console.log("Disappear:" + region.label);
+        } else {
+          if (this.map.hasLayer(this.regionFeatureGroups[region.label]))
+            this.toggleLayerVisibility(
+              this.regionFeatureGroups[region.label],
+              false
+            );
         }
-      }
-    });
-    // }
-    // });
-  }
-
-  toggleLayerVisibility(cluster) {
-    if (this.map.hasLayer(cluster)) {
-      this.map.removeLayer(cluster);
-    } else {
-      this.map.addLayer(cluster);
+      });
     }
   }
 
-  toggleStationClusterVisibility() {
-    console.log("Now toggling button: station");
-    this.toggleLayerVisibility(this.regionClusterGroup);
+  zoom(regionLabel) {
+    // Find the selected region and zoom to it
+    const selectedRegionData = regionDetails.find(
+      (region) => region.label === regionLabel
+    );
+    const {
+      largestLatitude,
+      largestLongitude,
+      smallestLatitude,
+      smallestLongitude,
+    } = selectedRegionData;
+
+    const northEastRegionBound = L.latLng(largestLatitude, largestLongitude);
+    const southWestRegionBound = L.latLng(smallestLatitude, smallestLongitude);
+    const regionBounds = L.latLngBounds(
+      northEastRegionBound,
+      southWestRegionBound
+    );
+
+    this.map.flyToBounds(regionBounds);
   }
 
-  toggleSensorClusterVisibility() {
-    console.log("Now toggling button: sensor");
+  toggleStationClusterVisibility(isStationsVisible) {
+    console.log("Now toggling button: station");
+    if (!this.selection.regions)
+      this.toggleLayerVisibility(this.regionClusterGroup, isStationsVisible);
+    else
+      this.toggleLayerVisibility(
+        this.regionFeatureGroups[this.selection.regions],
+        isStationsVisible
+      );
+  }
 
-    this.toggleLayerVisibility(this.purpleairMarkerClusterGroup);
+  toggleSensorClusterVisibility(isSensorsVisible) {
+    console.log("Now toggling button: sensor");
+    console.log("isSensorVisible: ", isSensorsVisible);
+    this.toggleLayerVisibility(this.sensorClusterGroup, isSensorsVisible);
+  }
+
+  toggleLayerVisibility(layer, isVisible) {
+    console.log(`Now toggling button: ${layer}`);
+    console.log(`${layer} visibility: `, isVisible);
+
+    if (isVisible) {
+      this.map.addLayer(layer);
+    } else {
+      this.map.removeLayer(layer);
+    }
   }
 
   markerAQS() {
@@ -272,32 +342,20 @@ export class MapWidget {
       region.stations.forEach((station) => {
         // console.log(station);
         let latLngs = L.latLng([station.Latitude, station.Longitude]);
-        
+
         let marker = L.marker(latLngs, {
           icon: colorMarker("station", "normal", color),
           riseOnHover: true,
-          stationId: replaceSpace(station.SiteName), // Assign a unique identifier
-        }).bindTooltip(station.SiteName, { direction: "top",className: "leaflet-tooltip-fontsize" });
+          stationName: replaceSpace(station.SiteName), // Assign a unique identifier
+          stationId: station.Site_Id,
+          stationStatus: "default",
+        }).bindTooltip(station.SiteName, {
+          direction: "top",
+          className: "leaflet-tooltip-fontsize",
+        });
 
         marker.on("click", () => {
-          if (this.csvData) {
-            var pollutantSelection =
-              document.querySelector("#select-pollutants");
-            // console.log(pollutantSelection);
-            let selectedPollutant = pollutantSelection.value;
-            console.log(selectedPollutant);
-
-            var selectedPollutantObj = airPollutants.find(
-              (pollutant) => pollutant.label === this.selection.pollutants
-            );
-            const forecastYValues =
-              this.csvData.data.stations[
-                replaceSpace(station.SiteName.toUpperCase())
-              ].forecastValue;
-            const sidebarHeaderIndicator = getCategoryLabel(
-              selectedPollutantObj,
-              forecastYValues[0]
-            );
+          if (this.csvData && marker.options.stationStatus !== "default") {
             if (this.activeSensorMarker != null) {
               this.activeSensorMarker.setIcon(
                 colorMarker("purpleair", "normal")
@@ -330,9 +388,10 @@ export class MapWidget {
       this.regionClusterGroup.addLayer(featureGroup);
     }
     this.regionClusterGroup.addTo(this.map);
+    console.log("oom2: ", this.regionClusterGroup);
   }
 
-  markerPA(sidebar) {
+  markerPA() {
     // return new Promise(function (resolve, reject) {
     // var purpleairInfo;
     // var activeSensorMarker = null;
@@ -373,7 +432,7 @@ export class MapWidget {
         )
           .then((content) => {
             // console.log(content);
-            sidebar.setContent(content).show();
+            this.sidebar.setContent(content).show();
           })
           .catch((error) => {
             console.error(error);
@@ -382,10 +441,10 @@ export class MapWidget {
       });
 
       // this.purpleairFeatureGroups.addLayer(purpleairMarker);
-      this.purpleairMarkerClusterGroup.addLayer(purpleairMarker);
+      this.sensorClusterGroup.addLayer(purpleairMarker);
     });
 
-    // this.map.addLayer(this.purpleairMarkerClusterGroup);
+    // this.map.addLayer(this.sensorClusterGroup);
 
     // const closeButton = document.querySelector(".close");
     // closeButton.addEventListener("click", () => {

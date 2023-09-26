@@ -14,10 +14,13 @@ import { useData } from "../../../../services/Selector/dataContext";
 import getNewestObs from "../../../../services/getNewestObs";
 
 function Ranking() {
-  const { csvData, selectedOptions, selectionState } = useData();
-  // const [useCsvData, setUseCsvData] = useState(false);
-
-  const [stationObsInfo, setStationObsInfo] = useState([]);
+  const {
+    csvData,
+    selectedOptions,
+    selectionState,
+    stationObsInfo,
+    setStationObsInfo,
+  } = useData();
   const [stationForecastInfo, setStationForecastInfo] = useState([]);
 
   useEffect(() => {

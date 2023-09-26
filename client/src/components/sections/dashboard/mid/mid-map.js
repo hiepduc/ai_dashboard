@@ -1,16 +1,11 @@
 import React, { useRef, useEffect } from "react";
-// import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
-// import { map } from "leaflet";
-// import * as L from "leaflet";
-// import "leaflet/dist/leaflet.css";
-// import "./leaflet.js"
-// import markerCluster from "../../../assets/images/markerCluster.svg";
 import { MapWidget } from "./map-widget";
 import { useData } from "../../../../services/Selector/dataContext";
 import { useLayerVisibility } from "../../../../services/Selector/visibilityContext";
 
 export default function LeafletMap() {
-  const { csvData, selectedOptions } = useData();
+  const { csvData, selectedOptions, selectionState, stationObsInfo, sliderValue } =
+    useData();
   const { isStationLayerVisible, isSensorLayerVisible } = useLayerVisibility();
   const mapRef = useRef(null);
   const containerRef = useRef(null);
@@ -22,6 +17,10 @@ export default function LeafletMap() {
   }, []);
 
   useEffect(() => {
+    mapRef.current.getStationObsData(stationObsInfo);
+  }, [stationObsInfo]);
+
+  useEffect(() => {
     console.log(csvData);
     mapRef.current.getData(csvData);
   }, [csvData]);
@@ -31,16 +30,20 @@ export default function LeafletMap() {
   }, [selectedOptions]);
 
   useEffect(() => {
-    mapRef.current.zoomToRegion(selectedOptions.regions);
-  }, [selectedOptions]);
+    mapRef.current.zoomToRegion(selectedOptions.regions,selectionState);
+  }, [selectedOptions.regions]);
 
   useEffect(() => {
-    mapRef.current.toggleStationClusterVisibility();
+    mapRef.current.toggleStationClusterVisibility(isStationLayerVisible.state);
   }, [isStationLayerVisible.state]);
 
   useEffect(() => {
-    mapRef.current.toggleSensorClusterVisibility();
+    mapRef.current.toggleSensorClusterVisibility(isSensorLayerVisible.state);
   }, [isSensorLayerVisible.state]);
+
+  useEffect(() => {
+      mapRef.current.setAnimation(sliderValue);
+    }, [sliderValue]);
 
   return <div id="mapid" ref={containerRef}></div>;
 }

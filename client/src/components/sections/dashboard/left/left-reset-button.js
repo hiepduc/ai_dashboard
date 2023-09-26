@@ -5,12 +5,20 @@ import { resetButton } from "../../../../Configuration/buttonConfig";
 import { stateConfig } from "../../../../Configuration/config";
 
 function ResetButton() {
-  const {setCSVData, setSelectionState, setSelectedOptions } = useData();
+  const {
+    setCSVData,
+    setSelectionState,
+    setSelectedOptions,
+    setSliderValue,
+    setSliderTimeLabel,
+  } = useData();
 
   const resetSelections = () => {
     setCSVData(stateConfig.initForecastData);
     setSelectionState(stateConfig.initSelectionState);
     setSelectedOptions(stateConfig.initSelectedOptions);
+    setSliderValue(stateConfig.initSliderValue);
+    setSliderTimeLabel(stateConfig.initSliderTimeLabel);
   };
 
   return (

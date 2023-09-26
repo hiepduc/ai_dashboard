@@ -7,19 +7,7 @@ function MidLegend() {
   const { selectedOptions } = useData();
 
   const [currentPollutantLegend, setCurrentPollutantLegend] = useState(null);
-  const a = {
-    ParameterCode: "OZONE",
-    label: "O3",
-    ParameterDescription: "Ozone",
-    Units: "pphm",
-    categories: [
-      { label: "Good", range: "< 5.4" },
-      { label: "Fair", range: "5.4 - 8.0" },
-      { label: "Poor", range: "8.0 - 12.0" },
-      { label: "Very poor", range: "12.0 - 16.0" },
-      { label: "Extremely poor", range: "> 16.0" },
-    ],
-  };
+  
   console.log(findAirPollutantByLabel(selectedOptions.pollutants));
   useEffect(() => {
     console.log("AAAAA", selectedOptions);

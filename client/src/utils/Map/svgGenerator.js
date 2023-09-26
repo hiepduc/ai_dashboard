@@ -17,7 +17,7 @@ function markerGenerator(type, size, category) {
     // Determine the color based on the category
     let colour = categorizedColorCode(category);
     return `<svg width="${size}" height="${size}">
-    <rect width="${size}" height="${size}" style="fill:${colour};stroke-width:5;stroke:rgba(0,0,0,0.5)" /> 
+    <rect width="${size}" height="${size}" style="fill:${colour};stroke-width:3;stroke:rgba(0,0,0,0.5)" /> 
     </svg>`;
   }
 }
@@ -42,7 +42,8 @@ function categorizedColorCode(category) {
       break;
     default:
       // Default color if category is not recognized
-      colour = "#524eee"; // Change this to your default color
+      // colour = "#524eee"; // Change this to your default color
+      colour = "#242424";
   }
   return colour;
 }

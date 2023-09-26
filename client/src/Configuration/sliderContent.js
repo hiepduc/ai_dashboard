@@ -1,6 +1,5 @@
 import stepButton from "../assets/images/step-button.svg";
 import pauseButton from "../assets/images/pause-button.svg";
-// import playButton from "../../../assets/images/play-button.svg"
 
 const sliderConfig = {
   labels: [

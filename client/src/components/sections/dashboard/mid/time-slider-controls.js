@@ -1,14 +1,20 @@
 import React, { useState } from "react";
 import sliderConfig from "../../../../Configuration/sliderContent"; // Path to your sliderConfig.js
+import playButton from "../../../../assets/images/play-button.svg";
 
-function SliderControls({ onStepForward, onStepBackward, onAutoForwardToggle }) {
+function SliderControls({
+  onStepForward,
+  onStepBackward,
+  onAutoForwardToggle,
+}) {
   const [isPlaying, setIsPlaying] = useState(false);
   const controlActions = {
     "time-slider__control--backward": onStepBackward,
     "time-slider__control--forward": onStepForward,
     "time-slider__control--motion": () => {
       setIsPlaying((prevIsPlaying) => !prevIsPlaying);
-      onAutoForwardToggle(!isPlaying); // Pass the playing state to the parent
+      console.log("isPlaying1 ", isPlaying);
+      onAutoForwardToggle(isPlaying); // Pass the playing state to the parent
     },
   };
 
@@ -21,7 +27,18 @@ function SliderControls({ onStepForward, onStepBackward, onAutoForwardToggle }) 
           key={control.id}
           onClick={controlActions[control.id]}
         >
-          <img src={control.src} alt={control.alt} />
+          {/* Conditionally render play or pause button */}
+          {console.log("isPlaying", isPlaying)}
+          <img
+            src={
+              control.id === "time-slider__control--motion"
+                ? isPlaying
+                  ? playButton
+                  : control.src
+                : control.src
+            }
+            alt={control.alt}
+          />
         </button>
       ))}
     </div>

@@ -10,6 +10,7 @@ function useData() {
 
 function DataProvider({ children }) {
   const [csvData, setCSVData] = useState(stateConfig.initForecastData);
+  const [stationObsInfo, setStationObsInfo] = useState([]);
   const [selectionState, setSelectionState] = useState(
     stateConfig.initSelectionState
   );
@@ -27,6 +28,8 @@ function DataProvider({ children }) {
       value={{
         csvData,
         setCSVData,
+        stationObsInfo,
+        setStationObsInfo,
         selectionState,
         setSelectionState,
         selectedOptions,

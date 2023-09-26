@@ -20,7 +20,7 @@ const linePlotParams = {
   xAxisTitle: "Time",
 };
 
-const fileNameParameters = ["regions", "models", "pollutants", "timeScopes"];
+// const fileNameParameters = ["regions", "models", "pollutants", "timeScopes"];
 
 const stateConfig = {
   initSelectionState: false,

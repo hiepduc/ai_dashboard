@@ -29,9 +29,9 @@ const Header = () => {
             </a>
           </div>
         </div>
-      </div>
-      <div className="banner">
-        <h1>Air Quality Forecast Dashboard</h1>
+        <div className="banner">
+          <h1>Air Quality Forecast Dashboard</h1>
+        </div>
       </div>
     </header>
   );
