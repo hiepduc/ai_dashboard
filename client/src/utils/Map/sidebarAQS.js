@@ -2,47 +2,33 @@
 // import getPollutantDataForLocation from "../retrieveData";
 import getCategoryLabel from "../helper/getCategoryLabel";
 import generateChart from "./generateChart";
-import { airPollutants } from "../../Configuration/pollutant";
+// import { airPollutants } from "../../Configuration/pollutant";
 import MarkerContent from "./markerContent";
 import { replaceSpace } from "../string/stringProcess";
+import { findAirPollutantByLabel } from "../helper/lookupHelper";
 
-export function generateMarkerContent(station, regionData) {
+export function generateMarkerContent(station, regionData, selectedPollutant) {
   const title = station.SiteName;
   console.log(station);
 
-  const content = MarkerContent(title, station, regionData);
+  const content = MarkerContent(station, regionData);
   // console.log("Content ", content);
   setTimeout(() => {
     const canvas1 = document.getElementById(`marker-chart-${title}`);
-    const canvas2 = document.getElementById(`NO2-chart-${title}`);
-    const canvas3 = document.getElementById(`WDR-chart-${title}`);
-    const canvas4 = document.getElementById(`WSP-chart-${title}`);
+    // const canvas2 = document.getElementById(`NO2-chart-${title}`);
+    // const canvas3 = document.getElementById(`WDR-chart-${title}`);
+    // const canvas4 = document.getElementById(`WSP-chart-${title}`);
 
     const ctx1 = canvas1.getContext("2d");
-    const ctx2 = canvas2.getContext("2d");
-    const ctx3 = canvas3.getContext("2d");
-    const ctx4 = canvas4.getContext("2d");
+    // const ctx2 = canvas2.getContext("2d");
+    // const ctx3 = canvas3.getContext("2d");
+    // const ctx4 = canvas4.getContext("2d");
 
     if (canvas1) {
-      // var timeSelection = document.querySelector("#select-timescopes");
-      // console.log(timeSelection);
 
-      // let selectedTime = timeSelection.value;
-      // console.log(selectedTime);
+      var selectedPollutantObj = findAirPollutantByLabel(selectedPollutant);
 
-      var pollutantSelection = document.querySelector("#select-pollutants");
-      // console.log(pollutantSelection);
-      let selectedPollutant = pollutantSelection.value;
-      console.log(selectedPollutant);
-
-      var selectedPollutantObj = airPollutants.find(
-        (pollutant) => pollutant.label === selectedPollutant
-      );
-
-      /////////////////////////////////////////////////////
       // Load forecast files
-      /////////////////////////////////////////////////////
-
       const historyYValues =
         regionData.data.stations[replaceSpace(title.toUpperCase())].histValue;
 

@@ -1,10 +1,9 @@
 import React from "react";
 import { renderToString } from "react-dom/server";
-// import { useData } from "../../../services/Selector/dataContext";
 import { replaceSpace, replaceUnderscore } from "../string/stringProcess";
 
-function MarkerContent(title, station,csvData) {
-  // const { csvData } = useData();
+function MarkerContent(station, csvData) {
+  const title = station.SiteName;
   return renderToString(
     <div className="marker-content">
       <div className="marker-title-container">
@@ -28,7 +27,9 @@ function MarkerContent(title, station,csvData) {
             width="100"
             height="100"
           ></canvas>
-          <StationInfo stationInfo={csvData.stats[replaceSpace(title.toUpperCase())]} />
+          <StationInfo
+            stationInfo={csvData.stats[replaceSpace(title.toUpperCase())]}
+          />
         </div>
         <div className="chart">
           <canvas

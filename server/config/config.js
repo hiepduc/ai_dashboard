@@ -1,13 +1,34 @@
 // DPIE AQ stations
 import fs from "fs";
+import path from "path";
+import { fileURLToPath } from "url";
+
 const dpe_site_data_dirs = "../../AQSs_Info";
 const dpe_site_data_file = "/SiteDetails.js";
+const forecastFolderPath = "../data1";
+const forecastFileExtension = ".csv";
+const forecastFileParamPartition = "_";
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const dataFolderPath = path.join(__dirname, forecastFolderPath);
+const fileNameParameters = [
+  "regions",
+  "pollutants",
+  "timeScopes",
+  "models",
+  "date",
+];
+const paramIndexInFile = [0, 2, 4, 5, 8];
 
-//
-const csvDatabasePath = (selectedRegion, selectedPollutant, selectedTime,selectedModel) => {
+const csvDatabasePath = (
+  selectedRegion,
+  selectedPollutant,
+  selectedTime,
+  selectedModel,
+  forecastFileName
+) => {
   const inputTimes = [24, 48, 72];
   for (const possibleInput of inputTimes) {
-    const filepath = `../data1/${selectedRegion}_${selectedPollutant}_${possibleInput}_${selectedTime}_${selectedModel}_model_v1.csv`;
+    const filepath = path.join(forecastFolderPath, forecastFileName); //`../data1/${selectedRegion}_${selectedPollutant}_${possibleInput}_${selectedTime}_${selectedModel}_model_v1.csv`;
     if (fs.existsSync(filepath)) {
       return filepath;
     }
@@ -40,4 +61,15 @@ const forecastFileVariable = {
 
 const localTimeSetting = "en-AU";
 
-export { dateOptions, forecastFileVariable, localTimeSetting, csvDatabasePath };
+export {
+  dateOptions,
+  forecastFileVariable,
+  localTimeSetting,
+  csvDatabasePath,
+  forecastFolderPath,
+  forecastFileExtension,
+  forecastFileParamPartition,
+  fileNameParameters,
+  paramIndexInFile,
+  dataFolderPath,
+};

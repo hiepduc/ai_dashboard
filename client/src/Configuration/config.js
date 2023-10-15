@@ -29,6 +29,7 @@ const stateConfig = {
     pollutants: "", // Example: O3, PM2.5
     timeScopes: "", // Example: 24, 48, 72
     models: "", // Example: LSTM-BNN
+    date: "", // Example: 20231015AEST
   },
   initForecastData: null,
   initSliderValue: 0,

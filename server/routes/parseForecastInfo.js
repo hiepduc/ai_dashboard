@@ -8,6 +8,8 @@ import {
   localTimeSetting,
   csvDatabasePath,
 } from "../config/config.js";
+import { forecastFilePath } from "../config/processForecastFile.js";
+import { findAirPollutantByLabel } from "../config/pollutant.js";
 
 const parseForecastInfo = Router();
 
@@ -134,26 +136,22 @@ function ProcessParsedCSV(parsedData, pollutant) {
 
 parseForecastInfo.get("/getForecastInfo", async (req, res) => {
   try {
-    const { selectedRegion, selectedPollutant, selectedTime, selectedModel } =
-      req.query;
+    let chosenKeyParams = Object.values(req.query);
+    console.log(chosenKeyParams);
 
-    const csvFilePath = csvDatabasePath(
-      selectedRegion,
-      selectedPollutant,
-      selectedTime,
-      selectedModel
-    );
+    const csvFilePath = forecastFilePath(chosenKeyParams);
+    console.log("csvFilePath: ", csvFilePath);
 
     const parsedData = await ParseCSV(csvFilePath);
     console.log("Parsed data: ", parsedData);
-    const pollutant = "OZONE";
-    const processedData = ProcessParsedCSV(parsedData, pollutant);
+    const pollutant = findAirPollutantByLabel(req.query.selectedPollutant);
+    const processedData = ProcessParsedCSV(parsedData, pollutant.ParameterCode);
 
     // Send the transformed data to the frontend
     res.json(processedData);
   } catch (error) {
     // console.error("Error transforming data:", error);
-    res.status(500).json({ error: "Error transforming data" });
+    res.status(500).json({ error: "Error transforming data!" });
   }
 });
 

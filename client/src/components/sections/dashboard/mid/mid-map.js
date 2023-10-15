@@ -4,8 +4,13 @@ import { useData } from "../../../../services/Selector/dataContext";
 import { useLayerVisibility } from "../../../../services/Selector/visibilityContext";
 
 export default function LeafletMap() {
-  const { csvData, selectedOptions, selectionState, stationObsInfo, sliderValue } =
-    useData();
+  const {
+    csvData,
+    selectedOptions,
+    selectionState,
+    stationObsInfo,
+    sliderValue,
+  } = useData();
   const { isStationLayerVisible, isSensorLayerVisible } = useLayerVisibility();
   const mapRef = useRef(null);
   const containerRef = useRef(null);
@@ -30,7 +35,7 @@ export default function LeafletMap() {
   }, [selectedOptions]);
 
   useEffect(() => {
-    mapRef.current.zoomToRegion(selectedOptions.regions,selectionState);
+    mapRef.current.zoomToRegion(selectedOptions.regions, selectionState);
   }, [selectedOptions.regions]);
 
   useEffect(() => {
@@ -42,8 +47,8 @@ export default function LeafletMap() {
   }, [isSensorLayerVisible.state]);
 
   useEffect(() => {
-      mapRef.current.setAnimation(sliderValue);
-    }, [sliderValue]);
+    mapRef.current.setAnimation(sliderValue);
+  }, [sliderValue]);
 
   return <div id="mapid" ref={containerRef}></div>;
 }

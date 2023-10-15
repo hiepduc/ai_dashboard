@@ -8,9 +8,9 @@
 function markerGenerator(type, size, category) {
   if (type === "purpleair") {
     let colour = "#aa44aa";
-    return `<svg height="${size}" width="${size}">
+    return `<svg height="${size}" width="${size}" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <circle cx="${size / 2}" cy="${size / 2}" r="${
-      size / 2
+      (size-1) / 2
     }"  stroke="rgba(0,0,0,0.5)" stroke-width="1" fill="${colour}"/>
     </svg>`;
   } else if (type === "station") {
@@ -40,12 +40,22 @@ function categorizedColorCode(category) {
     case "extremely-poor":
       colour = "#590019";
       break;
+    case "legend":
+      colour = "#524eee";
+      break;
     default:
       // Default color if category is not recognized
       // colour = "#524eee"; // Change this to your default color
       colour = "#242424";
   }
   return colour;
+}
+
+function svgClusterMarker(category) {
+  let colour = categorizedColorCode(category);
+  return `<svg width="30" height="30" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <circle cx="15" cy="15" r="12"  stroke="${colour}" stroke-width="6" stroke-opacity="0.278431" fill="${colour}" fill-rule="evenodd"/>
+</svg>`;
 }
 
 const svgHome = `<svg width="32" height="32" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -56,4 +66,4 @@ const svgHome = `<svg width="32" height="32" viewBox="0 0 10 10" fill="none" xml
 //     <path stroke="#fff" fill="${color}" d="M15.938 32S6 17.938 6 11.938C6 .125 15.938 0 15.938 0S26 .125 26 11.875C26 18.062 15.938 32 15.938 32zM16 6a4 4 0 100 8 4 4 0 000-8z"/>
 //   </svg>`;
 
-export { markerGenerator, svgHome };
+export { markerGenerator, svgClusterMarker, svgHome };

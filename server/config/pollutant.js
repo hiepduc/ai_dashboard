@@ -53,6 +53,21 @@ export function findAirPollutantByCode(parameterCode) {
   return pollutant || null;
 }
 
+/**
+ *
+ * @param {String} parameterLabel - label of air pollutant
+ * @returns pollutant - corresponding pollutant object in pollutant.js config file
+ */
+export function findAirPollutantByLabel(parameterLabel) {
+  // Use the find() method to find the object with the specified ParameterCode
+  const pollutant = airPollutants.find(
+    (pollutant) => pollutant.label === parameterLabel
+  );
+
+  // Return the pollutant object if found, or null if not found
+  return pollutant || null;
+}
+
 /*
 const airPollutants = [
   {

@@ -1,16 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { Chart, registerables } from "chart.js";
-// import "chartjs-plugin-annotation";
-import Annotation from "chartjs-plugin-annotation";
+import { Chart } from "chart.js";
 import SliderControls from "./time-slider-controls";
 import sliderConfig from "../../../../Configuration/sliderContent"; // Path to your sliderConfig.js
-import Button from "../left/button";
-import stepButton from "../../../../assets/images/step-button.svg";
-import pauseButton from "../../../../assets/images/pause-button.svg";
 import { useData } from "../../../../services/Selector/dataContext";
 
-// Chart.register(...registerables);
-// Chart.register(Annotation);
 
 function Slider() {
   const {

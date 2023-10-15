@@ -51,13 +51,13 @@ async function getNewestObsAPI() {
   console.log("Hey ya!");
   // Get the current date
   let today = new Date();
-  today.setHours(today.getHours() + 10);
+  today.setHours(today.getHours() + timezoneDiff);
   let todayFormatted = today.toISOString().split("T")[0];
   console.log("today", todayFormatted)
 
   // Add 1 day to the current date to get tomorrow's date
   let tomorrow = new Date();
-  tomorrow.setHours(tomorrow.getHours() + 10);
+  tomorrow.setHours(tomorrow.getHours() + timezoneDiff);
   tomorrow.setDate(tomorrow.getDate() + 1);
   // Format the date as "yyyy-mm-dd"
   let tomorrowFormatted = tomorrow.toISOString().split("T")[0];

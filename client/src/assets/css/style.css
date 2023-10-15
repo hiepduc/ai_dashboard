@@ -331,6 +331,10 @@ main {
   display: block;
 }
 
+.stats {
+  padding: 5px;
+}
+
 .map-air-quality-legend {
   display: flex;
   flex-direction: row;
@@ -378,27 +382,27 @@ main {
   display: flex;
   flex-direction: column;
   align-self: flex-start;
-  padding: 30px 10px 0;
+  padding: 0 10px;
   overflow: hidden;
 }
 
 .select-header {
-  padding-bottom: 20px;
+  padding: 10px 0 20px;
 }
 
-.station-model label {
+.dropdown-selection label {
   font-size: large;
 }
 
 /* Style the custom select box */
-.select-box {
+.dropdown-selection__select-box {
   position: relative;
   display: inline-block;
   width: 100%;
-  padding: 10px 0;
+  padding-bottom: 10px;
 }
 
-.station-network {
+.dropdown-selection__option {
   width: 80%;
   height: 2rem;
   border-radius: 5px;
@@ -533,12 +537,14 @@ select:focus {
   width: 30px;
   translate: -9px -9px;
 }
+
 .marker-cluster span {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  color: #fff;
+  background-color: transparent !important;
+  /* color: #fff; */
 }
 
 .stations-menu {
@@ -611,11 +617,20 @@ select:focus {
   border: 1px solid #ccc;
 }
 
+.no-data {
+  color: #fff;
+  background-color: var(--no-data);
+}
+
 .good {
+  color: #333;
+  font-weight: 600;
   background-color: var(--good);
 }
 
 .fair {
+  font-weight: 600;
+  color: #333;
   background-color: var(--fair);
 }
 

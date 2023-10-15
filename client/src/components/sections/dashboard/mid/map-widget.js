@@ -1,7 +1,6 @@
 import "leaflet/dist/leaflet.css";
 import * as L from "leaflet";
 
-import { airPollutants } from "../../../../Configuration/pollutant";
 import { regionDetails } from "../../../../utils/Map/SiteDetails";
 import purpleairSensors from "../../../../utils/Map/sensors";
 
@@ -10,10 +9,17 @@ import generateMarkerContentPA from "../../../../utils/Map/sidebarPurpleAir";
 import getCategoryLabel from "../../../../utils/helper/getCategoryLabel";
 import { findAirPollutantByLabel } from "../../../../utils/helper/lookupHelper";
 
-import { markerGenerator, svgHome } from "../../../../utils/Map/svgGenerator";
+import {
+  markerGenerator,
+  svgClusterMarker,
+  svgHome,
+} from "../../../../utils/Map/svgGenerator";
 import markerCluster from "../../../../assets/images/markerCluster.svg";
 import markerPurpleAirCluster from "../../../../assets/images/markerPurpleAirCluster.svg";
-import { replaceSpace } from "../../../../utils/string/stringProcess";
+import {
+  replaceSpace,
+  replaceSpaceWithHyphen,
+} from "../../../../utils/string/stringProcess";
 
 import "leaflet-sidebar";
 import "leaflet.markercluster";
@@ -77,10 +83,9 @@ export class MapWidget {
 
     this.regionClusterGroup = L.markerClusterGroup({
       iconCreateFunction: function (cluster) {
-        const childCount = cluster.getChildCount();
         return L.divIcon({
-          html: `<img src=${markerCluster}>
-                  <span>${childCount}</span>`,
+          // html: `<img src=${markerCluster}>
+          //         <span>${childCount}</span>`,
           className: "marker-cluster",
         });
       },
@@ -127,19 +132,71 @@ export class MapWidget {
             );
             console.log("foundStationObs", foundStationObs);
             if (foundStationObs) {
-              layer.setIcon(
-                colorMarker(
-                  "station",
-                  "normal",
-                  foundStationObs.AirQualityCategory.toLowerCase()
-                )
+              let colorCategory = replaceSpaceWithHyphen(
+                foundStationObs.AirQualityCategory.toLowerCase()
               );
+              layer.options.stationStatus = colorCategory;
+              layer.setIcon(colorMarker("station", "normal", colorCategory));
             } else {
               layer.setIcon(colorMarker("station", "normal", "default"));
             }
           }
         });
       });
+      console.log(
+        "QQQQQQ: ",
+        this.regionClusterGroup.options.iconCreateFunction
+      );
+      console.log("Q2", this.regionClusterGroup.options);
+      // this.map.removeLayer(this.regionClusterGroup);
+      // this.regionClusterGroup.options.maxClusterRadius = 10;
+      // Update the cluster's icon function with the new highest category
+      this.regionClusterGroup.options.iconCreateFunction = (cluster) => {
+        const childMarkers = cluster.getAllChildMarkers(); // Get all child markers
+        let clusterColor = "default"; // Default color is "good"
+
+        const colorOrder = [
+          "default",
+          "good",
+          "fair",
+          "poor",
+          "very-poor",
+          "extremely-poor",
+        ];
+
+        childMarkers.forEach((marker) => {
+          console.log("Q3", marker);
+          const childCategory = marker.options.stationStatus;
+          const childColorIndex = colorOrder.indexOf(childCategory);
+          const clusterColorIndex = colorOrder.indexOf(clusterColor);
+
+          // Compare the current child category with the cluster color
+          if (childColorIndex > clusterColorIndex) {
+            clusterColor = childCategory;
+          }
+        });
+        // const highestCategory = findHighestCategory(cluster);
+
+        const clusterIcon = L.divIcon({
+          html: `${svgClusterMarker(clusterColor)}
+                <span class=${clusterColor}>${cluster.getChildCount()}</span>`,
+          className: "marker-cluster",
+          iconSize: [30, 30],
+        });
+        return clusterIcon;
+      };
+      // Add the updated regionClusterGroup back to the map
+      for (const region in this.regionFeatureGroups) {
+        const featureGroup = this.regionFeatureGroups[region];
+        this.regionClusterGroup.addLayer(featureGroup);
+      }
+      this.map.addLayer(this.regionClusterGroup);
+
+      console.log(
+        "QQQQQQ1: ",
+        this.regionClusterGroup.options.iconCreateFunction
+      );
+      console.log("Q3", this.regionClusterGroup.options);
     }
   }
 
@@ -195,7 +252,9 @@ export class MapWidget {
           // Use the stationId to access the data in this.csvData
           if (this.csvData.data.stations.hasOwnProperty(stationName)) {
             const forecastValue =
-              this.csvData.data.stations[stationName].forecastValue[sliderValue];
+              this.csvData.data.stations[stationName].forecastValue[
+                sliderValue
+              ];
             let color = getCategoryLabel(selectedPollutantObj, forecastValue);
             // Set the new icon for the marker
             layer.setIcon(colorMarker("station", "normal", color));
@@ -370,7 +429,13 @@ export class MapWidget {
             this.activeStationMarker = marker;
             marker.setIcon(colorMarker("station", "selected", "good"));
             this.sidebar
-              .setContent(generateMarkerContent(station, this.csvData))
+              .setContent(
+                generateMarkerContent(
+                  station,
+                  this.csvData,
+                  this.selection.pollutants
+                )
+              )
               .show();
           }
         });
@@ -383,15 +448,15 @@ export class MapWidget {
         this.regionFeatureGroups[region.label].addLayer(marker);
       });
     });
-    for (const region in this.regionFeatureGroups) {
-      const featureGroup = this.regionFeatureGroups[region];
-      this.regionClusterGroup.addLayer(featureGroup);
-    }
-    this.regionClusterGroup.addTo(this.map);
+    // for (const region in this.regionFeatureGroups) {
+    //   const featureGroup = this.regionFeatureGroups[region];
+    //   this.regionClusterGroup.addLayer(featureGroup);
+    // }
+    // this.regionClusterGroup.addTo(this.map);
     console.log("oom2: ", this.regionClusterGroup);
   }
 
-  markerPA() {
+  markerPA(sidebar) {
     // return new Promise(function (resolve, reject) {
     // var purpleairInfo;
     // var activeSensorMarker = null;
@@ -432,7 +497,7 @@ export class MapWidget {
         )
           .then((content) => {
             // console.log(content);
-            this.sidebar.setContent(content).show();
+            sidebar.setContent(content).show();
           })
           .catch((error) => {
             console.error(error);

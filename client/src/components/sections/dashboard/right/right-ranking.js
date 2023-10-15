@@ -12,6 +12,7 @@ import {
 } from "../../../../utils/helper/lookupHelper";
 import { useData } from "../../../../services/Selector/dataContext";
 import getNewestObs from "../../../../services/getNewestObs";
+import { replaceSpaceWithHyphen } from "../../../../utils/string/stringProcess";
 
 function Ranking() {
   const {
@@ -61,11 +62,13 @@ function Ranking() {
               station.Value
             );
           } else {
-            classList = station.AirQualityCategory.toLowerCase();
+            classList = replaceSpaceWithHyphen(
+              station.AirQualityCategory.toLowerCase()
+            );
           }
           return (
             <li className="station-item" key={station.SiteName}>
-              <div
+              <div1
                 className="station-container"
                 style={{
                   borderLeft: `8px solid var(--${classList})`,
@@ -81,7 +84,7 @@ function Ranking() {
                     ? station.Value.toFixed(2)
                     : station.AirQualityCategory}
                 </div>
-              </div>
+              </div1>
             </li>
           );
         }

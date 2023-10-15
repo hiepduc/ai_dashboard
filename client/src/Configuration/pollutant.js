@@ -6,6 +6,7 @@ export const airPollutants = [
     ParameterDescription: "Ozone",
     Units: "pphm",
     categories: [
+      { label: "No data", range: "N/A" },
       { label: "Good", range: "< 5.4" },
       { label: "Fair", range: "5.4 - 8.0" },
       { label: "Poor", range: "8.0 - 12.0" },
@@ -19,11 +20,24 @@ export const airPollutants = [
     ParameterDescription: "PM 2.5",
     Units: "µg/m³",
     categories: [
+      { label: "No data", range: "N/A" },
       { label: "Good", range: "< 25" },
       { label: "Fair", range: "25 - 50" },
       { label: "Poor", range: "50 - 100" },
       { label: "Very poor", range: "100 - 300" },
       { label: "Extremely poor", range: "> 300" },
+    ],
+  },{
+    ParameterCode: "PM10",
+    label: "PM10",
+    ParameterDescription: "PM 10",
+    Units: "µg/m³",
+    categories: [
+      { label: "Good", range: "< 50" },
+      { label: "Fair", range: "50 - 100" },
+      { label: "Poor", range: "100 - 200" },
+      { label: "Very poor", range: "200 - 600" },
+      { label: "Extremely poor", range: "> 600" },
     ],
   },
   {

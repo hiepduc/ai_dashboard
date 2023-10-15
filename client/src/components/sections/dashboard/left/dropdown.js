@@ -69,12 +69,12 @@ function Dropdown(selection) {
 
   return (
     // Run const func "options" to render all available options
-    <div className="station-model">
-      <label htmlFor="station-network">{capitaliseCase(selection.label)}</label>
+    <div className="dropdown-selection">
+      <label htmlFor="dropdown-selection__option">{capitaliseCase(selection.label)}</label>
       <br />
-      <div className="select-box">
+      <div className="dropdown-selection__select-box">
         <select
-          className="station-network"
+          className="dropdown-selection__option"
           id={selection.id}
           onChange={selection.onChange} //{selection.onChange}
           value={selection.selected}

@@ -8,14 +8,14 @@ const Disclaimer = () => {
   useEffect(() => {
     if (csvData) {
       setUseCsvData(csvData.stats);
-    }
+    } else setUseCsvData(null);
   }, [csvData]);
 
   return (
     <div id="disclaimer">
-      <h2 className="disclaimer-flex">Disclaimer placeholder</h2>
+      {/* <h2 className="disclaimer-flex">Disclaimer placeholder</h2> */}
       <h2 id="stat" className="disclaimer-flex">
-        Statistics placeholder
+        Statistics
       </h2>
       {useCsvData && <StatsTable statsData={useCsvData} />}
     </div>

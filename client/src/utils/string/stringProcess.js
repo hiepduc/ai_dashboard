@@ -6,4 +6,8 @@ function replaceSpace(str) {
   return str.replace(/ /g, "_");
 }
 
-export { replaceUnderscore, replaceSpace };
+function replaceSpaceWithHyphen(str) {
+  return str.replace(/ /g, "-");
+}
+
+export { replaceUnderscore, replaceSpace, replaceSpaceWithHyphen };

@@ -1,7 +1,7 @@
 import express from "express";
 import cors from "cors";
 
-import getForecastOptions from "../routes/parseForecastOptions.js";
+import getForecastOptions from "../routes/getForecastOptions.js";
 import parseForecastInfo from "../routes/parseForecastInfo.js";
 import parseForecastCombination from "../routes/getCombinations.js";
 import getForecastFiles from "../routes/getForecastFiles.js";
@@ -14,19 +14,22 @@ const port = 8000;
 
 app.use(cors());
 
-// Use the route files
+// Get all available options (Parameters) of forecast files
 app.use("/api", getForecastOptions);
 
-app.use("/api", getObs);
+// app.use("/api", getObs);
 
-app.use("/api", getCurrentObs);
+// app.use("/api", getCurrentObs);
 
+// Get forecasts corresponded to selected Parameters
 app.use("/api", parseForecastInfo);
 
-app.use("/api", parseForecastCombination);
+// app.use("/api", parseForecastCombination);
 
+// Get key Parameters of all forecast files
 app.use("/api", getForecastFiles);
 
+// Get up-to-date AQI observations from DPE API
 app.use("/api", getNewestObs);
 
 app.listen(port, () => {

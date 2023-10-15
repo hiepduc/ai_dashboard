@@ -26,7 +26,7 @@ function LeftLegend() {
           </svg> */}
           {/* {markerGenerator("station", 16)} */}
           <span
-            dangerouslySetInnerHTML={{ __html: markerGenerator("station", 16) }}
+            dangerouslySetInnerHTML={{ __html: markerGenerator("station", 16,"legend") }}
           />
 
           <span>Air quality station</span>

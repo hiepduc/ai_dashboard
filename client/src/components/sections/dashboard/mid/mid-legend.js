@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useData } from "../../../../services/Selector/dataContext";
 import { findAirPollutantByLabel } from "../../../../utils/helper/lookupHelper";
-import { airPollutants } from "../../../../Configuration/pollutant";
+
 
 function MidLegend() {
   const { selectedOptions } = useData();
