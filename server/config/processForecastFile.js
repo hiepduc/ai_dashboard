@@ -10,7 +10,7 @@ import {
   forecastFileParamPartition,
 } from "./config.js";
 
-const fileNames = fs.readdirSync(dataFolderPath); // getFileName(dataFolderPath);
+const fileNames = fs.readdirSync(forecastFolderPath); // getFileName(dataFolderPath);
 const fileAllParams = [];
 const fileKeyParams = [];
 getFileParameters();

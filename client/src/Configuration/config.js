@@ -34,7 +34,7 @@ const stateConfig = {
   initForecastData: null,
   initSliderValue: 0,
   initSliderTimeLabel: ["--", "--", "--"],
-  initRightPanelHeader: "Up-to-date AQS observations across NSW",
+  initRightPanelHeader: `Latest AQI observations across NSW`,
   initRightPanelPollutant: "AQC",
 };
 

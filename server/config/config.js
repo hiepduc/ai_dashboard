@@ -3,13 +3,11 @@ import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 
-const dpe_site_data_dirs = "../../AQSs_Info";
-const dpe_site_data_file = "/SiteDetails.js";
 const forecastFolderPath = "../data1";
-const forecastFileExtension = ".csv";
-const forecastFileParamPartition = "_";
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const dataFolderPath = path.join(__dirname, forecastFolderPath);
+const forecastFileExtension = ".csv";
+const forecastFileParamPartition = "_";
 const fileNameParameters = [
   "regions",
   "pollutants",
