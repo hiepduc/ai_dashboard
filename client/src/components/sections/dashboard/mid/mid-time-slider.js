@@ -101,7 +101,7 @@ function Slider() {
         if (prevValue >= sliderMax - 1) {
           clearInterval(intervalTime);
           setIsPlaying(false);
-          // setSliderValue(0);
+          setSliderValue(0);
           return prevValue;
         }
         return prevValue + 1;
