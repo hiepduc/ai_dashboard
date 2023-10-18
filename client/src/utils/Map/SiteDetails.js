@@ -822,7 +822,7 @@ const regionDetails = [
   },
   {
     name: "Illawarra",
-    label: "IL",
+    label: "Illawarra",
     largestLatitude: -34.41706,
     smallestLatitude: -34.57781,
     largestLongitude: 150.88733,
@@ -849,7 +849,7 @@ const regionDetails = [
   },
   {
     name: "Lower Hunter",
-    label: "LH",
+    label: "LowerHunter",
     largestLatitude: -32.79677,
     smallestLatitude: -32.9312,
     largestLongitude: 151.75965,

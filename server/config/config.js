@@ -3,7 +3,7 @@ import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 
-const forecastFolderPath = "../data1";
+const forecastFolderPath = "../data1/forecast";
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const dataFolderPath = path.join(__dirname, forecastFolderPath);
 const forecastFileExtension = ".csv";
@@ -15,7 +15,7 @@ const fileNameParameters = [
   "models",
   "date",
 ];
-const paramIndexInFile = [0, 2, 4, 5, 8];
+const paramIndexInFile = [0, 1, 3, 4, 5];
 
 // const csvDatabasePath = (
 //   selectedRegion,
