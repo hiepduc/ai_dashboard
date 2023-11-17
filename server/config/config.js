@@ -17,22 +17,6 @@ const fileNameParameters = [
 ];
 const paramIndexInFile = [0, 1, 3, 4, 5];
 
-// const csvDatabasePath = (
-//   selectedRegion,
-//   selectedPollutant,
-//   selectedTime,
-//   selectedModel,
-//   forecastFileName
-// ) => {
-//   const inputTimes = [24, 48, 72];
-//   for (const possibleInput of inputTimes) {
-//     const filepath = path.join(forecastFolderPath, forecastFileName); //`../data1/${selectedRegion}_${selectedPollutant}_${possibleInput}_${selectedTime}_${selectedModel}_model_v1.csv`;
-//     if (fs.existsSync(filepath)) {
-//       return filepath;
-//     }
-//     //  else return null;
-//   }
-// };
 
 // Insert plots
 const dateOptions = {
@@ -63,7 +47,6 @@ export {
   dateOptions,
   forecastFileVariable,
   localTimeSetting,
-  // csvDatabasePath,
   forecastFolderPath,
   forecastFileExtension,
   forecastFileParamPartition,
