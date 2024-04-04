@@ -48,12 +48,8 @@ function Dropdown(selection) {
 
     if (selection.label === "regions") {
       // Find the region with the matching label
-      // const selectedRegion = regionDetails.find(
-      //   (region) => region.label === option
-      // );
-
       const selectedRegion = regionDetails.find(
-        (region) => region.labels.includes(option)
+        (region) => region.label === option
       );
 
       // If the region is found, use its name as the optionContent

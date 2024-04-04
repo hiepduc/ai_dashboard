@@ -805,7 +805,6 @@ const regionDetails = [
   {
     name: "Sydney East",
     label: "CE",
-    labels: ["CE"],
     largestLatitude: -33.76524,
     smallestLatitude: -33.93175,
     largestLongitude: 151.24278,
@@ -815,7 +814,6 @@ const regionDetails = [
   {
     name: "Sydney South-west",
     label: "SW",
-    labels: ["SW"],
     largestLatitude: -33.91766,
     smallestLatitude: -34.30621,
     largestLongitude: 150.90727,
@@ -825,7 +823,6 @@ const regionDetails = [
   {
     name: "Illawarra",
     label: "Illawara",
-    labels: ["Illawarra", "IL", "Illawara"],
     largestLatitude: -34.41706,
     smallestLatitude: -34.57781,
     largestLongitude: 150.88733,
@@ -835,7 +832,6 @@ const regionDetails = [
   {
     name: "Sydney North-west",
     label: "NW",
-    labels: ["NW"],
     largestLatitude: -33.61641,
     smallestLatitude: -33.7995,
     largestLongitude: 150.99777,
@@ -845,7 +841,6 @@ const regionDetails = [
   {
     name: "Upper Hunter",
     label: "Upper-Hunter",
-    labels: ["Upper-Hunter", "UH", "UpperHunter"],
     largestLatitude: -32.12665,
     smallestLatitude: -32.64864,
     largestLongitude: 151.20895,
@@ -855,7 +850,6 @@ const regionDetails = [
   {
     name: "Lower Hunter",
     label: "Lower-Hunter",
-    labels: ["Lower-Hunter", "LH", "LowerHunter"],
     largestLatitude: -32.79677,
     smallestLatitude: -32.9312,
     largestLongitude: 151.75965,
