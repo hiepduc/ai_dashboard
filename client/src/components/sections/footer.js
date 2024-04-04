@@ -13,7 +13,7 @@ const Footer = () => {
         </div>
         <hr />
         <div className="global__footer__meta">
-          <span>© 2023 UTS SEDE Showcase</span>
+          <span>© 2023 NSW DPE</span>
           <nav
             className="nav nav--inline"
             role="navigation"

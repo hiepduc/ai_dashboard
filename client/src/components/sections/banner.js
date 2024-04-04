@@ -3,8 +3,7 @@ const Banner = () => {
     <div className="nsw-infobar">
       <div className="nsw-container">
         <p>
-          {console.log("This")}
-          A Website for Deep Learning Application <br />
+          A Website for Air Quality Monitoring & Deep Learning Forecast <br />
         </p>
       </div>
     </div>

@@ -27,7 +27,8 @@ export const airPollutants = [
       { label: "Very poor", range: "100 - 300" },
       { label: "Extremely poor", range: "> 300" },
     ],
-  },{
+  },
+  {
     ParameterCode: "PM10",
     label: "PM10",
     ParameterDescription: "PM 10",
@@ -48,43 +49,14 @@ export const airPollutants = [
     Category: "Site AQC",
     SubCategory: "Hourly",
     Frequency: "Hourly average",
+    categories: [
+      { label: "Good" },
+      { label: "Fair" },
+      { label: "Poor" },
+      { label: "Very poor" },
+      { label: "Extremely poor" },
+    ],
   },
-  // {
-  //   ParameterCode: "NO2",
-  //   ParameterDescription: "NO2",
-  //   Units: "pphm",
-  //   categories: [
-  //     { label: "Good", range: "< 25" },
-  //     { label: "Fair", range: "25 - 50" },
-  //     { label: "Poor", range: "50 - 100" },
-  //     { label: "Very poor", range: "100 - 300" },
-  //     { label: "Extremely poor", range: "> 300" },
-  //   ],
-  // },
-  // {
-  //   ParameterCode: "WDR",
-  //   ParameterDescription: "Wind direction",
-  //   Units: "°",
-  //   categories: [
-  //     { label: "Good", range: "< 25" },
-  //     { label: "Fair", range: "25 - 50" },
-  //     { label: "Poor", range: "50 - 100" },
-  //     { label: "Very poor", range: "100 - 300" },
-  //     { label: "Extremely poor", range: "> 300" },
-  //   ],
-  // },
-  // {
-  //   ParameterCode: "WSP",
-  //   ParameterDescription: "Wind speed",
-  //   Units: "m/s",
-  //   categories: [
-  //     { label: "Good", range: "< 25" },
-  //     { label: "Fair", range: "25 - 50" },
-  //     { label: "Poor", range: "50 - 100" },
-  //     { label: "Very poor", range: "100 - 300" },
-  //     { label: "Extremely poor", range: "> 300" },
-  //   ],
-  // },
 ];
 
 /*
