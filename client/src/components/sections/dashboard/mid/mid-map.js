@@ -50,5 +50,9 @@ export default function LeafletMap() {
     mapRef.current.setAnimation(sliderValue);
   }, [sliderValue]);
 
+  useEffect(() => {
+    mapRef.current.closeSidebar();
+  }, [selectionState]);
+
   return <div id="mapid" ref={containerRef}></div>;
 }

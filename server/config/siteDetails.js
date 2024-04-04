@@ -12,36 +12,29 @@ const siteIDs = [
 
 const regionDetails = [
   {
-    name: "Sydney East",
     label: "CE",
     labels: ["CE"],
   },
   {
-    name: "Sydney South-west",
     label: "SW",
     labels: ["SW"],
   },
   {
-    name: "Illawarra",
     label: "Illawara",
     labels: ["Illawarra", "IL", "Illawara"],
   },
   {
-    name: "Sydney North-west",
     label: "NW",
     labels: ["NW"],
   },
   {
-    name: "Upper Hunter",
     label: "Upper-Hunter",
     labels: ["Upper-Hunter", "UH", "UpperHunter"],
   },
   {
-    name: "Lower Hunter",
     label: "Lower-Hunter",
     labels: ["Lower-Hunter", "LH", "LowerHunter"],
-  }
+  },
 ];
 
-
-export { siteIDs };
+export { siteIDs, regionDetails };

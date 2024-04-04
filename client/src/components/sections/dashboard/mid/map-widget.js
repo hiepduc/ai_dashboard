@@ -518,6 +518,11 @@ export class MapWidget {
     // resolve(purpleairInfo);
     // });
   }
+
+  closeSidebar() {
+    this.sidebar.hide();
+  }
+  
 }
 
 function colorMarker(type, state, color) {

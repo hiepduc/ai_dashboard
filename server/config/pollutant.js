@@ -8,7 +8,7 @@ export const airPollutants = [
   },
   {
     ParameterCode: "PM2.5",
-    label: "PM25",
+    label: "PM2.5",
     ParameterDescription: "PM 2.5",
     Units: "µg/m³",
   },
