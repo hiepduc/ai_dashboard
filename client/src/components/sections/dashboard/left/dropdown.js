@@ -53,7 +53,7 @@ function Dropdown(selection) {
       // );
 
       const selectedRegion = regionDetails.find(
-        (region) => region.label.includes(option)
+        (region) => region.labels.includes(option)
       );
 
       // If the region is found, use its name as the optionContent
