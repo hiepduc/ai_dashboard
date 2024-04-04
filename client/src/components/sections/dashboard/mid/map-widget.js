@@ -139,6 +139,7 @@ export class MapWidget {
               layer.setIcon(colorMarker("station", "normal", colorCategory));
             } else {
               layer.setIcon(colorMarker("station", "normal", "default"));
+              layer.options.stationStatus = "default";
             }
           }
         });
@@ -230,6 +231,7 @@ export class MapWidget {
           } else {
             // Set default icon for the marker
             layer.setIcon(colorMarker("station", "normal", "default"));
+            layer.options.stationStatus = "default";
           }
           console.log("mod: ", layer.options);
         }
@@ -412,8 +414,9 @@ export class MapWidget {
           direction: "top",
           className: "leaflet-tooltip-fontsize",
         });
-
+        
         marker.on("click", () => {
+          console.log("STATION STATUS: ", marker.options.stationStatus)
           if (this.csvData && marker.options.stationStatus !== "default") {
             if (this.activeSensorMarker != null) {
               this.activeSensorMarker.setIcon(
@@ -522,7 +525,6 @@ export class MapWidget {
   closeSidebar() {
     this.sidebar.hide();
   }
-  
 }
 
 function colorMarker(type, state, color) {
