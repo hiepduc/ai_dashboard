@@ -3,7 +3,7 @@ import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 
-const forecastFolderPath = "../data1/forecast";
+const forecastFolderPath = "../data1/forecast_test040424"; // Define Path to forecast data folder Here
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const dataFolderPath = path.join(__dirname, forecastFolderPath);
 const forecastFileExtension = ".csv";

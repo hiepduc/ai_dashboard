@@ -3,11 +3,9 @@ import cors from "cors";
 
 import getForecastOptions from "../routes/getForecastOptions.js";
 import parseForecastInfo from "../routes/parseForecastInfo.js";
-import parseForecastCombination from "../routes/getCombinations.js";
 import getForecastFiles from "../routes/getForecastFiles.js";
-import getObs from "../routes/getObs.js";
-import getCurrentObs from "../routes/getCurrentObs.js";
 import getNewestObs from "../routes/getNewestObs.js";
+// import getCurrentObs from "../routes/getCurrentObs.js";
 
 const app = express();
 const port = 8000;
@@ -17,14 +15,10 @@ app.use(cors());
 // Get all available options (Parameters) of forecast files
 app.use("/api", getForecastOptions);
 
-// app.use("/api", getObs);
-
 // app.use("/api", getCurrentObs);
 
 // Get forecasts corresponded to selected Parameters
 app.use("/api", parseForecastInfo);
-
-// app.use("/api", parseForecastCombination);
 
 // Get key Parameters of all forecast files
 app.use("/api", getForecastFiles);
