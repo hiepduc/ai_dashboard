@@ -6,15 +6,24 @@ import generateChart from "./generateChart";
 import MarkerContent from "./markerContent";
 import { replaceSpace } from "../string/stringProcess";
 import { findAirPollutantByLabel } from "../helper/lookupHelper";
+// import { type } from "@testing-library/user-event/dist/type";
 
-export function generateMarkerContent(station, regionData, selectedPollutant) {
-  const title = station.SiteName;
-  console.log(station);
+export function generateMarkerContent(
+  entity,
+  regionData,
+  selectedPollutant,
+  markerType
+) {
+  const title = entity.SiteName;
+  console.log("buckle5 sidebar", entity);
 
-  const content = MarkerContent(station, regionData);
-  // console.log("Content ", content);
+  const chart_Id = entity.Site_Id;
+  console.log("buckle5 sidebar chart id: ", chart_Id);
+  const content = MarkerContent(entity, regionData, markerType);
+  console.log("buckle5 Content ", content);
+
   setTimeout(() => {
-    const canvas1 = document.getElementById(`marker-chart-${title}`);
+    const canvas1 = document.getElementById(`marker-chart-${chart_Id}`);
     // const canvas2 = document.getElementById(`NO2-chart-${title}`);
     // const canvas3 = document.getElementById(`WDR-chart-${title}`);
     // const canvas4 = document.getElementById(`WSP-chart-${title}`);
@@ -23,18 +32,30 @@ export function generateMarkerContent(station, regionData, selectedPollutant) {
     // const ctx2 = canvas2.getContext("2d");
     // const ctx3 = canvas3.getContext("2d");
     // const ctx4 = canvas4.getContext("2d");
+    console.log("buckle5 sidebar has canvas: ", canvas1);
+    console.log("buckle5 sidebar has ctx: ", ctx1);
+    console.log("buckle5 sidebar has selected pollutant: ", selectedPollutant);
+    console.log("buckle5 sidebar has region data: ", regionData);
+    console.log("buckle5 sidebar has marker type: ", markerType);
+    console.log("buckle5 sidebar if has canvas1: ", canvas1 ? true : false);
 
     if (canvas1) {
-
+      console.log("buckle5 sidebar if has canvas: ");
       var selectedPollutantObj = findAirPollutantByLabel(selectedPollutant);
+      let entityDataCodename;
 
       // Load forecast files
+      if (markerType === "station") {
+        entityDataCodename = replaceSpace(title.toUpperCase());
+      } else {
+        entityDataCodename = entity.Site_Id;
+      }
+      console.log("buckle5 sidebar entity data codename: ", entityDataCodename);
       const historyYValues =
-        regionData.data.stations[replaceSpace(title.toUpperCase())].histValue;
-
+        regionData.data.stations[entityDataCodename].histValue;
+      console.log("buckle5 sidebar history values: ", historyYValues);
       const forecastYValues =
-        regionData.data.stations[replaceSpace(title.toUpperCase())]
-          .forecastValue;
+        regionData.data.stations[entityDataCodename].forecastValue;
 
       const sidebarHeaderIndicator = getCategoryLabel(
         selectedPollutantObj,
@@ -44,7 +65,10 @@ export function generateMarkerContent(station, regionData, selectedPollutant) {
       if (markerHeader) {
         markerHeader.classList.add(sidebarHeaderIndicator);
       }
-
+      console.log(
+        "buckle5 sidebar indicator has canvas: ",
+        sidebarHeaderIndicator
+      );
       generateChart(
         ctx1,
         selectedPollutantObj,
@@ -53,6 +77,7 @@ export function generateMarkerContent(station, regionData, selectedPollutant) {
         regionData.data.time.histTime,
         regionData.data.time.forecastTime
       );
+      console.log("buckle5 sidebar has chart: ", canvas1);
     }
 
     // let tabs = document.querySelectorAll(".marker-title__tabs h3");

@@ -799,6 +799,27 @@ const sitesDetails = [
     Latitude: -33.827271,
     Region: "Research Monitoring",
   },
+  {
+    Site_Id: 798,
+    SiteName: "MILLTHORPE",
+    Longitude: 149.185325,
+    Latitude: -33.444339,
+    Region: "Cadia Monitoring",
+  },
+  {
+    Site_Id: 9800,
+    SiteName: "Forest Reef 2",
+    Longitude: 149.065,
+    Latitude: -33.467,
+    Region: " Cadia Monitoring DRX",
+  },
+  {
+    Site_Id: 92800,
+    SiteName: "Errowanbang 2",
+    Longitude: 149.052,
+    Latitude: -33.552,
+    Region: "Cadia Monitoring DRX",
+  },
 ];
 
 const regionDetails = [

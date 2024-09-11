@@ -77,6 +77,7 @@ async function getNewestObsAPI() {
 
     storedNewestObs = processNewestObs(response);
     console.log("Data fetched and processed successfully:");
+    console.log(storedNewestObs);
   } catch (error) {
     console.error("Error fetching or processing data:", error);
   }

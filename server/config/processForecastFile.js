@@ -3,14 +3,13 @@ import path from "path";
 
 import {
   fileNameParameters,
-  paramIndexInFile,
-  forecastFolderPath,
-  dataFolderPath,
+  paramIndexInFilename,
+  stationForecastFolderPath,
   forecastFileExtension,
   forecastFileParamPartition,
 } from "./config.js";
 
-const fileNames = fs.readdirSync(forecastFolderPath); // getFileName(dataFolderPath);
+const fileNames = fs.readdirSync(stationForecastFolderPath); // getFileName(dataFolderPath);
 const fileAllParams = [];
 const fileKeyParams = [];
 getFileParameters();
@@ -37,7 +36,7 @@ function extractFileParameters(fileName) {
     .split(forecastFileParamPartition); // Extract Parameters
   console.log(fileElements);
   fileAllParams.push(fileElements);
-  let parameters = paramIndexInFile.map((i) => fileElements[i]);
+  let parameters = paramIndexInFilename.map((i) => fileElements[i]);
   console.log("paramFiltered: ", parameters);
   // parameters.splice(3, 1);
   // parameters.pop();
@@ -84,7 +83,7 @@ function forecastFilePath(chosenKeyParams) {
   if (matchingArray) {
     const fileName =
       matchingArray.join(forecastFileParamPartition) + forecastFileExtension;
-    const filepath = path.join(forecastFolderPath, fileName);
+    const filepath = path.join(stationForecastFolderPath, fileName);
     if (fs.existsSync(filepath)) {
       return filepath;
     } else return null;

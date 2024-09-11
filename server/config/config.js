@@ -1,11 +1,17 @@
-// DPIE AQ stations
-import fs from "fs";
+// DCCEEW AQ stations
 import path from "path";
 import { fileURLToPath } from "url";
 
-const forecastFolderPath = "../data1/forecast_test040424"; // Define Path to forecast data folder Here
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const dataFolderPath = path.join(__dirname, forecastFolderPath);
+
+// Main settings for the forecast data folders
+const stationForecastFolderPath = path.resolve(
+  __dirname,
+  "../data/forecast_test040424"
+); // Define Path to AQ station forecast data folder Here
+const sensorForecastFolderPath = path.resolve(__dirname, "../data/pas"); // Define Path to PAS forecast data folder Here
+
+// Forecast file settings
 const forecastFileExtension = ".csv";
 const forecastFileParamPartition = "_";
 const fileNameParameters = [
@@ -15,8 +21,7 @@ const fileNameParameters = [
   "models",
   "date",
 ];
-const paramIndexInFile = [0, 1, 3, 4, 5];
-
+const paramIndexInFilename = [0, 1, 3, 4, 5];
 
 // Insert plots
 const dateOptions = {
@@ -26,15 +31,15 @@ const dateOptions = {
   minute: "2-digit",
 };
 
-const linePlotParams = {
-  historicalBackgroundColour: "rgba(0,0,0,0.8)",
-  historicalLineColour: "rgba(0,0,0,0.3)",
-  historicalLabel: "Historical data",
-  forecastBackgroundColour: "rgba(0,0,255,0.8)",
-  forecastLineColour: "rgba(0,0,255,0.3)",
-  forecastLabel: "Forecast data",
-  xAxisTitle: "Time",
-};
+// const linePlotParams = {
+//   historicalBackgroundColour: "rgba(0,0,0,0.8)",
+//   historicalLineColour: "rgba(0,0,0,0.3)",
+//   historicalLabel: "Historical data",
+//   forecastBackgroundColour: "rgba(0,0,255,0.8)",
+//   forecastLineColour: "rgba(0,0,255,0.3)",
+//   forecastLabel: "Forecast data",
+//   xAxisTitle: "Time",
+// };
 
 const forecastFileVariable = {
   hour: "forecast_hours",
@@ -46,11 +51,11 @@ const localTimeSetting = "en-AU";
 export {
   dateOptions,
   forecastFileVariable,
+  sensorForecastFolderPath,
   localTimeSetting,
-  forecastFolderPath,
+  stationForecastFolderPath,
   forecastFileExtension,
   forecastFileParamPartition,
   fileNameParameters,
-  paramIndexInFile,
-  dataFolderPath,
+  paramIndexInFilename,
 };

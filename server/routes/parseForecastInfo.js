@@ -114,6 +114,7 @@ function processStatsData(statsTable, result) {
       result.stats[entry[0]][stat] = entry[index + 1];
     });
   });
+  console.log("statsValue1", statsValue);
 }
 
 function ProcessParsedCSV(parsedData, pollutant) {

@@ -21,8 +21,13 @@ const linePlotParams = {
 };
 
 // const fileNameParameters = ["regions", "models", "pollutants", "timeScopes"];
+const dashboardVisualizationMode = {
+  monitor: "monitor",
+  forecast: "forecast",
+};
 
 const stateConfig = {
+  initVisualizationState: dashboardVisualizationMode.monitor,
   initSelectionState: false,
   initSelectedOptions: {
     regions: "", // Initialize selected options for each dropdown list
@@ -38,20 +43,10 @@ const stateConfig = {
   initRightPanelPollutant: "AQC",
 };
 
-// const content = [
-
-//     right: [{
-//       heading: "NSW Air Quality Station Ranking",
-//       subHeading: "Highest up-to-date PM2.5 level",
-//     },]
-
-// ];
-
 export {
   dpe_site_data_dirs,
   dpe_site_data_file,
   dateOptions,
   linePlotParams,
   stateConfig,
-  // content,
 };
