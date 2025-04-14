@@ -37,3 +37,23 @@ The client side of the dashboard uses Node.js with the React.js framework.
 - In the the client folder, run `npm install`
 
 - To run this application locally, `npm start` and the visualisation client is accessible at http://localhost:3000/
+
+
+## DASHBOARD DATA FEED AND RESTART
+
+
+###	Data feed
+
+The dashboard uses a few data request:
+
+- A data query to DCCEW air quality API (https://data.airquality.nsw.gov.au)
+
+- A data query to purple air api: (https://api.purpleair.com)
+
+- file transfers from SDC, one per model from
+`/mnt/scratch_lustre/ar_aichem_scratch/AI_Runs/Forecast/Region/VAR/Additionl_vars/model_name/YYYMMDDHHUTC---tstamp---YYYYMMDD_HHMMSSAEDT/Dashboard/Forecastfilename.csv`
+
+### Restart
+
+Dashboard server is not able to refresh the forecast file list, so a periodic restart is needed (once a day minimum)
+
