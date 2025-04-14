@@ -6,15 +6,15 @@ The dashboard is built with a simple client-server architecture in web developme
 
 ## Install
 
-1. Cloning
+### Cloning
 
 The source code needs to be cloned:  `git clone git@bitbucket.org:oehcas/ai_dashboard.git`
 
-2. Install
+### Install
 
 Then the install itself is done following the instructions written in the README file:
 
-3. Environment
+### Environment
 
 Both client and server side of the dashboard utilise Node.js runtime environment. 
 
@@ -22,7 +22,7 @@ Both client and server side of the dashboard utilise Node.js runtime environment
 
 - After installation, check the version with `node –version`, and should be >18 
 
-4. Server
+### Server
 
 The server side of the dashboard runs on Node.js with the Express.js framework.
 
@@ -30,7 +30,7 @@ The server side of the dashboard runs on Node.js with the Express.js framework.
 
 - To launch the local server (at http://localhost:8000/), run `node ./src/server.js`
 
-5. Client
+### Client
 
 The client side of the dashboard uses Node.js with the React.js framework.
 
