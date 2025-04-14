@@ -4,7 +4,7 @@ This project dedicates to creating a dashboard visulising air quality forecast f
 
 The dashboard is built with a simple client-server architecture in web development.
 
-## Install
+## Installing and running the dashboard
 
 ### Cloning
 
