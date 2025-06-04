@@ -1,5 +1,7 @@
 import axios from "axios";
 
+const BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 // Function to fetch historical observations from the backend
 async function fetchHistoricalObservations(
   parameters,
@@ -10,7 +12,7 @@ async function fetchHistoricalObservations(
 ) {
   if (currentState) return [];
   try {
-    const getObsURL = "http://localhost:8000/api/getObs";
+    const getObsURL = `${BASE_URL}/api/getObs`;
     const response = await axios.get(getObsURL, {
       params: {
         parameters: parameters,
