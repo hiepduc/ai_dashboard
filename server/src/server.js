@@ -8,7 +8,8 @@ import getNewestObs from "../routes/getNewestObs.js";
 // import getCurrentObs from "../routes/getCurrentObs.js";
 
 const app = express();
-const port = 8000;
+// const port = 8000;
+const port = process.env.PORT || 8000;
 
 app.use(cors());
 
