@@ -1,2 +1,59 @@
+# === Node.js / React ===
+node_modules/
+build/
+dist/
+.env
+.env.local
+.npmrc
+yarn.lock
+package-lock.json
+coverage/
+.vite/
+
+# === Python ===
+__pycache__/
+*.py[cod]
+*.egg
+*.egg-info/
+dist/
+build/
+.eggs/
+.env
+.venv/
+venv/
+pip-log.txt
+*.sqlite3
+
+# === Logs and temp ===
+*.log
+*.tmp
+*.swp
+.DS_Store
+Thumbs.db
+
+# === IDEs and OS ===
+.vscode/
+.idea/
+*.code-workspace
+
+# === LFS or unwanted large files ===
+Mockup/AQSs_Info/ckan_*.json
+
+# === Git files ===
+*.orig
+*.bak
+*.rej
+
+# === LFS catch-all (if using GitHub LFS) ===
+*.psd
+*.zip
+*.tar
+*.gz
+*.7z
+*.csv
+*.json
+*.h5
+*.nc
+*.pkl
 # Local Netlify folder
 .netlify
