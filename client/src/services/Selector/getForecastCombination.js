@@ -1,10 +1,11 @@
-import axios from "axios";
+
+// client/src/services/Selector/getForecastCombination.js
+import http from "../../api";   // ← points to client/src/api.js
 
 async function getForecastCombination() {
   try {
-    const getForecastCombinationURL =
-      "http://localhost:8000/api/getForecastCombination";
-    const response = await axios.get(getForecastCombinationURL);
+    // No need for “http://localhost:8000” — http.baseURL handles it
+    const response = await http.get("/api/getForecastCombination");
     console.log("Forecast combination: ", response.data);
     return response.data;
   } catch (error) {
@@ -12,5 +13,3 @@ async function getForecastCombination() {
     throw error;
   }
 }
-
-export default getForecastCombination;

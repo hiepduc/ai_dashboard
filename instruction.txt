@@ -1,0 +1,58 @@
+To put client of ai-dashboard on netlify
+
+(0) First et the ai-dashboard code
+git clone git@bitbucket.org:oehcas/ai_dashboard.git
+ln -s /mnt/scratch_lustre/duch/ai_dashboard ai_dashboard
+cd ai_dashboard
+cd client
+
+(1) Install the nodejs with conda in nodeenv environment
+source ~/.bashrc.conda
+conda create -n nodeenv nodejs -y
+conda activate nodeenv
+node -v
+npm -v
+
+(2) Build the client using node package manager (npm)
+(a)npm install
+(b) npm run build
+The project was built using Vite, a fast frontend build tool.
+
+Output files were generated in the build/ directory.
+
+(3) After build, install the client on netlify by first installing netlify command line interface netlify-cli
+(a) npm install -g netlify-cli
+(b) netlify --version
+(c) netlify login
+This will open a browser window where you authorize Netlify. Once you grant access, your Linux shell will be ready to deploy.
+
+(d) netlify deploy --dir=build
+
+The CLI will ask:
+
+? Create & configure a new site? (Y/n)
+If you already have a Netlify site and want to attach to it, answer “n” and pick from the list.
+
+If you want to make a brand-new site, answer “Y” and follow the prompts to give it a name (or let Netlify choose one).
+
+Next it will ask:
+
+? Team:   <select your team>
+? Site Name (optional): <enter or leave blank>
+? Deploy path: build/
+
+It will then upload the contents of build/ and give you a draft URL (something like https://splendorous-yeot-5b6f09.netlify.app/).
+
+If everything is ok, then promote to production
+
+(e) netlify deploy --dir=build --prod
+
+You now have ai-dashboard client on netlify
+
+(4) Whenever you rebuild locally (npm run build), just re-run:
+
+netlify deploy --dir=build --prod
+
+and Netlify will update your live site.
+
+That’s it—your Vite-built dashboard is now live and production-ready on Netlify.

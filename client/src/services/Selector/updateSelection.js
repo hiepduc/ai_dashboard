@@ -1,12 +1,13 @@
-import axios from "axios";
+
+// client/src/services/Selector/updateSelection.js
+
+  import http from "../../api";   // adjust path if necessary
 
 async function updateSelection() {
   try {
-    const getOptionsURL = "http://localhost:8000/api/getOptions";
-    const response = await axios.get(getOptionsURL);
+    // http.baseURL is import.meta.env.VITE_API_BASE_URL, so this goes to `${API_BASE}/api/getOptions`
+    const response = await http.get("/api/getOptions");
     console.log("Response data:", response);
-    //   const numberOfFields = Object.keys(response.data).length;
-    //   console.log("Number of fields:", numberOfFields);
     return response.data;
   } catch (error) {
     console.error("Error fetching data:", error);
@@ -15,3 +16,4 @@ async function updateSelection() {
 }
 
 export default updateSelection;
+

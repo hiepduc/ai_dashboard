@@ -51,7 +51,6 @@ Mockup/AQSs_Info/ckan_*.json
 *.gz
 *.7z
 *.csv
-*.json
 *.h5
 *.nc
 *.pkl

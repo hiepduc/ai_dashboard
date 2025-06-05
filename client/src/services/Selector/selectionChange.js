@@ -1,12 +1,12 @@
-// import { useData } from "./dataContext";
-// import { useState, useEffect } from "react";
-import axios from "axios";
+// client/src/services/Selector/selectionChange.js
+
+import http from "../../api";   // adjust path if necessary
 
 async function StoreFileData({ regions, pollutants, timeScopes, models }) {
   try {
     console.log({ regions, pollutants, timeScopes, models });
-    const getForecastInfoURL = "http://localhost:8000/api/getForecastInfo";
-    const response = await axios.get(getForecastInfoURL, {
+    // The baseURL (VITE_API_BASE_URL) is prefixed automatically:
+    const response = await http.get("/api/getForecastInfo", {
       params: {
         selectedRegion: regions,
         selectedPollutant: pollutants,
@@ -22,3 +22,4 @@ async function StoreFileData({ regions, pollutants, timeScopes, models }) {
 }
 
 export { StoreFileData };
+

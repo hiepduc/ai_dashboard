@@ -1,0 +1,12 @@
+Netlify is a hosted service that makes it very easy to deploy static websites and single-page applications. In practice, you:
+
+Connect your code repo (GitHub, GitLab, Bitbucket) or use the CLI to deploy directly.
+
+Netlify automatically builds your site (using whatever build command you’ve specified, e.g., npm run build).
+
+It then publishes the built files (HTML, CSS, JS, assets) to a global CDN, giving you a live URL (like https://my-site.netlify.app).
+
+You can optionally attach a custom domain (e.g., dashboard.example.com) and get free HTTPS.
+
+Netlify handles continuous redeploys (whenever you push new code) and offers features like form handling, serverless functions, and split testing for JavaScript-based web apps.
+
